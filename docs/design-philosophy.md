@@ -1,0 +1,38 @@
+# Rave Route Design Philosophy
+
+## Guiding principle
+
+> Every screen should make the user more excited for their next festival.
+
+Rave Route should feel warm, energetic, and optimistic without making important information difficult to read.
+
+## Experience principles
+
+### Next adventure first
+
+The next upcoming festival is the visual priority. Secondary plans should remain easy to find without competing with it.
+
+### Mobile first
+
+Design for a phone-sized viewport, touch interaction, safe areas, scrolling, and an on-screen keyboard before adapting to larger screens.
+
+### Bright but usable
+
+Begin with a warm red/coral primary direction, orange accents, a cream background, and dark readable text. Colour should create energy, but never be the only way information is communicated.
+
+### Clear and calm interactions
+
+Controls should be comfortably sized and labelled. Forms should explain errors clearly. Destructive actions should require confirmation. Loading, empty, and failure states should tell the user what is happening.
+
+### Consistency through shared tokens
+
+Colours, spacing, radii, shadows, and typography should use shared design tokens rather than scattered raw values. Tokens will be introduced in the branding stage, when the UI exists to use them.
+
+### Accessibility is part of quality
+
+Use semantic structure, visible focus, sufficient contrast, accessible labels, reduced-motion support, and disclosure states that work with keyboards and assistive technology.
+
+## Scope discipline
+
+Visual polish should support the current stage. Do not build a complex design system or future screens before the MVP needs them.
+
