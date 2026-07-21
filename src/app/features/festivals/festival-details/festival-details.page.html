@@ -1,0 +1,60 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home" text="Back"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Festival details</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <main class="festival-details">
+    @if (loading()) {
+      <p class="festival-details__status" role="status" aria-live="polite">Loading festival…</p>
+    } @else if (festival(); as selectedFestival) {
+      <div class="festival-details__image">
+        <app-festival-image [festivalTitle]="selectedFestival.title" [imageUrl]="selectedFestival.imageUrl"></app-festival-image>
+      </div>
+
+      <section aria-labelledby="festival-title">
+        <p class="festival-details__eyebrow">YOUR ADVENTURE</p>
+        <h1 id="festival-title">{{ selectedFestival.title }}</h1>
+        <p class="festival-details__countdown">{{ getCountdownLabel(selectedFestival) }}</p>
+      </section>
+
+      <dl class="festival-details__facts">
+        <div>
+          <dt>Where</dt>
+          <dd>{{ selectedFestival.location }}</dd>
+        </div>
+        <div>
+          <dt>When</dt>
+          <dd>{{ formatDateRange(selectedFestival) }}</dd>
+        </div>
+        <div>
+          <dt>Travel</dt>
+          <dd>{{ getTransportLabel(selectedFestival) }}</dd>
+        </div>
+      </dl>
+
+      <div class="festival-details__actions">
+        <ion-button class="rr-button" expand="block" (click)="editFestival()">Edit festival</ion-button>
+        <ion-button color="danger" expand="block" fill="outline" (click)="openDeleteConfirmation()">Delete festival</ion-button>
+      </div>
+    } @else {
+      <section class="festival-details__status">
+        <h1>Festival not found</h1>
+        <p>It may have been deleted or the link is no longer valid.</p>
+        <ion-button routerLink="/home" fill="clear">Return home</ion-button>
+      </section>
+    }
+  </main>
+
+  <ion-alert
+    [isOpen]="isDeleteAlertOpen()"
+    header="Delete festival?"
+    message="This cannot be undone."
+    [buttons]="deleteAlertButtons"
+    (didDismiss)="closeDeleteConfirmation()"
+  ></ion-alert>
+</ion-content>

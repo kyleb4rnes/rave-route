@@ -1,0 +1,36 @@
+.festival-form {
+  padding: var(--rr-spacing-page);
+}
+
+.festival-form ion-list {
+  background: transparent;
+  padding: 0;
+}
+
+.festival-form ion-item {
+  --background: var(--rr-surface);
+  --border-color: var(--rr-border);
+  --color: var(--rr-text);
+  --padding-start: 0.875rem;
+  --padding-end: 0.875rem;
+  border: 1px solid var(--rr-border);
+  border-radius: var(--rr-radius-control);
+  margin-bottom: 0.5rem;
+}
+
+.festival-form ion-note {
+  display: block;
+  font-size: 0.8125rem;
+  margin: -0.125rem 0 0.625rem;
+}
+
+.festival-form__actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: flex-end;
+  margin-top: 1.25rem;
+}
+
+.festival-form__cancel {
+  --color: var(--rr-text-muted);
+}

@@ -1,0 +1,59 @@
+.festival-card {
+  --background: var(--rr-surface);
+  border: 1px solid var(--rr-border);
+  border-radius: var(--rr-radius-card);
+  box-shadow: var(--rr-shadow-card);
+  margin: 0;
+  overflow: hidden;
+}
+
+.festival-card__image {
+  min-height: 8rem;
+}
+
+.festival-card__eyebrow {
+  color: var(--rr-primary-dark);
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  margin: 0 0 0.5rem;
+}
+
+.festival-card ion-card-title {
+  color: var(--rr-text);
+  font-size: 1.5rem;
+}
+
+.festival-card__details {
+  display: grid;
+  gap: 0.75rem;
+  margin: 0;
+}
+
+.festival-card__details div {
+  display: grid;
+  gap: 0.125rem;
+}
+
+.festival-card dt {
+  color: var(--rr-text-muted);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.festival-card dd {
+  color: var(--rr-text);
+  margin: 0;
+}
+
+.festival-card__countdown {
+  color: var(--rr-primary-dark);
+  font-size: 1.125rem;
+  font-weight: 800;
+  margin: 1rem 0 0.75rem;
+}
+
+.festival-card ion-chip {
+  margin: 0;
+}

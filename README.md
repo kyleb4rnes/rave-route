@@ -6,9 +6,9 @@ The project is part of **Project Freedom**, a personal mission focused on greate
 
 ## Project status
 
-Stage 0 - Project Preparation
+Stages 10–18 - Persisted Festival MVP (Android project configured; device verification pending)
 
-The repository currently contains planning documentation only. Application scaffolding begins in Stage 1.
+The app now persists festivals in local storage, supports expandable cards, details, editing, deletion confirmation, image URLs/default images, optional Android device-image selection, and accessibility-focused states. The Android project uses the `com.raveroute.app` application ID and includes temporary generated icon and splash assets. Physical-device verification remains outstanding.
 
 ## MVP capabilities
 
@@ -42,7 +42,29 @@ See [MVP specification](docs/mvp-specification.md) for the full scope.
 
 ## Development
 
-There is no application to run yet. Stage 1 will add the blank Ionic Angular application and its setup commands.
+Run the development server:
+
+```powershell
+npm start
+```
+
+Run verification:
+
+```powershell
+npm run lint
+npm run build
+npm test -- --watch=false --browsers=ChromeHeadless
+```
+
+## Android development
+
+Install Android Studio and its Android SDK, then use:
+
+```bash
+npm run android:sync
+npm run android:open
+```
+
+Run the project from Android Studio on an emulator or a physical Android device. iOS packaging is intentionally unverified until the project is opened on macOS with Xcode.
 
 Work on one documented stage at a time. Review, run, test, and understand each stage before moving to the next one.
-

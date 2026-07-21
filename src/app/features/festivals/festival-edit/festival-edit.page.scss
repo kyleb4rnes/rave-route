@@ -1,0 +1,23 @@
+ion-toolbar {
+  --background: var(--rr-primary);
+  --border-width: 0;
+  --color: var(--rr-primary-contrast);
+}
+
+ion-content {
+  --background: var(--rr-background);
+}
+
+.festival-edit {
+  min-height: 100%;
+}
+
+.festival-edit__status {
+  background: var(--rr-surface);
+  border: 1px solid var(--rr-border);
+  border-radius: var(--rr-radius-card);
+  color: var(--rr-text-muted);
+  margin: var(--rr-spacing-page);
+  padding: var(--rr-spacing-page);
+  text-align: center;
+}

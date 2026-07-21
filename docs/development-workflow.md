@@ -40,6 +40,13 @@ Example: `feat: add mobile application shell`
 
 These conventions can evolve when a real need appears. Do not add new layers or patterns only for theoretical future use.
 
+## Angular conventions
+
+- Prefer standalone components.
+- Use signal-based `input()` and `output()` APIs for component communication when the installed Angular version supports them.
+- Add an `output()` only for a real child-to-parent event; do not create placeholder events.
+- Keep presentation components focused on rendering inputs and emitting user actions. Keep domain and state logic outside them.
+
 ## Stage workflow
 
 For each stage:

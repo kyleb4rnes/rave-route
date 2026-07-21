@@ -1,0 +1,85 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      <app-rave-route-logo></app-rave-route-logo>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <main class="home-shell">
+    <header class="page-intro">
+      <p class="page-intro__eyebrow">YOUR FESTIVAL ROUTE</p>
+      <h1>Make room for your next adventure.</h1>
+    </header>
+
+    @if (loading()) {
+      <p class="page-status" role="status" aria-live="polite">Loading your festivals…</p>
+    } @else if (error()) {
+      <section class="page-status page-status--error" role="alert">
+        <p>{{ error() }}</p>
+        <ion-button fill="clear" (click)="retryLoadingFestivals()">Try again</ion-button>
+      </section>
+    } @else if (allFestivals().length === 0) {
+      <app-empty-festival-state></app-empty-festival-state>
+    } @else if (nextFestival(); as festival) {
+      <app-upcoming-festival-card
+        [title]="festival.title"
+        [location]="festival.location"
+        [dateLabel]="formatDateRange(festival)"
+        [countdownLabel]="getCountdownLabel(festival)"
+        [transportLabel]="getTransportLabel(festival)"
+        [imageUrl]="festival.imageUrl"
+        (viewDetails)="viewFestival(festival.id)"
+      ></app-upcoming-festival-card>
+
+      @if (laterUpcomingFestivals().length > 0) {
+        <section class="future-festivals" aria-labelledby="future-festivals-title">
+          <h2 id="future-festivals-title">Later adventures</h2>
+          @for (futureFestival of laterUpcomingFestivals(); track futureFestival.id) {
+            <app-collapsed-festival-card
+              [title]="futureFestival.title"
+              [dateLabel]="formatDateRange(futureFestival)"
+              [location]="futureFestival.location"
+              [countdownLabel]="getCountdownLabel(futureFestival)"
+              [transportLabel]="getTransportLabel(futureFestival)"
+              [expanded]="expandedFestivalId() === futureFestival.id"
+              (toggled)="toggleFestival(futureFestival.id)"
+              (viewDetails)="viewFestival(futureFestival.id)"
+            ></app-collapsed-festival-card>
+          }
+        </section>
+      }
+    } @else {
+      <section class="page-status">
+        <p>You have no upcoming festivals yet. Add one to start planning.</p>
+      </section>
+    }
+
+    <ion-button class="rr-button add-festival-button" expand="block" [disabled]="loading()" (click)="openAddFestivalForm()">
+      Add Festival
+    </ion-button>
+
+    @if (addFestivalExperience === 'inline' && isAddFestivalFormOpen()) {
+      <section class="inline-form" aria-labelledby="inline-form-title">
+        <h2 id="inline-form-title">Add a festival</h2>
+        <app-festival-form (saved)="createFestival($event)" (cancelled)="closeAddFestivalForm()"></app-festival-form>
+      </section>
+    }
+  </main>
+
+  @if (addFestivalExperience === 'modal') {
+    <ion-modal [isOpen]="isAddFestivalFormOpen()" (didDismiss)="closeAddFestivalForm()">
+      <ng-template>
+        <ion-header>
+          <ion-toolbar>
+            <ion-title>Add a festival</ion-title>
+          </ion-toolbar>
+        </ion-header>
+        <ion-content>
+          <app-festival-form (saved)="createFestival($event)" (cancelled)="closeAddFestivalForm()"></app-festival-form>
+        </ion-content>
+      </ng-template>
+    </ion-modal>
+  }
+</ion-content>

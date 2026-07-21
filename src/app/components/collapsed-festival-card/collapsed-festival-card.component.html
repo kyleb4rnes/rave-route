@@ -1,0 +1,25 @@
+<section class="collapsed-card">
+  <button
+    class="collapsed-card__summary"
+    type="button"
+    [attr.aria-expanded]="expanded()"
+    [attr.aria-controls]="'festival-details-' + title()"
+    (click)="toggled.emit()"
+  >
+    <span>
+    <h3>{{ title() }}</h3>
+    <p>{{ dateLabel() }}</p>
+    </span>
+    <ion-icon [name]="expanded() ? 'chevron-down' : 'chevron-forward'" aria-hidden="true"></ion-icon>
+  </button>
+
+  @if (expanded()) {
+    <div class="collapsed-card__details" [id]="'festival-details-' + title()">
+      <p><strong>Where:</strong> {{ location() }}</p>
+      <p><strong>When:</strong> {{ dateLabel() }}</p>
+      <p><strong>{{ countdownLabel() }}</strong></p>
+      <p>{{ transportLabel() }}</p>
+      <ion-button fill="clear" (click)="viewDetails.emit()">View details</ion-button>
+    </div>
+  }
+</section>

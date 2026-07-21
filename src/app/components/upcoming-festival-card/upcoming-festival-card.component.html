@@ -1,0 +1,30 @@
+<ion-card class="festival-card">
+  <div class="festival-card__image">
+    <app-festival-image [festivalTitle]="title()" [imageUrl]="imageUrl()"></app-festival-image>
+  </div>
+
+  <ion-card-header>
+    <p class="festival-card__eyebrow">NEXT ADVENTURE</p>
+    <ion-card-title>{{ title() }}</ion-card-title>
+  </ion-card-header>
+
+  <ion-card-content>
+    <dl class="festival-card__details">
+      <div>
+        <dt>When</dt>
+        <dd>{{ dateLabel() }}</dd>
+      </div>
+      <div>
+        <dt>Where</dt>
+        <dd>{{ location() }}</dd>
+      </div>
+    </dl>
+
+    <p class="festival-card__countdown">{{ countdownLabel() }}</p>
+    <ion-chip color="primary">
+      <ion-label>{{ transportLabel() }}</ion-label>
+    </ion-chip>
+
+    <ion-button fill="clear" (click)="viewDetails.emit()">View details</ion-button>
+  </ion-card-content>
+</ion-card>

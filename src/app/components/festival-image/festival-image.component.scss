@@ -1,0 +1,21 @@
+:host {
+  display: block;
+  height: 100%;
+}
+
+.festival-image {
+  display: block;
+  height: 100%;
+  object-fit: cover;
+  width: 100%;
+}
+
+.festival-image--placeholder {
+  align-items: center;
+  background: linear-gradient(135deg, var(--rr-primary), var(--rr-accent));
+  color: var(--rr-primary-contrast);
+  display: flex;
+  font-size: 0.875rem;
+  font-weight: 700;
+  justify-content: center;
+}

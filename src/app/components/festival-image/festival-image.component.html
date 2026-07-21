@@ -1,0 +1,7 @@
+@if (imageUrl()) {
+  <img class="festival-image" [src]="imageUrl()" [alt]="festivalTitle() + ' festival image'" />
+} @else {
+  <div class="festival-image festival-image--placeholder" role="img" [attr.aria-label]="festivalTitle() + ' festival image placeholder'">
+    <span>Festival picture</span>
+  </div>
+}

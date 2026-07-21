@@ -1,0 +1,35 @@
+:root {
+  // Rave Route design tokens.
+  --rr-primary: #e52b38;
+  --rr-primary-dark: #bd1f2a;
+  --rr-primary-contrast: #ffffff;
+  --rr-accent: #ff6b6b;
+  --rr-background: #fff8f2;
+  --rr-surface: #ffffff;
+  --rr-text: #2d201e;
+  --rr-text-muted: #765f5a;
+  --rr-border: #f0d9d0;
+
+  --rr-radius-card: 1.25rem;
+  --rr-radius-control: 0.75rem;
+  --rr-shadow-card: 0 0.75rem 2rem rgb(85 45 35 / 12%);
+  --rr-spacing-page: clamp(1.25rem, 5vw, 2rem);
+
+  // Ionic theme mappings.
+  --ion-color-primary: var(--rr-primary);
+  --ion-color-primary-rgb: 229, 43, 56;
+  --ion-color-primary-contrast: var(--rr-primary-contrast);
+  --ion-color-primary-contrast-rgb: 255, 255, 255;
+  --ion-color-primary-shade: var(--rr-primary-dark);
+  --ion-color-primary-tint: #e94550;
+}
+
+ion-button.rr-button,
+button.rr-button {
+  --background: var(--rr-primary);
+  --background-hover: var(--rr-primary-dark);
+  --border-radius: var(--rr-radius-control);
+  --box-shadow: none;
+  --color: var(--rr-primary-contrast);
+  font-weight: 700;
+}

@@ -31,6 +31,7 @@ Use:
 - TypeScript
 - SCSS
 - Angular signals
+- Signal-based component inputs and outputs where appropriate
 - Typed reactive forms
 - Jest
 - Local device storage for the MVP

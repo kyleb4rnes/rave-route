@@ -1,0 +1,28 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home" text="Back"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Edit festival</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <main class="festival-edit">
+    @if (loading()) {
+      <p class="festival-edit__status" role="status" aria-live="polite">Loading festival…</p>
+    } @else if (festival(); as selectedFestival) {
+      <app-festival-form
+        [festival]="selectedFestival"
+        submitLabel="Save changes"
+        (saved)="saveFestival($event)"
+        (cancelled)="cancelEditing()"
+      ></app-festival-form>
+    } @else {
+      <section class="festival-edit__status">
+        <h1>Festival not found</h1>
+        <p>It may have been deleted or the link is no longer valid.</p>
+      </section>
+    }
+  </main>
+</ion-content>

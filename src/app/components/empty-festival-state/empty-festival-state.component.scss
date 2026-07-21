@@ -1,0 +1,18 @@
+.empty-state {
+  background: var(--rr-surface);
+  border: 1px dashed var(--rr-border);
+  border-radius: var(--rr-radius-card);
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.empty-state h2 {
+  color: var(--rr-text);
+  font-size: 1.25rem;
+  margin: 0;
+}
+
+.empty-state p {
+  color: var(--rr-text-muted);
+  margin: 0.5rem 0 0;
+}

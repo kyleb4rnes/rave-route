@@ -1,0 +1,56 @@
+<form class="festival-form" [formGroup]="form" (ngSubmit)="submit()" novalidate>
+  <ion-list lines="none">
+    <ion-item>
+      <ion-input formControlName="title" label="Festival name" labelPlacement="stacked" placeholder="e.g. Sunset Fields"></ion-input>
+    </ion-item>
+    @if (isInvalid('title')) {
+      <ion-note color="danger" role="alert">Enter a festival name.</ion-note>
+    }
+
+    <ion-item>
+      <ion-input formControlName="location" label="Location" labelPlacement="stacked" placeholder="e.g. Somerset, UK"></ion-input>
+    </ion-item>
+    @if (isInvalid('location')) {
+      <ion-note color="danger" role="alert">Enter a location.</ion-note>
+    }
+
+    <ion-item>
+      <ion-input formControlName="startDate" label="Start date" labelPlacement="stacked" type="date"></ion-input>
+    </ion-item>
+    @if (isInvalid('startDate')) {
+      <ion-note color="danger" role="alert">Choose a start date.</ion-note>
+    }
+
+    <ion-item>
+      <ion-input formControlName="endDate" label="End date" labelPlacement="stacked" type="date"></ion-input>
+    </ion-item>
+    @if (isInvalid('endDate')) {
+      <ion-note color="danger" role="alert">Choose an end date.</ion-note>
+    }
+    @if (isEndDateInvalid) {
+      <ion-note color="danger" role="alert">The end date must be on or after the start date.</ion-note>
+    }
+
+    <ion-item>
+      <ion-input formControlName="imageUrl" label="Picture URL (optional)" labelPlacement="stacked" placeholder="https://..." type="url"></ion-input>
+    </ion-item>
+    @if (deviceImageSelectionAvailable) {
+      <ion-button fill="clear" type="button" (click)="selectDeviceImage()">Choose device image</ion-button>
+    }
+    @if (isInvalid('imageUrl')) {
+      <ion-note color="danger" role="alert">Enter a full URL beginning with http:// or https://.</ion-note>
+    }
+    @if (imageSelectionError()) {
+      <ion-note color="danger" role="alert">{{ imageSelectionError() }}</ion-note>
+    }
+
+    <ion-item>
+      <ion-toggle formControlName="transportArranged">Transport arranged</ion-toggle>
+    </ion-item>
+  </ion-list>
+
+  <div class="festival-form__actions">
+    <ion-button class="festival-form__cancel" fill="clear" type="button" (click)="cancel()">Cancel</ion-button>
+    <ion-button class="rr-button" type="submit">{{ submitLabel() }}</ion-button>
+  </div>
+</form>
