@@ -1,0 +1,61 @@
+.launch-screen {
+  align-items: center;
+  display: flex;
+  inset: 0;
+  justify-content: center;
+  position: fixed;
+  z-index: 10000;
+}
+
+.launch-screen__backdrop {
+  background: var(--rr-primary);
+  height: 100dvh;
+  inset: 0 auto auto 0;
+  position: absolute;
+  transition: height 900ms cubic-bezier(0.4, 0, 0.2, 1);
+  width: 100%;
+  will-change: height;
+}
+
+.launch-screen__content {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  position: relative;
+  transform: translateY(-0.5rem);
+}
+
+.launch-screen__mark {
+  color: var(--rr-primary-contrast);
+  font-size: clamp(4.5rem, 24vw, 7rem);
+  font-weight: 900;
+  letter-spacing: -0.12em;
+  line-height: 0.8;
+  padding-right: 0.12em;
+}
+
+.launch-screen ion-spinner {
+  --color: var(--rr-primary-contrast);
+  height: 2rem;
+  width: 2rem;
+}
+
+.launch-screen--leaving {
+  pointer-events: none;
+}
+
+.launch-screen--leaving .launch-screen__backdrop {
+  height: calc(3.5rem + env(safe-area-inset-top));
+}
+
+.launch-screen--leaving .launch-screen__content {
+  animation: launch-content-exit 250ms ease-out forwards;
+}
+
+@keyframes launch-content-exit {
+  to {
+    opacity: 0;
+    transform: translateY(-2rem) scale(0.85);
+  }
+}

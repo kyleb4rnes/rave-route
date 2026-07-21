@@ -1,3 +1,19 @@
 <ion-app>
   <ion-router-outlet></ion-router-outlet>
+
+  @if (launchScreenVisible()) {
+    <section
+      class="launch-screen"
+      [class.launch-screen--leaving]="launchState() === 'leaving'"
+      aria-label="Loading Rave Route"
+      aria-live="polite"
+      role="status"
+    >
+      <div class="launch-screen__backdrop" aria-hidden="true"></div>
+      <div class="launch-screen__content">
+        <span class="launch-screen__mark" aria-hidden="true">RR</span>
+        <ion-spinner aria-label="Loading your festival route" name="crescent"></ion-spinner>
+      </div>
+    </section>
+  }
 </ion-app>
