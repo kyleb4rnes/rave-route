@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
 import { FESTIVAL_REPOSITORY } from '../core/festivals/data/festival-repository.token';
 import { FestivalRepository } from '../core/festivals/data/festival.repository';
 import { FestivalDraft } from '../core/festivals/models/festival-draft';
@@ -18,7 +19,10 @@ describe('HomePage', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [HomePage],
-      providers: [{ provide: FESTIVAL_REPOSITORY, useValue: emptyFestivalRepository }],
+      providers: [
+        provideRouter([]),
+        { provide: FESTIVAL_REPOSITORY, useValue: emptyFestivalRepository },
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(HomePage);

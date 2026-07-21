@@ -93,6 +93,7 @@ Before completing a stage, confirm:
 - Run and test instructions are provided.
 - This guide was reviewed for any necessary small update.
 - The developer is given questions to confirm understanding.
+- At the end of every development session, append a brief dated summary to `docs/development-log.md`. The first entry captures project history; later entries capture only that session.
 
 ## 9. Current Build Stages
 

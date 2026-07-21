@@ -1,0 +1,52 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button aria-label="Back to home" (click)="closeSettings()">
+        <ion-icon aria-hidden="true" name="chevron-back"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>App settings</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <main class="settings-page" [class.settings-page--closing]="isClosing()">
+    <div class="settings-page__backdrop" aria-hidden="true"></div>
+    <header class="settings-page__hero">
+      <p>MAKE IT YOURS</p>
+      <h1>App settings</h1>
+    </header>
+
+    <form class="settings-form" [formGroup]="form" (ngSubmit)="saveSettings()" novalidate>
+      <section aria-labelledby="background-image-title">
+        <h2 id="background-image-title">Background image</h2>
+        <p>Add an optional image URL to personalise your home screen.</p>
+
+        <ion-list lines="none">
+          <ion-item>
+            <ion-input
+              formControlName="homeBackgroundImageUrl"
+              label="Picture URL (optional)"
+              labelPlacement="stacked"
+              placeholder="https://..."
+              type="url"
+            ></ion-input>
+          </ion-item>
+        </ion-list>
+
+        @if (isBackgroundImageInvalid()) {
+          <ion-note color="danger" role="alert">Enter a full URL beginning with http:// or https://.</ion-note>
+        }
+        @if (saveError()) {
+          <ion-note color="danger" role="alert">{{ saveError() }}</ion-note>
+        }
+
+        <p class="settings-form__hint">Leave the field empty and save to restore the standard background.</p>
+      </section>
+
+      <div class="settings-form__actions">
+        <ion-button class="rr-button" type="submit">Save settings</ion-button>
+      </div>
+    </form>
+  </main>
+</ion-content>

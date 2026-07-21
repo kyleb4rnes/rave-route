@@ -11,7 +11,7 @@ bootstrapApplication(AppComponent, {
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     { provide: FESTIVAL_REPOSITORY, useClass: LocalStorageFestivalRepository },
-    provideIonicAngular(),
+    provideIonicAngular({ animated: false }),
     provideRouter(routes),
   ],
 }).catch((error: unknown) => console.error(error));

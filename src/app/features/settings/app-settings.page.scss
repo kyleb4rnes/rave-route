@@ -1,0 +1,155 @@
+ion-toolbar {
+  --background: var(--rr-primary);
+  --border-width: 0;
+  --color: var(--rr-primary-contrast);
+}
+
+ion-toolbar ion-button {
+  --color: var(--rr-primary-contrast);
+}
+
+ion-content {
+  --background: transparent;
+}
+
+.settings-page {
+  background: transparent;
+  box-sizing: border-box;
+  height: 100%;
+  min-height: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+.settings-page__backdrop {
+  animation: settings-backdrop-expand 650ms cubic-bezier(0.4, 0, 0.2, 1) both;
+  background: var(--rr-primary);
+  inset: 0;
+  position: absolute;
+  transform-origin: top;
+  z-index: 0;
+}
+
+.settings-page__hero {
+  animation: settings-content-enter 350ms 200ms ease-out both;
+  color: var(--rr-primary-contrast);
+  padding: 2.5rem max(var(--rr-spacing-page), env(safe-area-inset-right)) 3rem
+    max(var(--rr-spacing-page), env(safe-area-inset-left));
+  position: relative;
+  z-index: 1;
+}
+
+.settings-page__hero p {
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  margin: 0 0 0.5rem;
+}
+
+.settings-page__hero h1 {
+  font-size: clamp(2rem, 8vw, 3rem);
+  margin: 0;
+}
+
+.settings-form {
+  animation: settings-content-enter 400ms 250ms ease-out both;
+  background: var(--rr-background);
+  border-radius: var(--rr-radius-card);
+  margin-top: -1.25rem;
+  min-height: calc(100vh - 5rem);
+  padding: calc(var(--rr-spacing-page) + 0.5rem) var(--rr-spacing-page)
+    calc(var(--rr-spacing-page) + env(safe-area-inset-bottom));
+  position: relative;
+  z-index: 1;
+}
+
+.settings-form h2 {
+  color: var(--rr-text);
+  font-size: 1.25rem;
+  margin: 0;
+}
+
+.settings-form p {
+  color: var(--rr-text-muted);
+  margin: 0.5rem 0 1rem;
+}
+
+.settings-form ion-list {
+  background: transparent;
+  padding: 0;
+}
+
+.settings-form ion-item {
+  --background: var(--rr-surface);
+  --border-color: var(--rr-border);
+  --color: var(--rr-text);
+  --padding-end: 0.875rem;
+  --padding-start: 0.875rem;
+  border: 1px solid var(--rr-border);
+  border-radius: var(--rr-radius-control);
+}
+
+.settings-form ion-note {
+  display: block;
+  font-size: 0.8125rem;
+  margin-top: 0.5rem;
+}
+
+.settings-form__hint {
+  font-size: 0.8125rem;
+}
+
+.settings-form__actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1.5rem;
+}
+
+.settings-page--closing .settings-page__backdrop {
+  animation: settings-backdrop-collapse 650ms cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+.settings-page--closing .settings-page__hero,
+.settings-page--closing .settings-form {
+  animation: settings-content-exit 240ms ease-in both;
+  pointer-events: none;
+}
+
+@keyframes settings-backdrop-expand {
+  from {
+    transform: scaleY(0);
+  }
+
+  to {
+    transform: scaleY(1);
+  }
+}
+
+@keyframes settings-backdrop-collapse {
+  from {
+    transform: scaleY(1);
+  }
+
+  to {
+    transform: scaleY(0);
+  }
+}
+
+@keyframes settings-content-enter {
+  from {
+    opacity: 0;
+    transform: translateY(1.5rem);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes settings-content-exit {
+  to {
+    opacity: 0;
+    transform: translateY(1.5rem);
+  }
+}

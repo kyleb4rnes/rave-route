@@ -4,6 +4,10 @@ ion-toolbar {
   --color: var(--rr-primary-contrast);
 }
 
+ion-toolbar ion-button {
+  --color: var(--rr-primary-contrast);
+}
+
 ion-content {
   --background: var(--rr-background);
 }
