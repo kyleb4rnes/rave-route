@@ -6,9 +6,9 @@ The project is part of **Project Freedom**, a personal mission focused on greate
 
 ## Project status
 
-Stages 10–18 - Persisted Festival MVP (Android project configured; device verification pending)
+v0.1.0 MVP release candidate
 
-The app now persists festivals in local storage, supports expandable cards, details, editing, deletion confirmation, image URLs/default images, optional Android device-image selection, and accessibility-focused states. The Android project uses the `com.raveroute.app` application ID and includes temporary generated icon and splash assets. Physical-device verification remains outstanding.
+The app persists festivals locally, supports expandable cards, details, editing, deletion confirmation, image URLs/default images, optional Android device-image selection, and accessibility-focused states. The Android project uses the `com.raveroute.app` application ID and includes temporary generated icon and splash assets.
 
 ## MVP capabilities
 
@@ -38,6 +38,8 @@ See [MVP specification](docs/mvp-specification.md) for the full scope.
 - [Design philosophy](docs/design-philosophy.md)
 - [Technical development plan](technical-development-plan.md)
 - [Development workflow](docs/development-workflow.md)
+- [Architecture](docs/architecture.md)
+- [Release checklist](docs/release-checklist.md)
 - [Developer agent guide](developer.agent.md)
 
 ## Development
@@ -66,5 +68,12 @@ npm run android:open
 ```
 
 Run the project from Android Studio on an emulator or a physical Android device. iOS packaging is intentionally unverified until the project is opened on macOS with Xcode.
+
+## Known limitations
+
+- Festival data stays on the current device/browser only; there is no account, sync, backup, or cloud storage in this MVP.
+- Device-selected images are stored alongside local festival data, so many large images can exhaust browser/device storage.
+- The current Android build is a debug test build, not a store-signed release artifact.
+- iOS has not been packaged or tested because that requires macOS and Xcode.
 
 Work on one documented stage at a time. Review, run, test, and understand each stage before moving to the next one.

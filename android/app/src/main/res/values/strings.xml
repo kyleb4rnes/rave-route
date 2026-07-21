@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">RaveRoute</string>
-    <string name="title_activity_main">RaveRoute</string>
+    <string name="app_name">Rave Route</string>
+    <string name="title_activity_main">Rave Route</string>
     <string name="package_name">com.raveroute.app</string>
     <string name="custom_url_scheme">com.raveroute.app</string>
 </resources>

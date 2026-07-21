@@ -115,7 +115,7 @@ Before completing a stage, confirm:
 - [ ] Stage 16 - Mobile Packaging (Android project configured with temporary assets; Android Studio/device review pending)
 - [ ] Stage 17 - Accessibility and Usability (implementation ready; physical-device review pending)
 - [ ] Stage 18 - MVP Testing and Polish (automated coverage complete; physical-device review pending)
-- [ ] Stage 19 - MVP Release
+- [x] Stage 19 - MVP Release (v0.1.0 MVP test build created; iOS intentionally deferred)
 
 Stage checkboxes show roadmap progress, not permission to begin the next stage.
 
@@ -152,3 +152,4 @@ Do not implement these unless they are explicitly brought into scope later:
 - 2026-07-20: Festival details, editing, and deletion use route-based pages, the shared form, and a declarative Ionic confirmation alert. Future-card expansion is local home-page signal state, with one expanded card at a time.
 - 2026-07-20: Image URLs use a shared image component with an accessible default placeholder. Accessibility includes explicit form errors, disclosure semantics, safe-area padding, loading/error states, and reduced-motion support.
 - 2026-07-20: Android packaging uses Capacitor with application ID `com.raveroute.app`. The Camera plugin provides native image selection only on a native platform; browser users retain the image-URL field. Generated temporary launcher and splash assets live in `resources/` and are transformed into Android resources with `@capacitor/assets`.
+- 2026-07-21: Stage 19 release preparation records the MVP architecture, known limitations, and a pre-public-release checklist. The v0.1.0 Android debug APK was assembled successfully; store signing and iOS packaging remain deliberate follow-up work.
