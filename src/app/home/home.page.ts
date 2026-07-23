@@ -46,7 +46,9 @@ export class HomePage {
   readonly error = this.festivalStore.error;
   readonly nextFestival = this.festivalStore.nextFestival;
   readonly laterUpcomingFestivals = this.festivalStore.laterUpcomingFestivals;
+  readonly pastFestivals = this.festivalStore.pastFestivals;
   readonly isAddFestivalFormOpen = signal(false);
+  readonly isPastFestivalsOpen = signal(false);
   readonly expandedFestivalId = signal<string | null>(null);
   readonly addFestivalExperience: 'inline' | 'modal' = 'modal';
 
@@ -70,6 +72,10 @@ export class HomePage {
     this.expandedFestivalId.update((expandedFestivalId) =>
       expandedFestivalId === festivalId ? null : festivalId,
     );
+  }
+
+  togglePastFestivals(): void {
+    this.isPastFestivalsOpen.update((isOpen) => !isOpen);
   }
 
   viewFestival(festivalId: string): void {

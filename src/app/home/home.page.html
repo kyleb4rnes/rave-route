@@ -54,6 +54,40 @@
       </section>
     }
 
+    @if (pastFestivals().length > 0) {
+      <section class="past-festivals" aria-labelledby="past-festivals-title">
+        <button
+          [attr.aria-expanded]="isPastFestivalsOpen()"
+          aria-controls="past-festivals-list"
+          class="past-festivals__toggle"
+          type="button"
+          (click)="togglePastFestivals()"
+        >
+          <span id="past-festivals-title">Past adventures ({{ pastFestivals().length }})</span>
+          <span aria-hidden="true">{{ isPastFestivalsOpen() ? '−' : '+' }}</span>
+        </button>
+
+        @if (isPastFestivalsOpen()) {
+          <div id="past-festivals-list" class="past-festivals__list">
+            @for (pastFestival of pastFestivals(); track pastFestival.id) {
+              <app-collapsed-festival-card
+                [title]="pastFestival.title"
+                [dateLabel]="formatDateRange(pastFestival)"
+                [location]="pastFestival.location"
+                countdownLabel="Festival complete"
+                [transportLabel]="getTransportLabel(pastFestival)"
+                [accommodationLabel]="getAccommodationLabel(pastFestival)"
+                [expanded]="expandedFestivalId() === pastFestival.id"
+                (toggled)="toggleFestival(pastFestival.id)"
+                (viewLineup)="viewLineup(pastFestival.id)"
+                (viewDetails)="viewFestival(pastFestival.id)"
+              ></app-collapsed-festival-card>
+            }
+          </div>
+        }
+      </section>
+    }
+
     <ion-button class="rr-button add-festival-button" expand="block" [disabled]="loading()" (click)="openAddFestivalForm()">
       Add Festival
     </ion-button>

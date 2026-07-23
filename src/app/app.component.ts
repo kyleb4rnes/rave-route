@@ -2,6 +2,7 @@ import { Component, computed, effect, inject, signal } from '@angular/core';
 import { IonApp, IonRouterOutlet, IonSpinner } from '@ionic/angular/standalone';
 import { FestivalStore } from './core/festivals/festival.store';
 import { AppSettingsStore } from './core/settings/app-settings.store';
+import { appearancePalettes } from './core/settings/appearance-modes';
 import { themeColourPresets } from './core/settings/theme-colours';
 
 @Component({
@@ -24,12 +25,23 @@ export class AppComponent {
 
   readonly launchState = this.launchStateSignal.asReadonly();
   readonly launchScreenVisible = computed(() => this.launchState() !== 'complete');
-  readonly theme = computed(() => themeColourPresets[this.appSettingsStore.themeColour()]);
+  readonly appearance = computed(() => appearancePalettes[this.appSettingsStore.appearanceMode()]);
+  readonly theme = computed(() => {
+    const colourTheme = themeColourPresets[this.appSettingsStore.themeColour()];
+
+    return {
+      ...colourTheme,
+      primarySoft:
+        this.appSettingsStore.appearanceMode() === 'dark'
+          ? colourTheme.primarySoftDark
+          : colourTheme.primarySoft,
+    };
+  });
   readonly appBackground = computed(() => {
     const imageUrl = this.appSettingsStore.homeBackgroundImageUrl();
 
     return imageUrl
-      ? `linear-gradient(rgb(244 246 248 / 82%), rgb(244 246 248 / 92%)), url("${encodeURI(imageUrl)}") center / cover fixed`
+      ? `linear-gradient(var(--rr-background-overlay), var(--rr-background-overlay)), url("${encodeURI(imageUrl)}") center / cover fixed`
       : 'var(--rr-background)';
   });
 

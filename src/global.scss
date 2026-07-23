@@ -34,7 +34,7 @@
 
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
-@import "@ionic/angular/css/palettes/dark.system.css";
+/* Appearance is controlled explicitly from App Settings, not by the device setting. */
 
 :root {
   --ion-font-family: "Avenir Next", Avenir, "Segoe UI", sans-serif;
@@ -61,6 +61,273 @@ ion-content::part(scroll) {
 
 ion-content::part(scroll)::-webkit-scrollbar {
   display: none;
+}
+
+.time-schedule__set .set-must-see-button,
+.time-schedule__set .set-edit-button,
+.time-schedule__set .set-delete-button {
+  margin: 0;
+  min-width: 2.5rem;
+  width: 2.5rem;
+}
+
+.stage-schedule__set .set-must-see-button,
+.stage-schedule__set .set-edit-button,
+.stage-schedule__set .set-delete-button {
+  margin: 0;
+  min-width: 2.5rem;
+  width: 2.5rem;
+}
+
+.set-must-see-button,
+.set-edit-button,
+.set-delete-button {
+  --padding-end: 0;
+  --padding-start: 0;
+}
+
+.set-must-see-button {
+  --color: var(--rr-text-muted);
+}
+
+.set-must-see-button--active {
+  --color: var(--rr-primary);
+}
+
+.set-edit-button {
+  --color: var(--rr-primary-dark);
+}
+
+.set-delete-button {
+  --color: var(--rr-primary);
+}
+
+.time-schedule__set > strong {
+  grid-row: span 2;
+  margin-right: 0.625rem;
+}
+
+.time-schedule__set > span,
+.time-schedule__set > small,
+.stage-schedule__set > span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.time-schedule__set > .set-must-see-button,
+.time-schedule__set > .set-edit-button,
+.time-schedule__set > .set-delete-button,
+.stage-schedule__set > .set-must-see-button,
+.stage-schedule__set > .set-edit-button,
+.stage-schedule__set > .set-delete-button {
+  grid-row: 1 / span 2;
+}
+
+.time-schedule__set > .set-must-see-button {
+  grid-column: 3;
+}
+
+.time-schedule__set > .set-edit-button {
+  grid-column: 4;
+}
+
+.time-schedule__set > .set-delete-button {
+  grid-column: 5;
+}
+
+.stage-schedule__set > strong {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.stage-schedule__set > span {
+  grid-column: 1;
+  grid-row: 2;
+}
+
+.stage-schedule__set > .set-must-see-button {
+  grid-column: 2;
+}
+
+.stage-schedule__set > .set-edit-button {
+  grid-column: 3;
+}
+
+.stage-schedule__set > .set-delete-button {
+  grid-column: 4;
+}
+
+.time-schedule__set--must-see,
+.stage-schedule__set--must-see {
+  background: var(--rr-primary-soft);
+}
+
+.lineup-must-see-filter {
+  --color: var(--rr-text-muted);
+  justify-self: end;
+  margin: 0;
+}
+
+.lineup-must-see-filter--active {
+  --color: var(--rr-primary);
+}
+
+.appearance-mode-picker {
+  display: grid;
+  gap: 0.625rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.appearance-mode-picker__option {
+  background: var(--rr-surface);
+  border: 1px solid var(--rr-border);
+  border-radius: var(--rr-radius-control);
+  color: var(--rr-text);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 800;
+  min-height: 2.75rem;
+  padding: 0.5rem 0.75rem;
+}
+
+.appearance-mode-picker__option--selected {
+  background: var(--rr-primary-soft);
+  border-color: var(--rr-primary);
+  box-shadow: 0 0 0 1px var(--rr-primary);
+  color: var(--rr-primary-dark);
+}
+
+.past-festivals,
+.past-festivals__list {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.past-festivals__toggle {
+  align-items: center;
+  background: var(--rr-surface);
+  border: 1px solid var(--rr-border);
+  border-radius: var(--rr-radius-control);
+  color: var(--rr-text);
+  cursor: pointer;
+  display: flex;
+  font: inherit;
+  font-weight: 800;
+  justify-content: space-between;
+  min-height: 3rem;
+  padding: 0.75rem 1rem;
+  text-align: left;
+  width: 100%;
+}
+
+.past-festivals__toggle span:last-child {
+  color: var(--rr-primary-dark);
+  font-size: 1.5rem;
+  font-weight: 400;
+  line-height: 1;
+}
+
+ion-modal.set-edit-modal {
+  --border-radius: var(--rr-radius-card);
+  --height: min(29rem, calc(100% - 3rem));
+  --width: min(calc(100% - 1rem), 32rem);
+}
+
+ion-modal.lineup-import-modal {
+  --border-radius: var(--rr-radius-card);
+  --height: min(32rem, calc(100% - 3rem));
+  --width: min(calc(100% - 1rem), 32rem);
+}
+
+.lineup-import-trigger {
+  --border-color: var(--rr-primary);
+  --color: var(--rr-primary-dark);
+  font-weight: 800;
+  margin: -0.5rem 0 0;
+}
+
+.lineup-import {
+  color: var(--rr-text);
+  display: grid;
+  gap: 1rem;
+  padding: var(--rr-spacing-page);
+}
+
+.lineup-import h2,
+.lineup-import p {
+  margin: 0;
+}
+
+.lineup-import > p:not(.lineup-import__eyebrow) {
+  color: var(--rr-text-muted);
+}
+
+.lineup-import__eyebrow {
+  color: var(--rr-primary-dark);
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.lineup-import__presets {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.lineup-import__preset {
+  --border-color: var(--rr-border);
+  --color: var(--rr-text);
+  height: auto;
+  margin: 0;
+  min-height: 4.5rem;
+  text-align: left;
+}
+
+.lineup-import__preset::part(native) {
+  align-items: flex-start;
+  flex-direction: column;
+  padding: 0.75rem 1rem;
+}
+
+.lineup-import__preset span,
+.lineup-import__preset small {
+  display: block;
+  width: 100%;
+}
+
+.lineup-import__preset small {
+  color: var(--rr-text-muted);
+  font-size: 0.75rem;
+  font-weight: 700;
+  margin-top: 0.25rem;
+}
+
+.lineup-import__preset--selected {
+  --background: var(--rr-primary-soft);
+  --border-color: var(--rr-primary);
+  --color: var(--rr-primary-dark);
+}
+
+.lineup-import__preview {
+  background: var(--rr-primary-soft);
+  border: 1px solid var(--rr-primary);
+  border-radius: var(--rr-radius-control);
+  color: var(--rr-primary-dark);
+  display: grid;
+  gap: 0.375rem;
+  padding: 0.875rem 1rem;
+}
+
+.lineup-import__preview span {
+  color: var(--rr-text-muted);
+  font-size: 0.8125rem;
+}
+
+.lineup-import ion-note {
+  display: block;
 }
 
 @media (prefers-reduced-motion: reduce) {

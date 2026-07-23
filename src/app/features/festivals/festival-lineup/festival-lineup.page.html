@@ -8,6 +8,11 @@
         <h1>{{ selectedFestival.title }}</h1>
       </header>
 
+      <ion-button class="lineup-import-trigger" expand="block" fill="outline" type="button" (click)="openImportModal()">
+        <ion-icon aria-hidden="true" name="cloud-download-outline" slot="start"></ion-icon>
+        Import official line-up
+      </ion-button>
+
       <ion-segment class="lineup-day-picker" [scrollable]="true" [value]="selectedDay()" (ionChange)="selectDay($event.detail.value)">
         @for (day of festivalDays(); track day) {
           <ion-segment-button [attr.aria-label]="formatDay(day)" [value]="day">
@@ -26,13 +31,25 @@
             <ion-icon aria-hidden="true" name="time-outline"></ion-icon>
           </ion-segment-button>
         </ion-segment>
+        <ion-button
+          [attr.aria-label]="isMustSeeFilterActive() ? 'Show all sets' : 'Show must-see sets only'"
+          [class.lineup-must-see-filter--active]="isMustSeeFilterActive()"
+          class="lineup-must-see-filter"
+          fill="clear"
+          type="button"
+          (click)="toggleMustSeeFilter()"
+        >
+          <ion-icon aria-hidden="true" [name]="isMustSeeFilterActive() ? 'heart' : 'heart-outline'"></ion-icon>
+        </ion-button>
       </section>
 
       <section class="festival-lineup__schedule" aria-labelledby="schedule-title">
         <h2 id="schedule-title">{{ selectedDayLabel() }}</h2>
 
         @if (timeSchedules().length === 0) {
-          <p class="festival-lineup__empty">No set times yet. Add the first one below.</p>
+          <p class="festival-lineup__empty">
+            {{ isMustSeeFilterActive() ? 'No must-see sets for this day yet.' : 'No set times yet. Add the first one below.' }}
+          </p>
         } @else if (viewMode() === 'time') {
           @for (schedule of timeSchedules(); track schedule.key) {
             <section class="time-schedule" [class.time-schedule--clash]="schedule.hasClash">
@@ -40,10 +57,29 @@
                 <p class="time-schedule__clash-label">Clash · choose one</p>
               }
               @for (set of schedule.sets; track set.id) {
-                <article class="time-schedule__set">
+                <article class="time-schedule__set" [class.time-schedule__set--must-see]="set.isMustSee">
                   <strong>{{ set.startTime }}–{{ set.endTime }}</strong>
                   <span>{{ set.artist }}</span>
                   <small>{{ set.stage || 'Unassigned stage' }}</small>
+                  <ion-button
+                    [attr.aria-label]="set.isMustSee ? 'Remove ' + set.artist + ' from must-see' : 'Add ' + set.artist + ' to must-see'"
+                    [class.set-must-see-button--active]="set.isMustSee"
+                    class="set-must-see-button"
+                    fill="clear"
+                    type="button"
+                    (click)="toggleMustSee(set)"
+                  >
+                    <ion-icon aria-hidden="true" [name]="set.isMustSee ? 'heart' : 'heart-outline'"></ion-icon>
+                  </ion-button>
+                  <ion-button
+                    [attr.aria-label]="'Edit ' + set.artist + ' set'"
+                    class="set-edit-button"
+                    fill="clear"
+                    type="button"
+                    (click)="openEditSet(set)"
+                  >
+                    <ion-icon aria-hidden="true" name="create-outline"></ion-icon>
+                  </ion-button>
                   <ion-button
                     [attr.aria-label]="'Delete ' + set.artist + ' set'"
                     class="set-delete-button"
@@ -62,9 +98,28 @@
             <section class="stage-schedule" [attr.aria-label]="schedule.stage">
               <h3>{{ schedule.stage }}</h3>
               @for (set of schedule.sets; track set.id) {
-                <div class="stage-schedule__set">
+                <div class="stage-schedule__set" [class.stage-schedule__set--must-see]="set.isMustSee">
                   <strong>{{ set.startTime }}–{{ set.endTime }}</strong>
                   <span>{{ set.artist }}</span>
+                  <ion-button
+                    [attr.aria-label]="set.isMustSee ? 'Remove ' + set.artist + ' from must-see' : 'Add ' + set.artist + ' to must-see'"
+                    [class.set-must-see-button--active]="set.isMustSee"
+                    class="set-must-see-button"
+                    fill="clear"
+                    type="button"
+                    (click)="toggleMustSee(set)"
+                  >
+                    <ion-icon aria-hidden="true" [name]="set.isMustSee ? 'heart' : 'heart-outline'"></ion-icon>
+                  </ion-button>
+                  <ion-button
+                    [attr.aria-label]="'Edit ' + set.artist + ' set'"
+                    class="set-edit-button"
+                    fill="clear"
+                    type="button"
+                    (click)="openEditSet(set)"
+                  >
+                    <ion-icon aria-hidden="true" name="create-outline"></ion-icon>
+                  </ion-button>
                   <ion-button
                     [attr.aria-label]="'Delete ' + set.artist + ' set'"
                     class="set-delete-button"
@@ -81,8 +136,169 @@
         }
       </section>
 
+      <ion-modal class="set-edit-modal" [isOpen]="editingSet() !== null" (didDismiss)="closeEditSet()">
+        <ng-template>
+          <ion-header>
+            <ion-toolbar>
+              <ion-buttons slot="start">
+                <ion-button (click)="closeEditSet()">Cancel</ion-button>
+              </ion-buttons>
+              <ion-title>Edit set</ion-title>
+            </ion-toolbar>
+          </ion-header>
+          <ion-content>
+            <form class="lineup-form" [formGroup]="editForm" (ngSubmit)="saveEditedSet()" novalidate>
+              <ion-list lines="none">
+                <ion-item>
+                  <ion-input formControlName="artist" label="Artist" labelPlacement="stacked"></ion-input>
+                </ion-item>
+                <ion-item>
+                  <ion-select formControlName="day" label="Day" labelPlacement="stacked">
+                    @for (day of festivalDays(); track day) {
+                      <ion-select-option [value]="day">{{ formatDay(day) }}</ion-select-option>
+                    }
+                  </ion-select>
+                </ion-item>
+                <ion-item>
+                  <ion-input formControlName="stage" label="Stage (optional)" labelPlacement="stacked"></ion-input>
+                </ion-item>
+                <div class="lineup-form__times">
+                  <ion-item>
+                    <ion-input formControlName="startTime" label="Start" labelPlacement="stacked" type="time"></ion-input>
+                  </ion-item>
+                  <ion-item>
+                    <ion-input formControlName="endTime" label="End" labelPlacement="stacked" type="time"></ion-input>
+                  </ion-item>
+                </div>
+              </ion-list>
+
+              @if (editForm.invalid && editForm.touched) {
+                <ion-note color="danger" role="alert">Enter an artist, day, start time, and end time.</ion-note>
+              }
+              @if (editError()) {
+                <ion-note color="danger" role="alert">{{ editError() }}</ion-note>
+              }
+
+              <div class="lineup-form__actions">
+                <ion-button class="rr-button" type="submit">Save changes</ion-button>
+              </div>
+            </form>
+          </ion-content>
+        </ng-template>
+      </ion-modal>
+
+      <ion-modal class="lineup-import-modal" [isOpen]="isImportModalOpen()" (didDismiss)="closeImportModal()">
+        <ng-template>
+          <ion-header>
+            <ion-toolbar>
+              <ion-buttons slot="start">
+                <ion-button (click)="closeImportModal()">Cancel</ion-button>
+              </ion-buttons>
+              <ion-title>Import line-up</ion-title>
+            </ion-toolbar>
+          </ion-header>
+          <ion-content>
+            <section class="lineup-import">
+              <p class="lineup-import__eyebrow">Timetable sources</p>
+              <h2>Choose a timetable</h2>
+              <p>Importing only adds set times that match this festival's saved dates.</p>
+
+              <div class="lineup-import__presets">
+                @for (preset of tomorrowlandPresets; track preset.id) {
+                  <ion-button
+                    [class.lineup-import__preset--selected]="selectedImportPreset()?.id === preset.id"
+                    class="lineup-import__preset"
+                    expand="block"
+                    fill="outline"
+                    type="button"
+                    (click)="selectImportPreset(preset)"
+                  >
+                    <span>{{ preset.label }}</span>
+                    <small>{{ preset.weekend }} · {{ formatDay(preset.startDate) }}–{{ formatDay(preset.endDate) }}</small>
+                  </ion-button>
+                }
+              </div>
+
+              <section class="lineup-import__catalogue" aria-labelledby="timetable-lol-title">
+                <h3 id="timetable-lol-title">Timetable.lol catalogue</h3>
+                <p>Community timetable data for 27 festivals and events. It loads only when you browse the catalogue.</p>
+
+                @if (timetableLolPresets().length === 0) {
+                  <ion-button fill="outline" expand="block" [disabled]="isTimetableLolCatalogueLoading()" type="button" (click)="loadTimetableLolCatalogue()">
+                    @if (isTimetableLolCatalogueLoading()) {
+                      <ion-spinner aria-label="Loading Timetable.lol catalogue"></ion-spinner>
+                    } @else {
+                      Browse Timetable.lol presets
+                    }
+                  </ion-button>
+                } @else {
+                  <ion-searchbar
+                    aria-label="Search Timetable.lol presets"
+                    placeholder="Search festivals or a date"
+                    (ionInput)="updateTimetableLolSearchTerm($event.detail.value)"
+                  ></ion-searchbar>
+
+                  <div class="lineup-import__presets">
+                    @for (preset of filteredTimetableLolPresets(); track preset.id) {
+                      <ion-button
+                        [class.lineup-import__preset--selected]="selectedImportPreset()?.id === preset.id"
+                        class="lineup-import__preset"
+                        expand="block"
+                        fill="outline"
+                        type="button"
+                        (click)="selectImportPreset(preset)"
+                      >
+                        <span>{{ preset.label }}</span>
+                        <small>{{ preset.detail }} · {{ formatDay(preset.startDate) }}–{{ formatDay(preset.endDate) }}</small>
+                      </ion-button>
+                    } @empty {
+                      <ion-note>No Timetable.lol presets match that search.</ion-note>
+                    }
+                  </div>
+                }
+              </section>
+
+              @if (selectedImportPreset(); as preset) {
+                @if (!isPresetCompatible(preset)) {
+                  <ion-note color="danger" role="alert">
+                    This festival's dates do not overlap {{ preset.label }}. Edit the festival dates or choose another timetable.
+                  </ion-note>
+                } @else if (importedSets().length === 0) {
+                  <ion-button class="rr-button" expand="block" [disabled]="isImportPreviewLoading()" type="button" (click)="previewImport()">
+                    @if (isImportPreviewLoading()) {
+                      <ion-spinner aria-label="Loading official timetable"></ion-spinner>
+                    } @else {
+                      Preview import
+                    }
+                  </ion-button>
+                } @else {
+                  <div class="lineup-import__preview">
+                    <strong>{{ importedSets().length }} sets found from {{ preset.sourceLabel }}</strong>
+                    <span>Only the days saved for this festival will be imported. Existing source sets refresh; matching manual sets are left alone.</span>
+                  </div>
+                  <ion-button class="rr-button" expand="block" [disabled]="isImportSaving()" type="button" (click)="confirmImport()">
+                    @if (isImportSaving()) {
+                      <ion-spinner aria-label="Saving official timetable"></ion-spinner>
+                    } @else {
+                      Import {{ importedSets().length }} sets
+                    }
+                  </ion-button>
+                }
+              }
+
+              @if (importError()) {
+                <ion-note color="danger" role="alert">{{ importError() }}</ion-note>
+              }
+            </section>
+          </ion-content>
+        </ng-template>
+      </ion-modal>
+
       @if (actionError()) {
         <ion-note class="festival-lineup__action-error" color="danger" role="alert">{{ actionError() }}</ion-note>
+      }
+      @if (importStatus()) {
+        <ion-note class="festival-lineup__action-status" color="success" role="status">{{ importStatus() }}</ion-note>
       }
 
       <section class="lineup-form">

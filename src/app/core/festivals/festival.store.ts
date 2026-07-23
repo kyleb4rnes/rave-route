@@ -8,7 +8,7 @@ import {
 } from './festival-date.utils';
 import { FestivalDraft } from './models/festival-draft';
 import { Festival } from './models/festival';
-import { FestivalSetDraft } from './models/festival-set';
+import { FestivalSet, FestivalSetDraft, FestivalSetImport, LineupImportSummary } from './models/festival-set';
 import { FESTIVAL_REPOSITORY } from './data/festival-repository.token';
 
 @Injectable({ providedIn: 'root' })
@@ -195,7 +195,187 @@ export class FestivalStore {
     }
   }
 
+  async setLineupSetMustSee(festivalId: string, setId: string, isMustSee: boolean): Promise<boolean> {
+    const festival = this.getFestivalById(festivalId);
+
+    if (!festival || !(festival.lineupSets ?? []).some((set) => set.id === setId)) {
+      return false;
+    }
+
+    const updatedFestival: Festival = {
+      ...festival,
+      lineupSets: (festival.lineupSets ?? []).map((set) =>
+        set.id === setId ? { ...set, isMustSee } : set,
+      ),
+      updatedAt: new Date().toISOString(),
+    };
+
+    try {
+      await this.repository.update(updatedFestival);
+      this.festivalsSignal.set(
+        this.allFestivals().map((existingFestival) =>
+          existingFestival.id === festivalId ? updatedFestival : existingFestival,
+        ),
+      );
+
+      return true;
+    } catch {
+      this.setStorageError();
+
+      return false;
+    }
+  }
+
+  async updateLineupSet(
+    festivalId: string,
+    setId: string,
+    draft: FestivalSetDraft,
+  ): Promise<boolean> {
+    const festival = this.getFestivalById(festivalId);
+
+    if (!festival || !(festival.lineupSets ?? []).some((set) => set.id === setId)) {
+      return false;
+    }
+
+    const updatedFestival: Festival = {
+      ...festival,
+      lineupSets: (festival.lineupSets ?? []).map((set) =>
+        set.id === setId
+          ? {
+              ...set,
+              artist: draft.artist.trim(),
+              day: draft.day,
+              startTime: draft.startTime,
+              endTime: draft.endTime,
+              stage: draft.stage.trim(),
+            }
+          : set,
+      ),
+      updatedAt: new Date().toISOString(),
+    };
+
+    try {
+      await this.repository.update(updatedFestival);
+      this.festivalsSignal.set(
+        this.allFestivals().map((existingFestival) =>
+          existingFestival.id === festivalId ? updatedFestival : existingFestival,
+        ),
+      );
+
+      return true;
+    } catch {
+      this.setStorageError();
+
+      return false;
+    }
+  }
+
+  async importLineupSets(
+    festivalId: string,
+    importedSets: readonly FestivalSetImport[],
+  ): Promise<LineupImportSummary | undefined> {
+    const festival = this.getFestivalById(festivalId);
+
+    if (!festival) {
+      return undefined;
+    }
+
+    const currentSets = festival.lineupSets ?? [];
+    const importedBySource = new Map(
+      importedSets.map((set) => [getSourceKey(set.source.provider, set.source.performanceId), set]),
+    );
+    const existingSourceKeys = new Set<string>();
+
+    for (const set of currentSets) {
+      if (set.source) {
+        existingSourceKeys.add(getSourceKey(set.source.provider, set.source.performanceId));
+      }
+    }
+    const existingManualSignatures = new Set(
+      currentSets.filter((set) => !set.source).map((set) => getSetSignature(set)),
+    );
+    let added = 0;
+    let updated = 0;
+    let skipped = 0;
+
+    const refreshedSets = currentSets.map((set) => {
+      if (!set.source) {
+        return set;
+      }
+
+      const importedSet = importedBySource.get(
+        getSourceKey(set.source.provider, set.source.performanceId),
+      );
+
+      if (!importedSet) {
+        return set;
+      }
+
+      updated += 1;
+
+      return toFestivalSet(importedSet, set.id);
+    });
+
+    for (const importedSet of importedSets) {
+      const sourceKey = getSourceKey(importedSet.source.provider, importedSet.source.performanceId);
+
+      if (existingSourceKeys.has(sourceKey)) {
+        continue;
+      }
+
+      if (existingManualSignatures.has(getSetSignature(importedSet))) {
+        skipped += 1;
+
+        continue;
+      }
+
+      refreshedSets.push(toFestivalSet(importedSet));
+      added += 1;
+    }
+
+    const updatedFestival: Festival = {
+      ...festival,
+      lineupSets: refreshedSets,
+      updatedAt: new Date().toISOString(),
+    };
+
+    try {
+      await this.repository.update(updatedFestival);
+      this.festivalsSignal.set(
+        this.allFestivals().map((existingFestival) =>
+          existingFestival.id === festivalId ? updatedFestival : existingFestival,
+        ),
+      );
+
+      return { added, updated, skipped };
+    } catch {
+      this.setStorageError();
+
+      return undefined;
+    }
+  }
+
   private setStorageError(): void {
     this.errorSignal.set('We could not save your changes. Please try again.');
   }
+}
+
+function toFestivalSet(importedSet: FestivalSetImport, id: string = crypto.randomUUID()): FestivalSet {
+  return {
+    id,
+    artist: importedSet.artist.trim(),
+    day: importedSet.day,
+    startTime: importedSet.startTime,
+    endTime: importedSet.endTime,
+    stage: importedSet.stage.trim(),
+    source: importedSet.source,
+  };
+}
+
+function getSourceKey(provider: string, performanceId: string): string {
+  return `${provider}:${performanceId}`;
+}
+
+function getSetSignature(set: Pick<FestivalSet, 'artist' | 'day' | 'startTime' | 'endTime' | 'stage'>): string {
+  return [set.artist.trim().toLocaleLowerCase(), set.day, set.startTime, set.endTime, set.stage.trim().toLocaleLowerCase()].join('|');
 }

@@ -39,4 +39,12 @@
 - Extracted theme colour presets and added persistent Red, Blue, Green, Purple, and Pink choices in App Settings.
 - Added accommodation planning alongside transport, with form toggles and clear status indicators on festival cards and details.
 - Reviewed and aligned the README, architecture, MVP, design, and developer-guide documentation with the current post-MVP application.
-- Verified lint, production build, 16 automated tests, and Android sync.
+- Deferred Must see artists and bulk paste entry until a later Line-up enhancement.
+- Added Line-up set editing through a modal that can change artist, day, stage, and set times.
+- Constrained the set-edit modal to a centred, mobile-friendly sheet with vertical breathing room.
+- Added a reusable Import official line-up flow with explicit Tomorrowland Belgium 2026 Weekend 1 and Weekend 2 presets, a date-validated preview, official source tracking, safe re-import refreshes, and manual-duplicate protection.
+- Added a searchable Timetable.lol community catalogue containing all indexed event presets; a compact same-origin asset holds its 4,415 complete acts across 27 events, is loaded on demand, filtered to the selected event and festival dates, then persisted only as normal imported sets.
+- Added persisted Must-see hearts to Line-up sets and a compact heart-only filter beside the schedule view switcher.
+- Added persistent Light and Dark appearance modes across all accent presets, surfaces, text, borders, forms, cards, and modals while retaining the selected custom background image.
+- Made Line-up set actions compact and horizontal, added a collapsible Past adventures archive on Home, and generated a CORS-safe bundled Timetable.lol asset with a repeatable refresh script.
+- Recorded the deferred Active festival idea: surface the set currently playing at a selected current festival, with clear Must-see-first clash handling or simultaneous-set choices.

@@ -118,6 +118,12 @@ Do not implement these unless they are explicitly brought into scope later:
 - Budgets
 - Maps
 
+Future Line-up work, explicitly deferred:
+
+- Bulk paste/import of set times
+- Additional automatic import providers beyond the supported Tomorrowland Belgium 2026 official presets and Timetable.lol community catalogue
+- Active festival view: choose a current festival and surface the set currently playing; resolve clashes by prioritising Must-see sets or presenting the simultaneous options for the user to choose.
+
 ## Decision Notes
 
 - 2026-07-17: Established the initial MVP scope, staged roadmap, technology direction, and working rules.
@@ -138,5 +144,9 @@ Do not implement these unless they are explicitly brought into scope later:
 - 2026-07-20: Android packaging uses Capacitor with application ID `com.raveroute.app`. The Camera plugin provides native image selection only on a native platform; browser users retain the image-URL field. Generated temporary launcher and splash assets live in `resources/` and are transformed into Android resources with `@capacitor/assets`.
 - 2026-07-21: Stage 19 release preparation records the MVP architecture, known limitations, and a pre-public-release checklist. The v0.1.0 Android debug APK was assembled successfully; store signing and iOS packaging remain deliberate follow-up work.
 - 2026-07-23: Use the shared `AppHeaderComponent` for consistent Back, Home, and Settings navigation. Back follows in-app history and hidden controls avoid no-op actions.
-- 2026-07-23: Line-up set times are persisted inside their parent festival. Manual set entry is the current source of truth; automatic lookup remains a future enhancement.
+- 2026-07-23: Line-up set times are persisted inside their parent festival. Manual entry remains supported alongside explicit, user-confirmed imports.
+- 2026-07-23: The first timetable provider is Tomorrowland Belgium 2026. Its Weekend 1 and Weekend 2 official CDN JSON endpoints are fetched only after the user selects a preset and previews it; source performance IDs support safe refreshes without replacing manual entries.
+- 2026-07-23: Timetable.lol is a separately labelled community timetable provider. A compact, versioned same-origin asset is generated with `npm run timetable-lol:sync`, loaded only when the user browses its searchable catalogue, and cached in memory for that app session; selected sets persist as normal Rave Route sets with `timetable-lol` source IDs.
+- 2026-07-23: Must-see is a persisted per-set preference. The Line-up heart filter applies only to the selected day and works in both schedule views.
+- 2026-07-23: Appearance is an explicit persisted Light or Dark setting, independent of the chosen accent colour. The optional custom background image remains the same source image; a mode-appropriate overlay keeps its content legible.
 - 2026-07-23: Appearance preferences are local-device settings. Theme presets update app-level CSS tokens and optional background images apply across routed content.

@@ -1,9 +1,11 @@
 import { computed, Injectable, signal } from '@angular/core';
+import { AppearanceMode, appearancePalettes } from './appearance-modes';
 import { ThemeColour, themeColourPresets } from './theme-colours';
 
 type StoredAppSettings = {
   homeBackgroundImageUrl?: string;
   themeColour?: ThemeColour;
+  appearanceMode?: AppearanceMode;
 };
 
 const storageKey = 'rave-route.settings.v1';
@@ -14,11 +16,13 @@ export class AppSettingsStore {
 
   readonly homeBackgroundImageUrl = computed(() => this.settingsSignal().homeBackgroundImageUrl ?? '');
   readonly themeColour = computed(() => this.settingsSignal().themeColour ?? 'red');
+  readonly appearanceMode = computed(() => this.settingsSignal().appearanceMode ?? 'light');
 
-  saveSettings(imageUrl: string, themeColour: ThemeColour): boolean {
+  saveSettings(imageUrl: string, themeColour: ThemeColour, appearanceMode: AppearanceMode): boolean {
     const homeBackgroundImageUrl = imageUrl.trim();
     const settings: StoredAppSettings = {
       themeColour,
+      appearanceMode,
       ...(homeBackgroundImageUrl ? { homeBackgroundImageUrl } : {}),
     };
 
@@ -48,8 +52,12 @@ export class AppSettingsStore {
         typeof settings.themeColour === 'string' && settings.themeColour in themeColourPresets
           ? settings.themeColour as ThemeColour
           : 'red';
+      const appearanceMode =
+        typeof settings.appearanceMode === 'string' && settings.appearanceMode in appearancePalettes
+          ? settings.appearanceMode as AppearanceMode
+          : 'light';
 
-      return { themeColour, ...(homeBackgroundImageUrl ? { homeBackgroundImageUrl } : {}) };
+      return { themeColour, appearanceMode, ...(homeBackgroundImageUrl ? { homeBackgroundImageUrl } : {}) };
     } catch {
       return {};
     }

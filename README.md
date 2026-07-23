@@ -18,11 +18,15 @@ The MVP will let a user:
 - See later festivals as collapsed cards.
 - Add, view, edit, and delete festivals.
 - Record dates, an image, a location, transport status, and accommodation status.
-- Add and browse manual set times by time or stage, including clash indicators.
-- Personalise the app with a background image and one of five theme-colour presets.
+- Add and browse manual set times by time or stage, including clash indicators and selectable official/community timetable imports.
+- Personalise the app with a background image, Light or Dark appearance, and one of five theme-colour presets.
 - Keep festival data locally between app restarts.
 
 See [MVP specification](docs/mvp-specification.md) for the full scope.
+
+## Refreshing the Timetable.lol catalogue
+
+Run `npm run timetable-lol:sync` to fetch the configured Timetable.lol source and generate the compact bundled timetable asset used by the community import catalogue. Review the resulting asset before committing it.
 
 ## Technical direction
 

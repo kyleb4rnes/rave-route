@@ -11,6 +11,7 @@ import {
 } from '@ionic/angular/standalone';
 import { AppHeaderComponent } from '../../components/app-header/app-header.component';
 import { AppSettingsStore } from '../../core/settings/app-settings.store';
+import { AppearanceMode, appearanceModeOptions } from '../../core/settings/appearance-modes';
 import { ThemeColour, themeColourOptions } from '../../core/settings/theme-colours';
 
 @Component({
@@ -36,12 +37,16 @@ export class AppSettingsPage {
   readonly saveError = signal<string | null>(null);
   readonly isClosing = signal(false);
   readonly themeColourOptions = themeColourOptions;
+  readonly appearanceModeOptions = appearanceModeOptions;
   readonly form = new FormGroup({
     homeBackgroundImageUrl: new FormControl(this.appSettingsStore.homeBackgroundImageUrl(), {
       nonNullable: true,
       validators: [Validators.pattern(/^\s*(https?:\/\/|data:image\/).+\s*$/)],
     }),
     themeColour: new FormControl<ThemeColour>(this.appSettingsStore.themeColour(), {
+      nonNullable: true,
+    }),
+    appearanceMode: new FormControl<AppearanceMode>(this.appSettingsStore.appearanceMode(), {
       nonNullable: true,
     }),
   });
@@ -62,6 +67,7 @@ export class AppSettingsPage {
     const saved = this.appSettingsStore.saveSettings(
       this.form.controls.homeBackgroundImageUrl.value,
       this.form.controls.themeColour.value,
+      this.form.controls.appearanceMode.value,
     );
 
     if (!saved) {
@@ -75,6 +81,10 @@ export class AppSettingsPage {
 
   selectThemeColour(themeColour: ThemeColour): void {
     this.form.controls.themeColour.setValue(themeColour);
+  }
+
+  selectAppearanceMode(appearanceMode: AppearanceMode): void {
+    this.form.controls.appearanceMode.setValue(appearanceMode);
   }
 
   closeSettings(): void {

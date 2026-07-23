@@ -44,7 +44,7 @@ ion-content {
   align-items: center;
   display: grid;
   gap: 0.5rem;
-  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-columns: auto auto minmax(0, 1fr);
 }
 
 .lineup-view-switcher > span {
@@ -111,8 +111,8 @@ ion-content {
 .time-schedule__set {
   align-items: center;
   display: grid;
-  gap: 0.25rem 0.75rem;
-  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 0.25rem 0;
+  grid-template-columns: auto minmax(0, 1fr) repeat(3, auto);
   padding: 0.875rem 1rem;
 }
 
@@ -137,13 +137,6 @@ ion-content {
   font-weight: 700;
 }
 
-.set-delete-button {
-  --color: var(--rr-primary);
-  grid-column: 3;
-  grid-row: 1 / span 2;
-  margin: 0;
-}
-
 .stage-schedule h3 {
   background: var(--rr-primary-soft);
   margin: 0;
@@ -153,8 +146,8 @@ ion-content {
 .stage-schedule__set {
   align-items: center;
   display: grid;
-  gap: 0.25rem;
-  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.25rem 0;
+  grid-template-columns: minmax(0, 1fr) repeat(3, auto);
   padding: 0.875rem 1rem;
 }
 
@@ -170,11 +163,6 @@ ion-content {
 .stage-schedule__set span {
   color: var(--rr-text);
   font-weight: 700;
-}
-
-.stage-schedule__set .set-delete-button {
-  grid-column: 2;
-  grid-row: 1 / span 2;
 }
 
 .lineup-form {

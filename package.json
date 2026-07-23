@@ -10,7 +10,8 @@
     "test": "ng test",
     "lint": "ng lint",
     "android:sync": "npm run build && npx cap sync android",
-    "android:open": "npx cap open android"
+    "android:open": "npx cap open android",
+    "timetable-lol:sync": "powershell -ExecutionPolicy Bypass -File scripts/sync-timetable-lol-index.ps1"
   },
   "private": true,
   "dependencies": {

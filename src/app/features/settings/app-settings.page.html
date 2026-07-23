@@ -32,6 +32,26 @@
         </div>
       </section>
 
+      <section aria-labelledby="appearance-title">
+        <h2 id="appearance-title">Appearance</h2>
+        <p>Choose a light or dark app surface.</p>
+
+        <div class="appearance-mode-picker" aria-labelledby="appearance-title" role="radiogroup">
+          @for (appearance of appearanceModeOptions; track appearance.id) {
+            <button
+              [attr.aria-checked]="form.controls.appearanceMode.value === appearance.id"
+              [class.appearance-mode-picker__option--selected]="form.controls.appearanceMode.value === appearance.id"
+              class="appearance-mode-picker__option"
+              role="radio"
+              type="button"
+              (click)="selectAppearanceMode(appearance.id)"
+            >
+              {{ appearance.label }}
+            </button>
+          }
+        </div>
+      </section>
+
       <section aria-labelledby="background-image-title">
         <h2 id="background-image-title">Background image</h2>
         <p>Add an optional image URL to personalise your app background.</p>

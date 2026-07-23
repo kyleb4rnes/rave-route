@@ -133,6 +133,174 @@ describe('FestivalStore', () => {
     expect(await repository.getAll()).toEqual([]);
   });
 
+  it('updates a persisted line-up set', async () => {
+    const festivalWithSet: Festival = {
+      ...nextFestival,
+      lineupSets: [
+        {
+          id: 'set-id',
+          artist: 'Original artist',
+          day: '2026-08-14',
+          startTime: '18:00',
+          endTime: '19:00',
+          stage: 'Main stage',
+        },
+      ],
+    };
+    const repository = new InMemoryFestivalRepository([festivalWithSet]);
+    const store = createStore(repository);
+    await store.loadFestivals();
+
+    expect(
+      await store.updateLineupSet('next', 'set-id', {
+        artist: 'Updated artist',
+        day: '2026-08-15',
+        startTime: '19:00',
+        endTime: '20:00',
+        stage: 'Second stage',
+      }),
+    ).toBeTrue();
+
+    expect(store.getFestivalById('next')?.lineupSets).toEqual([
+      {
+        id: 'set-id',
+        artist: 'Updated artist',
+        day: '2026-08-15',
+        startTime: '19:00',
+        endTime: '20:00',
+        stage: 'Second stage',
+      },
+    ]);
+  });
+
+  it('persists a line-up set as must-see', async () => {
+    const festivalWithSet: Festival = {
+      ...nextFestival,
+      lineupSets: [
+        {
+          id: 'set-id',
+          artist: 'Must-see artist',
+          day: '2026-08-14',
+          startTime: '20:00',
+          endTime: '21:00',
+          stage: 'Main stage',
+        },
+      ],
+    };
+    const store = createStore(new InMemoryFestivalRepository([festivalWithSet]));
+    await store.loadFestivals();
+
+    expect(await store.setLineupSetMustSee('next', 'set-id', true)).toBeTrue();
+    expect(store.getFestivalById('next')?.lineupSets?.[0].isMustSee).toBeTrue();
+
+    expect(await store.setLineupSetMustSee('next', 'set-id', false)).toBeTrue();
+    expect(store.getFestivalById('next')?.lineupSets?.[0].isMustSee).toBeFalse();
+  });
+
+  it('imports official sets without replacing matching manual entries and refreshes existing imports', async () => {
+    const festivalWithSets: Festival = {
+      ...nextFestival,
+      lineupSets: [
+        {
+          id: 'manual-set',
+          artist: 'Manual artist',
+          day: '2026-08-14',
+          startTime: '18:00',
+          endTime: '19:00',
+          stage: 'Main stage',
+        },
+        {
+          id: 'official-set',
+          artist: 'Old official artist',
+          day: '2026-08-14',
+          startTime: '19:00',
+          endTime: '20:00',
+          stage: 'Main stage',
+          source: {
+            provider: 'tomorrowland',
+            performanceId: 'official-1',
+            sourceUrl: 'https://example.com/old.json',
+            importedAt: '2026-01-01T00:00:00.000Z',
+          },
+        },
+      ],
+    };
+    const store = createStore(new InMemoryFestivalRepository([festivalWithSets]));
+    await store.loadFestivals();
+
+    const summary = await store.importLineupSets('next', [
+      {
+        artist: 'Manual artist',
+        day: '2026-08-14',
+        startTime: '18:00',
+        endTime: '19:00',
+        stage: 'Main stage',
+        source: {
+          provider: 'tomorrowland',
+          performanceId: 'manual-match',
+          sourceUrl: 'https://example.com/new.json',
+          importedAt: '2026-02-01T00:00:00.000Z',
+        },
+      },
+      {
+        artist: 'Refreshed official artist',
+        day: '2026-08-14',
+        startTime: '19:30',
+        endTime: '20:30',
+        stage: 'Second stage',
+        source: {
+          provider: 'tomorrowland',
+          performanceId: 'official-1',
+          sourceUrl: 'https://example.com/new.json',
+          importedAt: '2026-02-01T00:00:00.000Z',
+        },
+      },
+      {
+        artist: 'New official artist',
+        day: '2026-08-15',
+        startTime: '21:00',
+        endTime: '22:00',
+        stage: 'Third stage',
+        source: {
+          provider: 'tomorrowland',
+          performanceId: 'official-2',
+          sourceUrl: 'https://example.com/new.json',
+          importedAt: '2026-02-01T00:00:00.000Z',
+        },
+      },
+    ]);
+
+    expect(summary).toEqual({ added: 1, updated: 1, skipped: 1 });
+    expect(store.getFestivalById('next')?.lineupSets).toEqual([
+      {
+        id: 'manual-set',
+        artist: 'Manual artist',
+        day: '2026-08-14',
+        startTime: '18:00',
+        endTime: '19:00',
+        stage: 'Main stage',
+      },
+      {
+        id: 'official-set',
+        artist: 'Refreshed official artist',
+        day: '2026-08-14',
+        startTime: '19:30',
+        endTime: '20:30',
+        stage: 'Second stage',
+        source: {
+          provider: 'tomorrowland',
+          performanceId: 'official-1',
+          sourceUrl: 'https://example.com/new.json',
+          importedAt: '2026-02-01T00:00:00.000Z',
+        },
+      },
+      jasmine.objectContaining({
+        artist: 'New official artist',
+        source: jasmine.objectContaining({ performanceId: 'official-2' }),
+      }),
+    ]);
+  });
+
   it('reports a repository load failure without leaving the store loading', async () => {
     const store = createStore(new FailingFestivalRepository());
 
