@@ -5,7 +5,7 @@ ion-toolbar {
 }
 
 ion-content {
-  --background: var(--rr-background);
+  --background: var(--rr-app-background, var(--rr-background));
 }
 
 .festival-details {

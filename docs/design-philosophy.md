@@ -18,7 +18,7 @@ Design for a phone-sized viewport, touch interaction, safe areas, scrolling, and
 
 ### Bright but usable
 
-Begin with a warm red/coral primary direction, orange accents, a cream background, and dark readable text. Colour should create energy, but never be the only way information is communicated.
+Use an energetic primary colour against a cool-mist neutral background, white surfaces, and dark readable text. Red is the default theme, with blue, green, purple, and pink presets available for personalisation. Colour should create energy, but never be the only way information is communicated.
 
 ### Clear and calm interactions
 
@@ -26,7 +26,7 @@ Controls should be comfortably sized and labelled. Forms should explain errors c
 
 ### Consistency through shared tokens
 
-Colours, spacing, radii, shadows, and typography should use shared design tokens rather than scattered raw values. Tokens will be introduced in the branding stage, when the UI exists to use them.
+Colours, spacing, radii, shadows, and typography use shared design tokens rather than scattered raw values. Theme presets update the app-level colour tokens; optional background images are applied consistently behind routed page content.
 
 ### Accessibility is part of quality
 
@@ -35,4 +35,3 @@ Use semantic structure, visible focus, sufficient contrast, accessible labels, r
 ## Scope discipline
 
 Visual polish should support the current stage. Do not build a complex design system or future screens before the MVP needs them.
-

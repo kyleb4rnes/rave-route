@@ -32,6 +32,7 @@ Each festival records:
 - Picture, with a default when none is supplied
 - Location
 - Whether transport is arranged
+- Whether accommodation is arranged
 
 The application will also maintain identifiers and creation/update timestamps needed to manage records reliably.
 
@@ -63,7 +64,10 @@ The MVP does not include:
 - Maps
 - Complex image upload or cloud image storage
 
+## Delivered post-MVP enhancements
+
+The current application also includes manual festival line-ups with set times and stage grouping, configurable app backgrounds, and persistent theme-colour presets. These remain local-device features and do not change the MVP's no-account, no-network core constraint.
+
 ## MVP acceptance outcome
 
 A user can install or open Rave Route, create festival plans, see the next plan emphasised, inspect later plans, edit or delete them, and return later without losing the locally stored data.
-

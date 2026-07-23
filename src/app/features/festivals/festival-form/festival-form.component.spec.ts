@@ -36,6 +36,7 @@ describe('FestivalFormComponent', () => {
       endDate: '2026-08-14',
       imageUrl: '',
       transportArranged: true,
+      accommodationArranged: false,
     });
 
     component.submit();
@@ -53,6 +54,7 @@ describe('FestivalFormComponent', () => {
       endDate: '2026-08-16',
       imageUrl: ' https://example.com/festival.jpg ',
       transportArranged: true,
+      accommodationArranged: true,
     });
 
     component.submit();
@@ -65,6 +67,7 @@ describe('FestivalFormComponent', () => {
         endDate: '2026-08-16',
         imageUrl: 'https://example.com/festival.jpg',
         transportArranged: true,
+        accommodationArranged: true,
       },
     ]);
   });
@@ -78,6 +81,7 @@ describe('FestivalFormComponent', () => {
       imageUrl: 'https://example.com/festival.jpg',
       location: 'Somerset',
       transportArranged: true,
+      accommodationArranged: true,
       createdAt: '2026-01-01T00:00:00.000Z',
       updatedAt: '2026-01-01T00:00:00.000Z',
     };
@@ -92,6 +96,7 @@ describe('FestivalFormComponent', () => {
       imageUrl: festival.imageUrl ?? '',
       location: festival.location,
       transportArranged: festival.transportArranged,
+      accommodationArranged: festival.accommodationArranged ?? false,
     });
   });
 });

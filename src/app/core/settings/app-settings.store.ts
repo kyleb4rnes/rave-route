@@ -1,7 +1,9 @@
 import { computed, Injectable, signal } from '@angular/core';
+import { ThemeColour, themeColourPresets } from './theme-colours';
 
 type StoredAppSettings = {
   homeBackgroundImageUrl?: string;
+  themeColour?: ThemeColour;
 };
 
 const storageKey = 'rave-route.settings.v1';
@@ -11,10 +13,14 @@ export class AppSettingsStore {
   private readonly settingsSignal = signal<StoredAppSettings>(this.readSettings());
 
   readonly homeBackgroundImageUrl = computed(() => this.settingsSignal().homeBackgroundImageUrl ?? '');
+  readonly themeColour = computed(() => this.settingsSignal().themeColour ?? 'red');
 
-  saveHomeBackgroundImageUrl(imageUrl: string): boolean {
+  saveSettings(imageUrl: string, themeColour: ThemeColour): boolean {
     const homeBackgroundImageUrl = imageUrl.trim();
-    const settings = homeBackgroundImageUrl ? { homeBackgroundImageUrl } : {};
+    const settings: StoredAppSettings = {
+      themeColour,
+      ...(homeBackgroundImageUrl ? { homeBackgroundImageUrl } : {}),
+    };
 
     try {
       localStorage.setItem(storageKey, JSON.stringify(settings));
@@ -36,7 +42,14 @@ export class AppSettingsStore {
 
       const settings = JSON.parse(storedSettings) as StoredAppSettings;
 
-      return typeof settings.homeBackgroundImageUrl === 'string' ? settings : {};
+      const homeBackgroundImageUrl =
+        typeof settings.homeBackgroundImageUrl === 'string' ? settings.homeBackgroundImageUrl : undefined;
+      const themeColour =
+        typeof settings.themeColour === 'string' && settings.themeColour in themeColourPresets
+          ? settings.themeColour as ThemeColour
+          : 'red';
+
+      return { themeColour, ...(homeBackgroundImageUrl ? { homeBackgroundImageUrl } : {}) };
     } catch {
       return {};
     }

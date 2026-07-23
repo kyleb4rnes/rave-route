@@ -25,8 +25,9 @@ The MVP lets a user:
 - See the next festival emphasised and later festivals collapsed.
 - Add, view, edit, and delete festivals.
 - Store data locally so it remains after the app is closed.
+- Add manual line-up set times and personalise the app appearance.
 
-Each festival contains a title, start date, end date, picture, location, and transport-arranged status.
+Each festival contains a title, start date, end date, picture, location, transport-arranged status, accommodation-arranged status, and optional line-up sets.
 
 ## 4. Technology Choices
 
@@ -36,7 +37,7 @@ Each festival contains a title, start date, end date, picture, location, and tra
 - TypeScript and SCSS
 - Angular signals for suitable reactive state
 - Typed reactive forms
-- Jest
+- Jasmine and Karma
 - Local storage for MVP persistence
 
 Do not add a dependency automatically. If a dependency appears useful, explain its value and ask the developer for approval before installing it.
@@ -45,7 +46,7 @@ Do not add a dependency automatically. If a dependency appears useful, explain i
 
 Every screen should make the user more excited for their next festival.
 
-The experience is mobile-first, bright, warm, and energetic. The initial visual direction uses a warm red/coral theme. Usability and accessibility remain requirements, not polish to bolt on later.
+The experience is mobile-first, bright, and energetic. The default visual direction uses hot red, white surfaces, and a cool-mist neutral background; users can select blue, green, purple, or pink presets. Usability and accessibility remain requirements, not polish to bolt on later.
 
 ## 6. Development Rules
 
@@ -97,25 +98,7 @@ Before completing a stage, confirm:
 
 ## 9. Current Build Stages
 
-- [ ] Stage 0 - Project Preparation (implementation ready; awaiting review and commit)
-- [ ] Stage 1 - Blank Angular and Ionic Application (implementation ready; test suite passes)
-- [ ] Stage 2 - Mobile Application Shell (implementation ready; awaiting visual review)
-- [ ] Stage 3 - Theme and Brand Foundation (implementation ready; awaiting visual review)
-- [ ] Stage 4 - Static Home Page UI (implementation ready; awaiting visual review)
-- [ ] Stage 5 - Festival Domain Model (implementation ready; awaiting combined review)
-- [ ] Stage 6 - Festival State (implementation ready; awaiting combined review)
-- [ ] Stage 7 - Add Festival Form UI (implementation ready; awaiting combined review)
-- [ ] Stage 8 - Test Add Festival Interactions (modal selected provisionally; awaiting manual mobile review)
-- [ ] Stage 9 - Create Festival Functionality (implementation ready; awaiting combined review)
-- [ ] Stage 10 - Local Persistence (implementation ready; awaiting review)
-- [ ] Stage 11 - Expand Collapsed Festival Cards (implementation ready; awaiting review)
-- [ ] Stage 12 - Festival Details Page (implementation ready; awaiting review)
-- [ ] Stage 13 - Edit Festival (implementation ready; awaiting review)
-- [ ] Stage 14 - Delete Festival (implementation ready; awaiting review)
-- [ ] Stage 15 - Festival Images (URL/default and Android device selection implemented; physical-device review pending)
-- [ ] Stage 16 - Mobile Packaging (Android project configured with temporary assets; Android Studio/device review pending)
-- [ ] Stage 17 - Accessibility and Usability (implementation ready; physical-device review pending)
-- [ ] Stage 18 - MVP Testing and Polish (automated coverage complete; physical-device review pending)
+- [x] Stages 0-18 - Completed as part of the v0.1.0 MVP delivery; physical-device and public-release checks remain tracked in the release checklist.
 - [x] Stage 19 - MVP Release (v0.1.0 MVP test build created; iOS intentionally deferred)
 
 Stage checkboxes show roadmap progress, not permission to begin the next stage.
@@ -154,3 +137,6 @@ Do not implement these unless they are explicitly brought into scope later:
 - 2026-07-20: Image URLs use a shared image component with an accessible default placeholder. Accessibility includes explicit form errors, disclosure semantics, safe-area padding, loading/error states, and reduced-motion support.
 - 2026-07-20: Android packaging uses Capacitor with application ID `com.raveroute.app`. The Camera plugin provides native image selection only on a native platform; browser users retain the image-URL field. Generated temporary launcher and splash assets live in `resources/` and are transformed into Android resources with `@capacitor/assets`.
 - 2026-07-21: Stage 19 release preparation records the MVP architecture, known limitations, and a pre-public-release checklist. The v0.1.0 Android debug APK was assembled successfully; store signing and iOS packaging remain deliberate follow-up work.
+- 2026-07-23: Use the shared `AppHeaderComponent` for consistent Back, Home, and Settings navigation. Back follows in-app history and hidden controls avoid no-op actions.
+- 2026-07-23: Line-up set times are persisted inside their parent festival. Manual set entry is the current source of truth; automatic lookup remains a future enhancement.
+- 2026-07-23: Appearance preferences are local-device settings. Theme presets update app-level CSS tokens and optional background images apply across routed content.

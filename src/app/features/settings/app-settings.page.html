@@ -1,13 +1,4 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-button aria-label="Back to home" (click)="closeSettings()">
-        <ion-icon aria-hidden="true" name="chevron-back"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-    <ion-title>App settings</ion-title>
-  </ion-toolbar>
-</ion-header>
+<app-header title="App settings" [interceptBack]="true" (backRequested)="closeSettings()"></app-header>
 
 <ion-content>
   <main class="settings-page" [class.settings-page--closing]="isClosing()">
@@ -18,9 +9,32 @@
     </header>
 
     <form class="settings-form" [formGroup]="form" (ngSubmit)="saveSettings()" novalidate>
+      <section aria-labelledby="theme-colour-title">
+        <h2 id="theme-colour-title">Theme colour</h2>
+        <p>Choose the app's primary colour.</p>
+
+        <div class="theme-colour-picker" aria-labelledby="theme-colour-title" role="radiogroup">
+          @for (theme of themeColourOptions; track theme.id) {
+            <button
+              [attr.aria-checked]="form.controls.themeColour.value === theme.id"
+              [class.theme-colour-picker__option--selected]="form.controls.themeColour.value === theme.id"
+              [style.--theme-colour]="theme.primary"
+              [style.--theme-colour-soft]="theme.primarySoft"
+              class="theme-colour-picker__option"
+              role="radio"
+              type="button"
+              (click)="selectThemeColour(theme.id)"
+            >
+              <span aria-hidden="true"></span>
+              {{ theme.label }}
+            </button>
+          }
+        </div>
+      </section>
+
       <section aria-labelledby="background-image-title">
         <h2 id="background-image-title">Background image</h2>
-        <p>Add an optional image URL to personalise your home screen.</p>
+        <p>Add an optional image URL to personalise your app background.</p>
 
         <ion-list lines="none">
           <ion-item>

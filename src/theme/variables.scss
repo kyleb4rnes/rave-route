@@ -4,15 +4,16 @@
   --rr-primary-dark: #bd1f2a;
   --rr-primary-contrast: #ffffff;
   --rr-accent: #ff6b6b;
-  --rr-background: #fff8f2;
+  --rr-primary-soft: #fff0ee;
+  --rr-background: #f4f6f8;
   --rr-surface: #ffffff;
-  --rr-text: #2d201e;
-  --rr-text-muted: #765f5a;
-  --rr-border: #f0d9d0;
+  --rr-text: #2a2d32;
+  --rr-text-muted: #626a73;
+  --rr-border: #dfe4e8;
 
   --rr-radius-card: 1.25rem;
   --rr-radius-control: 0.75rem;
-  --rr-shadow-card: 0 0.75rem 2rem rgb(85 45 35 / 12%);
+  --rr-shadow-card: 0 0.75rem 2rem rgb(30 35 40 / 12%);
   --rr-spacing-page: clamp(1.25rem, 5vw, 2rem);
 
   // Ionic theme mappings.

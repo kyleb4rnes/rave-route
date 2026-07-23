@@ -2,15 +2,11 @@ import { Component, computed, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import {
   IonAlert,
-  IonBackButton,
   IonButton,
-  IonButtons,
   IonContent,
-  IonHeader,
-  IonTitle,
-  IonToolbar,
 } from '@ionic/angular/standalone';
 
+import { AppHeaderComponent } from '../../../components/app-header/app-header.component';
 import { FestivalImageComponent } from '../../../components/festival-image/festival-image.component';
 import { calculateDaysRemaining } from '../../../core/festivals/festival-date.utils';
 import { Festival } from '../../../core/festivals/models/festival';
@@ -23,14 +19,10 @@ import { FestivalStore } from '../../../core/festivals/festival.store';
   standalone: true,
   imports: [
     FestivalImageComponent,
+    AppHeaderComponent,
     IonAlert,
-    IonBackButton,
     IonButton,
-    IonButtons,
     IonContent,
-    IonHeader,
-    IonTitle,
-    IonToolbar,
     RouterLink,
   ],
 })
@@ -69,6 +61,10 @@ export class FestivalDetailsPage {
 
   getTransportLabel(festival: Festival): string {
     return festival.transportArranged ? 'Transport arranged' : 'Transport to arrange';
+  }
+
+  getAccommodationLabel(festival: Festival): string {
+    return festival.accommodationArranged ? 'Accommodation arranged' : 'Accommodation to arrange';
   }
 
   editFestival(): void {

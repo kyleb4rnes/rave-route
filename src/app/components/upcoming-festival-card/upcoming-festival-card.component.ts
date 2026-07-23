@@ -32,6 +32,8 @@ export class UpcomingFestivalCardComponent {
   readonly dateLabel = input.required<string>();
   readonly countdownLabel = input.required<string>();
   readonly transportLabel = input.required<string>();
+  readonly accommodationLabel = input.required<string>();
   readonly imageUrl = input<string | undefined>();
   readonly viewDetails = output<void>();
+  readonly viewLineup = output<void>();
 }

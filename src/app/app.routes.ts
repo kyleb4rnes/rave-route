@@ -14,6 +14,13 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'festivals/:festivalId/lineup',
+    loadComponent: () =>
+      import('./features/festivals/festival-lineup/festival-lineup.page').then(
+        ({ FestivalLineupPage }) => FestivalLineupPage,
+      ),
+  },
+  {
     path: 'festivals/:festivalId',
     loadComponent: () =>
       import('./features/festivals/festival-details/festival-details.page').then(

@@ -54,6 +54,33 @@
   margin: 1rem 0 0.75rem;
 }
 
-.festival-card ion-chip {
+.festival-card__statuses {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.festival-card__statuses ion-chip {
   margin: 0;
+}
+
+.festival-card__actions {
+  display: grid;
+  gap: 0.5rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-top: 1rem;
+}
+
+.festival-card__actions ion-button {
+  --border-color: var(--rr-primary);
+  --border-radius: var(--rr-radius-control);
+  --color: var(--rr-primary-dark);
+  font-size: 0.8125rem;
+  font-weight: 800;
+  margin: 0;
+  min-height: 2.75rem;
+}
+
+.festival-card__actions ion-button.rr-button {
+  --color: var(--rr-primary-contrast);
 }

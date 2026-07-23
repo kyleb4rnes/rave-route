@@ -1,11 +1,4 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-back-button defaultHref="/home" text="Back"></ion-back-button>
-    </ion-buttons>
-    <ion-title>Festival details</ion-title>
-  </ion-toolbar>
-</ion-header>
+<app-header title="Festival details"></app-header>
 
 <ion-content>
   <main class="festival-details">
@@ -35,9 +28,14 @@
           <dt>Travel</dt>
           <dd>{{ getTransportLabel(selectedFestival) }}</dd>
         </div>
+        <div>
+          <dt>Stay</dt>
+          <dd>{{ getAccommodationLabel(selectedFestival) }}</dd>
+        </div>
       </dl>
 
       <div class="festival-details__actions">
+        <ion-button class="rr-button" expand="block" [routerLink]="['/festivals', selectedFestival.id, 'lineup']">LINE UP</ion-button>
         <ion-button class="rr-button" expand="block" (click)="editFestival()">Edit festival</ion-button>
         <ion-button color="danger" expand="block" fill="outline" (click)="openDeleteConfirmation()">Delete festival</ion-button>
       </div>

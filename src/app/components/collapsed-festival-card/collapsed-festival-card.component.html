@@ -19,7 +19,11 @@
       <p><strong>When:</strong> {{ dateLabel() }}</p>
       <p><strong>{{ countdownLabel() }}</strong></p>
       <p>{{ transportLabel() }}</p>
-      <ion-button fill="clear" (click)="viewDetails.emit()">View details</ion-button>
+      <p>{{ accommodationLabel() }}</p>
+      <div class="collapsed-card__actions">
+        <ion-button class="rr-button" expand="block" (click)="viewLineup.emit()">Line up</ion-button>
+        <ion-button aria-label="View festival details" expand="block" fill="outline" (click)="viewDetails.emit()">Details</ion-button>
+      </div>
     </div>
   }
 </section>

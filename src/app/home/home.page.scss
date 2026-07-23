@@ -9,7 +9,7 @@ ion-toolbar ion-button {
 }
 
 ion-content {
-  --background: var(--rr-background);
+  --background: var(--rr-app-background, var(--rr-background));
 }
 
 .home-shell {

@@ -1,0 +1,30 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      @if (canGoBack()) {
+        <ion-button aria-label="Go back" (click)="goBack()">
+          <ion-icon aria-hidden="true" name="chevron-back"></ion-icon>
+        </ion-button>
+      }
+    </ion-buttons>
+
+    <ion-title>
+      @if (showLogo()) {
+        <app-rave-route-logo></app-rave-route-logo>
+      } @else {
+        {{ title() }}
+      }
+    </ion-title>
+
+    <ion-buttons slot="end">
+      @if (!isHome()) {
+        <ion-button aria-label="Go home" routerLink="/home">
+          <ion-icon aria-hidden="true" name="home-outline"></ion-icon>
+        </ion-button>
+      }
+      <ion-button aria-label="Open app settings" routerLink="/settings">
+        <ion-icon aria-hidden="true" name="settings-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>

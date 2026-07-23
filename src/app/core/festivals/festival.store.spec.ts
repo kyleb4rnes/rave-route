@@ -52,6 +52,7 @@ const nextFestival: Festival = {
   endDate: '2026-08-16',
   location: 'Somerset',
   transportArranged: true,
+  accommodationArranged: true,
   createdAt: '2026-01-01T00:00:00.000Z',
   updatedAt: '2026-01-01T00:00:00.000Z',
 };
@@ -95,6 +96,7 @@ describe('FestivalStore', () => {
       endDate: '2026-08-03',
       location: 'Bristol',
       transportArranged: false,
+      accommodationArranged: false,
     });
 
     if (!createdFestival) {
@@ -121,6 +123,7 @@ describe('FestivalStore', () => {
       endDate: '2026-08-17',
       location: 'Bristol',
       transportArranged: false,
+      accommodationArranged: false,
     });
 
     expect(updatedFestival?.title).toBe('Updated Festival');

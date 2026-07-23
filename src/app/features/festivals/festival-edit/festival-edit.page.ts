@@ -1,14 +1,8 @@
 import { Component, computed, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import {
-  IonBackButton,
-  IonButtons,
-  IonContent,
-  IonHeader,
-  IonTitle,
-  IonToolbar,
-} from '@ionic/angular/standalone';
+import { IonContent } from '@ionic/angular/standalone';
 
+import { AppHeaderComponent } from '../../../components/app-header/app-header.component';
 import { FestivalDraft } from '../../../core/festivals/models/festival-draft';
 import { FestivalStore } from '../../../core/festivals/festival.store';
 import { FestivalFormComponent } from '../festival-form/festival-form.component';
@@ -20,12 +14,8 @@ import { FestivalFormComponent } from '../festival-form/festival-form.component'
   standalone: true,
   imports: [
     FestivalFormComponent,
-    IonBackButton,
-    IonButtons,
+    AppHeaderComponent,
     IonContent,
-    IonHeader,
-    IonTitle,
-    IonToolbar,
   ],
 })
 export class FestivalEditPage {

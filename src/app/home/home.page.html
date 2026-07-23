@@ -1,17 +1,6 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>
-      <app-rave-route-logo></app-rave-route-logo>
-    </ion-title>
-    <ion-buttons slot="end">
-      <ion-button aria-label="Open app settings" routerLink="/settings">
-        <ion-icon aria-hidden="true" name="settings-outline"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header>
+<app-header title="Rave Route" [showLogo]="true"></app-header>
 
-<ion-content [style.--background]="homeBackground()">
+<ion-content>
   <main class="home-shell">
     <header class="page-intro">
       <p class="page-intro__eyebrow">YOUR FESTIVAL ROUTE</p>
@@ -34,7 +23,9 @@
         [dateLabel]="formatDateRange(festival)"
         [countdownLabel]="getCountdownLabel(festival)"
         [transportLabel]="getTransportLabel(festival)"
+        [accommodationLabel]="getAccommodationLabel(festival)"
         [imageUrl]="festival.imageUrl"
+        (viewLineup)="viewLineup(festival.id)"
         (viewDetails)="viewFestival(festival.id)"
       ></app-upcoming-festival-card>
 
@@ -48,8 +39,10 @@
               [location]="futureFestival.location"
               [countdownLabel]="getCountdownLabel(futureFestival)"
               [transportLabel]="getTransportLabel(futureFestival)"
+              [accommodationLabel]="getAccommodationLabel(futureFestival)"
               [expanded]="expandedFestivalId() === futureFestival.id"
               (toggled)="toggleFestival(futureFestival.id)"
+              (viewLineup)="viewLineup(futureFestival.id)"
               (viewDetails)="viewFestival(futureFestival.id)"
             ></app-collapsed-festival-card>
           }

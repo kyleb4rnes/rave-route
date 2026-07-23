@@ -21,10 +21,18 @@
     </dl>
 
     <p class="festival-card__countdown">{{ countdownLabel() }}</p>
-    <ion-chip color="primary">
-      <ion-label>{{ transportLabel() }}</ion-label>
-    </ion-chip>
+    <div class="festival-card__statuses">
+      <ion-chip color="primary">
+        <ion-label>{{ transportLabel() }}</ion-label>
+      </ion-chip>
+      <ion-chip color="primary">
+        <ion-label>{{ accommodationLabel() }}</ion-label>
+      </ion-chip>
+    </div>
 
-    <ion-button fill="clear" (click)="viewDetails.emit()">View details</ion-button>
+    <div class="festival-card__actions">
+      <ion-button class="rr-button" expand="block" (click)="viewLineup.emit()">Line up</ion-button>
+      <ion-button aria-label="View festival details" expand="block" fill="outline" (click)="viewDetails.emit()">Details</ion-button>
+    </div>
   </ion-card-content>
 </ion-card>

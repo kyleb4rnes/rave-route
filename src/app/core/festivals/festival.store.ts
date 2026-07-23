@@ -8,6 +8,7 @@ import {
 } from './festival-date.utils';
 import { FestivalDraft } from './models/festival-draft';
 import { Festival } from './models/festival';
+import { FestivalSetDraft } from './models/festival-set';
 import { FESTIVAL_REPOSITORY } from './data/festival-repository.token';
 
 @Injectable({ providedIn: 'root' })
@@ -64,6 +65,8 @@ export class FestivalStore {
       ...(draft.imageUrl ? { imageUrl: draft.imageUrl } : {}),
       location: draft.location,
       transportArranged: draft.transportArranged,
+      accommodationArranged: draft.accommodationArranged,
+      lineupSets: [],
       createdAt: timestamp,
       updatedAt: timestamp,
     };
@@ -115,6 +118,74 @@ export class FestivalStore {
     try {
       await this.repository.delete(id);
       this.festivalsSignal.set(this.allFestivals().filter((festival) => festival.id !== id));
+
+      return true;
+    } catch {
+      this.setStorageError();
+
+      return false;
+    }
+  }
+
+  async addLineupSet(festivalId: string, draft: FestivalSetDraft): Promise<boolean> {
+    const festival = this.getFestivalById(festivalId);
+
+    if (!festival) {
+      return false;
+    }
+
+    const updatedFestival: Festival = {
+      ...festival,
+      lineupSets: [
+        ...(festival.lineupSets ?? []),
+        {
+          id: crypto.randomUUID(),
+          artist: draft.artist.trim(),
+          day: draft.day,
+          startTime: draft.startTime,
+          endTime: draft.endTime,
+          stage: draft.stage.trim(),
+        },
+      ],
+      updatedAt: new Date().toISOString(),
+    };
+
+    try {
+      await this.repository.update(updatedFestival);
+      this.festivalsSignal.set(
+        this.allFestivals().map((existingFestival) =>
+          existingFestival.id === festivalId ? updatedFestival : existingFestival,
+        ),
+      );
+
+      return true;
+    } catch {
+      this.setStorageError();
+
+      return false;
+    }
+  }
+
+  async deleteLineupSet(festivalId: string, setId: string): Promise<boolean> {
+    const festival = this.getFestivalById(festivalId);
+
+    if (!festival) {
+      return false;
+    }
+
+    const updatedFestival: Festival = {
+      ...festival,
+      lineupSets: (festival.lineupSets ?? []).filter((set) => set.id !== setId),
+      updatedAt: new Date().toISOString(),
+    };
+
+    try {
+      await this.repository.update(updatedFestival);
+      this.festivalsSignal.set(
+        this.allFestivals().map((existingFestival) =>
+          existingFestival.id === festivalId ? updatedFestival : existingFestival,
+        ),
+      );
 
       return true;
     } catch {

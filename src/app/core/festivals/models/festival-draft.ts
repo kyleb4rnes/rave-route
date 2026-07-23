@@ -5,4 +5,5 @@ export interface FestivalDraft {
   imageUrl?: string;
   location: string;
   transportArranged: boolean;
+  accommodationArranged: boolean;
 }

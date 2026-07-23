@@ -1,0 +1,17 @@
+:host {
+  display: block;
+}
+
+ion-toolbar {
+  --background: var(--rr-primary);
+  --border-width: 0;
+  --color: var(--rr-primary-contrast);
+}
+
+ion-toolbar ion-button {
+  --color: var(--rr-primary-contrast);
+}
+
+ion-title {
+  font-weight: 800;
+}

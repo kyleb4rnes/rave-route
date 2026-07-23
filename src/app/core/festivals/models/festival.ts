@@ -1,3 +1,5 @@
+import { FestivalSet } from './festival-set';
+
 export interface Festival {
   id: string;
   title: string;
@@ -6,6 +8,8 @@ export interface Festival {
   imageUrl?: string;
   location: string;
   transportArranged: boolean;
+  accommodationArranged?: boolean;
+  lineupSets?: readonly FestivalSet[];
   createdAt: string;
   updatedAt: string;
 }

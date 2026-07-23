@@ -1,4 +1,14 @@
-<ion-app>
+<ion-app
+  [style.--ion-color-primary]="theme().primary"
+  [style.--ion-color-primary-rgb]="theme().primaryRgb"
+  [style.--ion-color-primary-shade]="theme().primaryDark"
+  [style.--ion-color-primary-tint]="theme().tint"
+  [style.--rr-accent]="theme().tint"
+  [style.--rr-app-background]="appBackground()"
+  [style.--rr-primary]="theme().primary"
+  [style.--rr-primary-dark]="theme().primaryDark"
+  [style.--rr-primary-soft]="theme().primarySoft"
+>
   <ion-router-outlet></ion-router-outlet>
 
   @if (launchScreenVisible()) {

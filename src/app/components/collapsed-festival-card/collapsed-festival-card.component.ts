@@ -18,7 +18,9 @@ export class CollapsedFestivalCardComponent {
   readonly location = input.required<string>();
   readonly countdownLabel = input.required<string>();
   readonly transportLabel = input.required<string>();
+  readonly accommodationLabel = input.required<string>();
   readonly expanded = input.required<boolean>();
   readonly toggled = output<void>();
   readonly viewDetails = output<void>();
+  readonly viewLineup = output<void>();
 }

@@ -9,7 +9,7 @@ ion-toolbar ion-button {
 }
 
 ion-content {
-  --background: transparent;
+  --background: var(--rr-app-background, var(--rr-background));
 }
 
 .settings-page {
@@ -72,6 +72,46 @@ ion-content {
 .settings-form p {
   color: var(--rr-text-muted);
   margin: 0.5rem 0 1rem;
+}
+
+.settings-form section + section {
+  margin-top: 2rem;
+}
+
+.theme-colour-picker {
+  display: grid;
+  gap: 0.625rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.theme-colour-picker__option {
+  align-items: center;
+  background: var(--rr-surface);
+  border: 1px solid var(--rr-border);
+  border-radius: var(--rr-radius-control);
+  color: var(--rr-text);
+  cursor: pointer;
+  display: flex;
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 800;
+  gap: 0.5rem;
+  min-height: 2.75rem;
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+}
+
+.theme-colour-picker__option span {
+  background: var(--theme-colour);
+  border-radius: 50%;
+  box-shadow: 0 0 0 3px var(--theme-colour-soft);
+  height: 0.75rem;
+  width: 0.75rem;
+}
+
+.theme-colour-picker__option--selected {
+  border-color: var(--theme-colour);
+  box-shadow: 0 0 0 1px var(--theme-colour);
 }
 
 .settings-form ion-list {

@@ -1,29 +1,22 @@
-import { Component, computed, inject, signal } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import { Component, inject, signal } from '@angular/core';
+import { Router } from '@angular/router';
 import {
   IonButton,
-  IonButtons,
   IonContent,
   IonHeader,
-  IonIcon,
   IonModal,
   IonTitle,
   IonToolbar,
 } from '@ionic/angular/standalone';
-import { addIcons } from 'ionicons';
-import { settingsOutline } from 'ionicons/icons';
+import { AppHeaderComponent } from '../components/app-header/app-header.component';
 import { CollapsedFestivalCardComponent } from '../components/collapsed-festival-card/collapsed-festival-card.component';
 import { EmptyFestivalStateComponent } from '../components/empty-festival-state/empty-festival-state.component';
-import { RaveRouteLogoComponent } from '../components/rave-route-logo/rave-route-logo.component';
 import { UpcomingFestivalCardComponent } from '../components/upcoming-festival-card/upcoming-festival-card.component';
 import { calculateDaysRemaining } from '../core/festivals/festival-date.utils';
 import { Festival } from '../core/festivals/models/festival';
 import { FestivalDraft } from '../core/festivals/models/festival-draft';
 import { FestivalStore } from '../core/festivals/festival.store';
-import { AppSettingsStore } from '../core/settings/app-settings.store';
 import { FestivalFormComponent } from '../features/festivals/festival-form/festival-form.component';
-
-addIcons({ settingsOutline });
 
 @Component({
   selector: 'app-home',
@@ -33,23 +26,19 @@ addIcons({ settingsOutline });
   imports: [
     CollapsedFestivalCardComponent,
     EmptyFestivalStateComponent,
+    AppHeaderComponent,
     IonButton,
-    IonButtons,
     IonContent,
     IonHeader,
-    IonIcon,
     IonModal,
     IonTitle,
     IonToolbar,
-    RaveRouteLogoComponent,
-    RouterLink,
     UpcomingFestivalCardComponent,
     FestivalFormComponent,
   ],
 })
 export class HomePage {
   private readonly festivalStore = inject(FestivalStore);
-  private readonly appSettingsStore = inject(AppSettingsStore);
   private readonly router = inject(Router);
 
   readonly allFestivals = this.festivalStore.allFestivals;
@@ -60,13 +49,6 @@ export class HomePage {
   readonly isAddFestivalFormOpen = signal(false);
   readonly expandedFestivalId = signal<string | null>(null);
   readonly addFestivalExperience: 'inline' | 'modal' = 'modal';
-  readonly homeBackground = computed(() => {
-    const imageUrl = this.appSettingsStore.homeBackgroundImageUrl();
-
-    return imageUrl
-      ? `linear-gradient(rgb(255 248 242 / 82%), rgb(255 248 242 / 92%)), url("${encodeURI(imageUrl)}") center / cover fixed`
-      : null;
-  });
 
   openAddFestivalForm(): void {
     this.isAddFestivalFormOpen.set(true);
@@ -92,6 +74,10 @@ export class HomePage {
 
   viewFestival(festivalId: string): void {
     void this.router.navigate(['/festivals', festivalId]);
+  }
+
+  viewLineup(festivalId: string): void {
+    void this.router.navigate(['/festivals', festivalId, 'lineup']);
   }
 
   retryLoadingFestivals(): void {
@@ -124,5 +110,9 @@ export class HomePage {
 
   getTransportLabel(festival: Festival): string {
     return festival.transportArranged ? 'Transport arranged' : 'Transport to arrange';
+  }
+
+  getAccommodationLabel(festival: Festival): string {
+    return festival.accommodationArranged ? 'Accommodation arranged' : 'Accommodation to arrange';
   }
 }

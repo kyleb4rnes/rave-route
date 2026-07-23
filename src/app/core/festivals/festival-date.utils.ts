@@ -46,6 +46,25 @@ export function calculateDaysRemaining(startDate: string, referenceDate = new Da
   return Math.max(0, Math.ceil((start - today) / millisecondsPerDay));
 }
 
+export function getFestivalDays(festival: Festival): string[] {
+  const days: string[] = [];
+  const endDate = toUtcStartOfDay(festival.endDate);
+  const currentDate = toUtcStartOfDay(festival.startDate);
+
+  while (currentDate <= endDate) {
+    days.push(currentDate.toISOString().slice(0, 10));
+    currentDate.setUTCDate(currentDate.getUTCDate() + 1);
+  }
+
+  return days;
+}
+
+export function getDefaultLineupDay(festival: Festival, referenceDate = new Date()): string {
+  const today = toUtcStartOfDay(referenceDate).toISOString().slice(0, 10);
+
+  return today >= festival.startDate && today <= festival.endDate ? today : festival.startDate;
+}
+
 function toUtcStartOfDay(value: string | Date): Date {
   if (typeof value === 'string') {
     return new Date(`${value}T00:00:00.000Z`);

@@ -52,7 +52,23 @@
   color: var(--rr-text);
 }
 
-.collapsed-card__details ion-button {
+.collapsed-card__actions {
+  display: grid;
+  gap: 0.5rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-top: 1rem;
+}
+
+.collapsed-card__actions ion-button {
+  --border-color: var(--rr-primary);
+  --border-radius: var(--rr-radius-control);
   --color: var(--rr-primary-dark);
-  margin: 0.75rem 0 0;
+  font-size: 0.8125rem;
+  font-weight: 800;
+  margin: 0;
+  min-height: 2.75rem;
+}
+
+.collapsed-card__actions ion-button.rr-button {
+  --color: var(--rr-primary-contrast);
 }

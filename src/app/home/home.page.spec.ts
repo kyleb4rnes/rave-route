@@ -41,6 +41,7 @@ describe('HomePage', () => {
       endDate: '2026-08-03',
       location: 'Bristol',
       transportArranged: false,
+      accommodationArranged: false,
     };
 
     component.openAddFestivalForm();

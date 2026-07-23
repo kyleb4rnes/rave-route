@@ -6,9 +6,9 @@ The project is part of **Project Freedom**, a personal mission focused on greate
 
 ## Project status
 
-v0.1.0 MVP release candidate
+Post-MVP iteration on the v0.1.0 foundation
 
-The app persists festivals locally, supports expandable cards, details, editing, deletion confirmation, image URLs/default images, optional Android device-image selection, and accessibility-focused states. The Android project uses the `com.raveroute.app` application ID and includes temporary generated icon and splash assets.
+The app persists festivals locally and supports festival CRUD, manual line-ups and set times, expandable cards, details, image URLs/default images, optional Android device-image selection, accessible navigation, personal backgrounds, and selectable colour themes. The Android project uses the `com.raveroute.app` application ID and includes temporary generated icon and splash assets.
 
 ## MVP capabilities
 
@@ -17,7 +17,9 @@ The MVP will let a user:
 - See their next festival emphasised on the home screen.
 - See later festivals as collapsed cards.
 - Add, view, edit, and delete festivals.
-- Record dates, an image, a location, and transport status.
+- Record dates, an image, a location, transport status, and accommodation status.
+- Add and browse manual set times by time or stage, including clash indicators.
+- Personalise the app with a background image and one of five theme-colour presets.
 - Keep festival data locally between app restarts.
 
 See [MVP specification](docs/mvp-specification.md) for the full scope.
@@ -29,7 +31,7 @@ See [MVP specification](docs/mvp-specification.md) for the full scope.
 - TypeScript and SCSS
 - Angular signals
 - Typed reactive forms
-- Jest
+- Jasmine and Karma
 - Local device storage for the MVP
 
 ## Project documents

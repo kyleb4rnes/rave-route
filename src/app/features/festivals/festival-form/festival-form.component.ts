@@ -29,6 +29,7 @@ type FestivalFormControls = {
   imageUrl: FormControl<string>;
   location: FormControl<string>;
   transportArranged: FormControl<boolean>;
+  accommodationArranged: FormControl<boolean>;
 };
 
 type EmptyFestivalFormValue = {
@@ -38,6 +39,7 @@ type EmptyFestivalFormValue = {
   imageUrl: string;
   location: string;
   transportArranged: boolean;
+  accommodationArranged: boolean;
 };
 
 const dateRangeValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
@@ -90,6 +92,7 @@ export class FestivalFormComponent {
         validators: [Validators.required, Validators.maxLength(120)],
       }),
       transportArranged: new FormControl(false, { nonNullable: true }),
+      accommodationArranged: new FormControl(false, { nonNullable: true }),
     },
     { validators: dateRangeValidator },
   );
@@ -107,6 +110,7 @@ export class FestivalFormComponent {
               imageUrl: festival.imageUrl ?? '',
               location: festival.location,
               transportArranged: festival.transportArranged,
+              accommodationArranged: festival.accommodationArranged ?? false,
             }
           : this.emptyFormValue(),
       );
@@ -171,6 +175,7 @@ export class FestivalFormComponent {
       ...(imageUrl ? { imageUrl } : {}),
       location: value.location.trim(),
       transportArranged: value.transportArranged,
+      accommodationArranged: value.accommodationArranged,
     };
   }
 
@@ -182,6 +187,7 @@ export class FestivalFormComponent {
       imageUrl: '',
       location: '',
       transportArranged: false,
+      accommodationArranged: false,
     };
   }
 }

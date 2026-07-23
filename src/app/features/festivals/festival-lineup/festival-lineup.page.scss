@@ -1,0 +1,255 @@
+ion-content {
+  --background: var(--rr-app-background, var(--rr-background));
+}
+
+.festival-lineup {
+  display: grid;
+  gap: 1.5rem;
+  padding: var(--rr-spacing-page)
+    max(var(--rr-spacing-page), env(safe-area-inset-right))
+    calc(var(--rr-spacing-page) + env(safe-area-inset-bottom))
+    max(var(--rr-spacing-page), env(safe-area-inset-left));
+}
+
+.festival-lineup__intro p,
+.stage-schedule h3 {
+  color: var(--rr-primary-dark);
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  margin: 0 0 0.5rem;
+  text-transform: uppercase;
+}
+
+.festival-lineup h1,
+.festival-lineup h2 {
+  color: var(--rr-text);
+  margin: 0;
+}
+
+.lineup-day-picker ion-segment-button {
+  --padding-bottom: 0.5rem;
+  --padding-end: 0.75rem;
+  --padding-start: 0.75rem;
+  --padding-top: 0.5rem;
+  font-size: 0.75rem;
+  min-width: 4.5rem;
+}
+
+.lineup-day-picker::-webkit-scrollbar {
+  display: none;
+}
+
+.lineup-view-switcher {
+  align-items: center;
+  display: grid;
+  gap: 0.5rem;
+  grid-template-columns: auto minmax(0, 1fr);
+}
+
+.lineup-view-switcher > span {
+  color: var(--rr-text-muted);
+  font-size: 0.8125rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.lineup-view-switcher__control {
+  justify-self: start;
+  width: 5.75rem;
+}
+
+.lineup-view-switcher__control ion-segment-button {
+  min-height: 2rem;
+  min-width: 2.75rem;
+}
+
+.festival-lineup__schedule {
+  display: grid;
+  gap: 1rem;
+}
+
+.festival-lineup__empty {
+  background: var(--rr-surface);
+  border: 1px solid var(--rr-border);
+  border-radius: var(--rr-radius-card);
+  color: var(--rr-text-muted);
+  margin: 0;
+  padding: var(--rr-spacing-page);
+  text-align: center;
+}
+
+.stage-schedule {
+  background: var(--rr-surface);
+  border: 1px solid var(--rr-border);
+  border-radius: var(--rr-radius-control);
+  overflow: hidden;
+}
+
+.time-schedule {
+  background: var(--rr-surface);
+  border: 1px solid var(--rr-border);
+  border-radius: var(--rr-radius-control);
+  overflow: hidden;
+}
+
+.time-schedule--clash {
+  border-color: var(--rr-primary);
+}
+
+.time-schedule__clash-label {
+  background: var(--rr-primary-soft);
+  color: var(--rr-primary-dark);
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  margin: 0;
+  padding: 0.625rem 1rem;
+  text-transform: uppercase;
+}
+
+.time-schedule__set {
+  align-items: center;
+  display: grid;
+  gap: 0.25rem 0.75rem;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  padding: 0.875rem 1rem;
+}
+
+.time-schedule__set + .time-schedule__set {
+  border-top: 1px solid var(--rr-border);
+}
+
+.time-schedule__set strong {
+  color: var(--rr-primary-dark);
+  font-size: 0.8125rem;
+  grid-row: span 2;
+}
+
+.time-schedule__set span {
+  color: var(--rr-text);
+  font-weight: 800;
+}
+
+.time-schedule__set small {
+  color: var(--rr-text-muted);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.set-delete-button {
+  --color: var(--rr-primary);
+  grid-column: 3;
+  grid-row: 1 / span 2;
+  margin: 0;
+}
+
+.stage-schedule h3 {
+  background: var(--rr-primary-soft);
+  margin: 0;
+  padding: 0.75rem 1rem;
+}
+
+.stage-schedule__set {
+  align-items: center;
+  display: grid;
+  gap: 0.25rem;
+  grid-template-columns: minmax(0, 1fr) auto;
+  padding: 0.875rem 1rem;
+}
+
+.stage-schedule__set + .stage-schedule__set {
+  border-top: 1px solid var(--rr-border);
+}
+
+.stage-schedule__set strong {
+  color: var(--rr-primary-dark);
+  font-size: 0.875rem;
+}
+
+.stage-schedule__set span {
+  color: var(--rr-text);
+  font-weight: 700;
+}
+
+.stage-schedule__set .set-delete-button {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+}
+
+.lineup-form {
+  background: var(--rr-surface);
+  border: 1px solid var(--rr-border);
+  border-radius: var(--rr-radius-card);
+  padding: var(--rr-spacing-page);
+}
+
+.lineup-form p {
+  margin: 0;
+}
+
+.lineup-form__toggle {
+  --color: var(--rr-primary-dark);
+  font-weight: 800;
+  margin: 0;
+}
+
+.lineup-form p {
+  color: var(--rr-text-muted);
+  margin-top: 0.5rem;
+}
+
+.lineup-form ion-list {
+  background: transparent;
+  margin-top: 1rem;
+  padding: 0;
+}
+
+.lineup-form ion-item {
+  --background: var(--rr-surface);
+  --border-color: var(--rr-border);
+  --color: var(--rr-text);
+  --padding-end: 0.875rem;
+  --padding-start: 0.875rem;
+  border: 1px solid var(--rr-border);
+  border-radius: var(--rr-radius-control);
+  margin-bottom: 0.5rem;
+}
+
+.lineup-form__times {
+  display: grid;
+  gap: 0.5rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.lineup-form__stage-picker {
+  color: var(--rr-text-muted);
+  display: grid;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  gap: 0.5rem;
+  margin: 0.25rem 0 0.75rem;
+}
+
+.lineup-form__stage-picker div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.lineup-form__stage-picker ion-button {
+  --border-color: var(--rr-primary);
+  --color: var(--rr-primary-dark);
+  margin: 0;
+}
+
+.lineup-form ion-note {
+  display: block;
+  margin-top: 0.5rem;
+}
+
+.lineup-form__actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1.25rem;
+}

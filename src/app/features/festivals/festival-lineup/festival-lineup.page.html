@@ -1,0 +1,154 @@
+<app-header title="LINE UP"></app-header>
+
+<ion-content>
+  <main class="festival-lineup">
+    @if (festival(); as selectedFestival) {
+      <header class="festival-lineup__intro">
+        <p>SET TIMES</p>
+        <h1>{{ selectedFestival.title }}</h1>
+      </header>
+
+      <ion-segment class="lineup-day-picker" [scrollable]="true" [value]="selectedDay()" (ionChange)="selectDay($event.detail.value)">
+        @for (day of festivalDays(); track day) {
+          <ion-segment-button [attr.aria-label]="formatDay(day)" [value]="day">
+            <ion-label>{{ formatCompactDay(day) }}</ion-label>
+          </ion-segment-button>
+        }
+      </ion-segment>
+
+      <section class="lineup-view-switcher" aria-label="Line-up view">
+        <span>View</span>
+        <ion-segment class="lineup-view-switcher__control" [value]="viewMode()" (ionChange)="selectViewMode($event.detail.value)">
+          <ion-segment-button aria-label="View by stage" value="stage">
+            <ion-icon aria-hidden="true" name="layers-outline"></ion-icon>
+          </ion-segment-button>
+          <ion-segment-button aria-label="View by time" value="time">
+            <ion-icon aria-hidden="true" name="time-outline"></ion-icon>
+          </ion-segment-button>
+        </ion-segment>
+      </section>
+
+      <section class="festival-lineup__schedule" aria-labelledby="schedule-title">
+        <h2 id="schedule-title">{{ selectedDayLabel() }}</h2>
+
+        @if (timeSchedules().length === 0) {
+          <p class="festival-lineup__empty">No set times yet. Add the first one below.</p>
+        } @else if (viewMode() === 'time') {
+          @for (schedule of timeSchedules(); track schedule.key) {
+            <section class="time-schedule" [class.time-schedule--clash]="schedule.hasClash">
+              @if (schedule.hasClash) {
+                <p class="time-schedule__clash-label">Clash · choose one</p>
+              }
+              @for (set of schedule.sets; track set.id) {
+                <article class="time-schedule__set">
+                  <strong>{{ set.startTime }}–{{ set.endTime }}</strong>
+                  <span>{{ set.artist }}</span>
+                  <small>{{ set.stage || 'Unassigned stage' }}</small>
+                  <ion-button
+                    [attr.aria-label]="'Delete ' + set.artist + ' set'"
+                    class="set-delete-button"
+                    fill="clear"
+                    type="button"
+                    (click)="deleteSet(set.id)"
+                  >
+                    <ion-icon aria-hidden="true" name="trash-outline"></ion-icon>
+                  </ion-button>
+                </article>
+              }
+            </section>
+          }
+        } @else {
+          @for (schedule of schedules(); track schedule.stage) {
+            <section class="stage-schedule" [attr.aria-label]="schedule.stage">
+              <h3>{{ schedule.stage }}</h3>
+              @for (set of schedule.sets; track set.id) {
+                <div class="stage-schedule__set">
+                  <strong>{{ set.startTime }}–{{ set.endTime }}</strong>
+                  <span>{{ set.artist }}</span>
+                  <ion-button
+                    [attr.aria-label]="'Delete ' + set.artist + ' set'"
+                    class="set-delete-button"
+                    fill="clear"
+                    type="button"
+                    (click)="deleteSet(set.id)"
+                  >
+                    <ion-icon aria-hidden="true" name="trash-outline"></ion-icon>
+                  </ion-button>
+                </div>
+              }
+            </section>
+          }
+        }
+      </section>
+
+      @if (actionError()) {
+        <ion-note class="festival-lineup__action-error" color="danger" role="alert">{{ actionError() }}</ion-note>
+      }
+
+      <section class="lineup-form">
+        <ion-button
+          aria-controls="add-set-form"
+          [attr.aria-expanded]="isAddSetFormOpen()"
+          class="lineup-form__toggle"
+          expand="block"
+          fill="clear"
+          type="button"
+          (click)="toggleAddSetForm()"
+        >
+          <ion-icon aria-hidden="true" name="add-circle-outline" slot="start"></ion-icon>
+          Add a set
+          <ion-icon aria-hidden="true" [name]="isAddSetFormOpen() ? 'chevron-up' : 'chevron-down'" slot="end"></ion-icon>
+        </ion-button>
+
+        @if (isAddSetFormOpen()) {
+          <form id="add-set-form" [formGroup]="form" (ngSubmit)="saveAndAddAnother()" novalidate>
+            <p>Save and add another keeps this day and stage ready for the next entry.</p>
+
+            <ion-list lines="none">
+          <ion-item>
+            <ion-input formControlName="artist" label="Artist" labelPlacement="stacked" placeholder="e.g. DJ Example"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-input formControlName="stage" label="Stage (optional)" labelPlacement="stacked" placeholder="e.g. Main stage"></ion-input>
+          </ion-item>
+          @if (savedStages().length > 0) {
+            <div class="lineup-form__stage-picker">
+              <span>Use a saved stage</span>
+              <div>
+                @for (stage of savedStages(); track stage) {
+                  <ion-button fill="outline" size="small" type="button" (click)="useStage(stage)">{{ stage }}</ion-button>
+                }
+              </div>
+            </div>
+          }
+          <div class="lineup-form__times">
+            <ion-item>
+              <ion-input formControlName="startTime" label="Start" labelPlacement="stacked" type="time"></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-input formControlName="endTime" label="End" labelPlacement="stacked" type="time"></ion-input>
+            </ion-item>
+          </div>
+            </ion-list>
+
+            @if (form.invalid && form.touched) {
+              <ion-note color="danger" role="alert">Enter an artist, start time, and end time.</ion-note>
+            }
+            @if (saveError()) {
+              <ion-note color="danger" role="alert">{{ saveError() }}</ion-note>
+            }
+
+            <div class="lineup-form__actions">
+              <ion-button class="rr-button" type="submit">Save & add another</ion-button>
+            </div>
+          </form>
+        }
+      </section>
+    } @else {
+      <section class="festival-lineup__empty">
+        <h1>Festival not found</h1>
+        <p>It may have been deleted or the link is no longer valid.</p>
+      </section>
+    }
+  </main>
+</ion-content>
