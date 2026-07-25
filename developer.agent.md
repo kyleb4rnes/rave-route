@@ -117,6 +117,7 @@ Do not implement these unless they are explicitly brought into scope later:
 - Packing lists
 - Budgets
 - Maps
+- Transport and accommodation planning: define and prioritise richer details beyond the current arranged/not-arranged toggles, such as bookings, timings, addresses, references, and reminders.
 
 Future platform, security, and account work, explicitly deferred:
 
