@@ -134,6 +134,8 @@ Future Line-up work, explicitly deferred:
 
 - Bulk paste/import of set times
 - Additional automatic import providers beyond the supported Tomorrowland Belgium 2026 official presets and Timetable.lol community catalogue
+- Live festival Line-up entry: when opening the Line-up for an active festival, select the current festival day by default.
+- Live festival Home route: when a Live now card is present, start the “Your festival route” list with the next festival after the active one instead of repeating the active festival.
 
 ## Decision Notes
 

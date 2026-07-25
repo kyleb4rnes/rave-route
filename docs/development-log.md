@@ -38,6 +38,7 @@
 - Added a non-destructive Live festival demo seed to exercise current, next, Must-see clash, and later-day schedule states on a physical device.
 - Refined the Live card so it appears only during an active festival, with stage and time displayed on separate lines for mobile readability.
 - Corrected the festival date-range picker to use Ionic's inline-modal template pattern after a blank nested modal was found on device testing.
+- Deferred two Live festival refinements: opening its Line-up should default to the current day, and Home should not repeat the active festival in “Your festival route”.
 
 ## 2026-07-23 — Festival line-ups
 
