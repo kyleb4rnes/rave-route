@@ -10,14 +10,15 @@ import {
 } from '@angular/forms';
 import {
   IonButton,
+  IonDatetime,
   IonInput,
   IonItem,
   IonList,
+  IonModal,
   IonNote,
   IonToggle,
 } from '@ionic/angular/standalone';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
-import { Capacitor } from '@capacitor/core';
 
 import { FestivalDraft } from '../../../core/festivals/models/festival-draft';
 import { Festival } from '../../../core/festivals/models/festival';
@@ -59,9 +60,11 @@ const dateRangeValidator: ValidatorFn = (control: AbstractControl): ValidationEr
   standalone: true,
   imports: [
     IonButton,
+    IonDatetime,
     IonInput,
     IonItem,
     IonList,
+    IonModal,
     IonNote,
     IonToggle,
     ReactiveFormsModule,
@@ -72,8 +75,10 @@ export class FestivalFormComponent {
   readonly submitLabel = input('Save festival');
   readonly saved = output<FestivalDraft>();
   readonly cancelled = output<void>();
-  readonly deviceImageSelectionAvailable = Capacitor.isNativePlatform();
   readonly imageSelectionError = signal<string | null>(null);
+  readonly isDateRangePickerOpen = signal(false);
+  readonly dateRangeSelectionStep = signal<'start' | 'end'>('start');
+  readonly pendingStartDate = signal<string | null>(null);
 
   readonly form = new FormGroup<FestivalFormControls>(
     {
@@ -83,10 +88,7 @@ export class FestivalFormComponent {
       }),
       startDate: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
       endDate: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
-      imageUrl: new FormControl('', {
-        nonNullable: true,
-        validators: [Validators.pattern(/^\s*(https?:\/\/|data:image\/).+\s*$/)],
-      }),
+      imageUrl: new FormControl('', { nonNullable: true }),
       location: new FormControl('', {
         nonNullable: true,
         validators: [Validators.required, Validators.maxLength(120)],
@@ -143,7 +145,7 @@ export class FestivalFormComponent {
         width: 1200,
         allowEditing: false,
         resultType: CameraResultType.DataUrl,
-        source: CameraSource.Prompt,
+        source: CameraSource.Photos,
       });
 
       if (photo.dataUrl) {
@@ -162,6 +164,65 @@ export class FestivalFormComponent {
 
   get isEndDateInvalid(): boolean {
     return this.form.controls.endDate.touched && this.form.hasError('endDateBeforeStartDate');
+  }
+
+  openDateRangePicker(): void {
+    this.pendingStartDate.set(null);
+    this.dateRangeSelectionStep.set('start');
+    this.isDateRangePickerOpen.set(true);
+  }
+
+  cancelDateRangePicker(): void {
+    this.isDateRangePickerOpen.set(false);
+    this.pendingStartDate.set(null);
+  }
+
+  selectRangeDate(event: CustomEvent<{ value?: string | string[] | null }>): void {
+    const value = event.detail.value;
+    const selectedDate = typeof value === 'string' ? value.slice(0, 10) : null;
+
+    if (!selectedDate) {
+      return;
+    }
+
+    if (this.dateRangeSelectionStep() === 'start') {
+      this.pendingStartDate.set(selectedDate);
+      this.dateRangeSelectionStep.set('end');
+      return;
+    }
+
+    const startDate = this.pendingStartDate();
+
+    if (!startDate) {
+      return;
+    }
+
+    this.form.patchValue({ startDate, endDate: selectedDate });
+    this.form.controls.startDate.markAsTouched();
+    this.form.controls.endDate.markAsTouched();
+    this.cancelDateRangePicker();
+  }
+
+  get dateRangeLabel(): string {
+    const { startDate, endDate } = this.form.getRawValue();
+
+    if (!startDate || !endDate) {
+      return 'Choose dates';
+    }
+
+    return `${this.formatDate(startDate)} – ${this.formatDate(endDate)}`;
+  }
+
+  get selectedDateRangeValue(): string {
+    return this.dateRangeSelectionStep() === 'start'
+      ? this.form.controls.startDate.value
+      : this.form.controls.endDate.value;
+  }
+
+  get minimumSelectableDate(): string | undefined {
+    return this.dateRangeSelectionStep() === 'end'
+      ? this.pendingStartDate() ?? undefined
+      : undefined;
   }
 
   private toFestivalDraft(): FestivalDraft {
@@ -189,5 +250,13 @@ export class FestivalFormComponent {
       transportArranged: false,
       accommodationArranged: false,
     };
+  }
+
+  private formatDate(value: string): string {
+    return new Intl.DateTimeFormat('en-GB', {
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric',
+    }).format(new Date(`${value}T12:00:00`));
   }
 }

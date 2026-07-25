@@ -52,7 +52,7 @@ describe('FestivalFormComponent', () => {
       location: ' Somerset ',
       startDate: '2026-08-14',
       endDate: '2026-08-16',
-      imageUrl: ' https://example.com/festival.jpg ',
+      imageUrl: ' data:image/jpeg;base64,festival-image ',
       transportArranged: true,
       accommodationArranged: true,
     });
@@ -65,7 +65,7 @@ describe('FestivalFormComponent', () => {
         location: 'Somerset',
         startDate: '2026-08-14',
         endDate: '2026-08-16',
-        imageUrl: 'https://example.com/festival.jpg',
+        imageUrl: 'data:image/jpeg;base64,festival-image',
         transportArranged: true,
         accommodationArranged: true,
       },

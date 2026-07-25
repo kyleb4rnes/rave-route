@@ -54,28 +54,28 @@
 
       <section aria-labelledby="background-image-title">
         <h2 id="background-image-title">Background image</h2>
-        <p>Add an optional image URL to personalise your app background.</p>
+        <p>Choose an optional image from your photo library for the app background.</p>
 
-        <ion-list lines="none">
-          <ion-item>
-            <ion-input
-              formControlName="homeBackgroundImageUrl"
-              label="Picture URL (optional)"
-              labelPlacement="stacked"
-              placeholder="https://..."
-              type="url"
-            ></ion-input>
-          </ion-item>
-        </ion-list>
+        <div class="settings-background-image">
+          @if (form.controls.homeBackgroundImageUrl.value) {
+            <img [src]="form.controls.homeBackgroundImageUrl.value" alt="Selected app background preview" />
+          }
+          <div class="settings-background-image__actions">
+            <ion-button fill="outline" type="button" (click)="selectBackgroundImage()">Choose photo</ion-button>
+            @if (form.controls.homeBackgroundImageUrl.value) {
+              <ion-button fill="clear" type="button" (click)="clearBackgroundImage()">Remove</ion-button>
+            }
+          </div>
+        </div>
 
-        @if (isBackgroundImageInvalid()) {
-          <ion-note color="danger" role="alert">Enter a full URL beginning with http:// or https://.</ion-note>
+        @if (imageSelectionError()) {
+          <ion-note color="danger" role="alert">{{ imageSelectionError() }}</ion-note>
         }
         @if (saveError()) {
           <ion-note color="danger" role="alert">{{ saveError() }}</ion-note>
         }
 
-        <p class="settings-form__hint">Leave the field empty and save to restore the standard background.</p>
+        <p class="settings-form__hint">Remove the image and save to restore the standard background.</p>
       </section>
 
       <div class="settings-form__actions">

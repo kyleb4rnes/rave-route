@@ -241,6 +241,12 @@ ion-modal.lineup-import-modal {
   --width: min(calc(100% - 1rem), 32rem);
 }
 
+ion-modal.festival-date-range-modal {
+  --border-radius: var(--rr-radius-card);
+  --height: min(34rem, calc(100% - 2rem));
+  --width: min(calc(100% - 1rem), 26rem);
+}
+
 .lineup-import-trigger {
   --border-color: var(--rr-primary);
   --color: var(--rr-primary-dark);

@@ -14,31 +14,28 @@
       <ion-note color="danger" role="alert">Enter a location.</ion-note>
     }
 
-    <ion-item>
-      <ion-input formControlName="startDate" label="Start date" labelPlacement="stacked" type="date"></ion-input>
+    <ion-item button detail="true" (click)="openDateRangePicker()">
+      <ion-input [value]="dateRangeLabel" label="Festival dates" labelPlacement="stacked" readonly></ion-input>
     </ion-item>
-    @if (isInvalid('startDate')) {
-      <ion-note color="danger" role="alert">Choose a start date.</ion-note>
-    }
-
-    <ion-item>
-      <ion-input formControlName="endDate" label="End date" labelPlacement="stacked" type="date"></ion-input>
-    </ion-item>
-    @if (isInvalid('endDate')) {
-      <ion-note color="danger" role="alert">Choose an end date.</ion-note>
+    @if (isInvalid('startDate') || isInvalid('endDate')) {
+      <ion-note color="danger" role="alert">Choose a festival start and end date.</ion-note>
     }
     @if (isEndDateInvalid) {
       <ion-note color="danger" role="alert">The end date must be on or after the start date.</ion-note>
     }
 
-    <ion-item>
-      <ion-input formControlName="imageUrl" label="Picture URL (optional)" labelPlacement="stacked" placeholder="https://..." type="url"></ion-input>
-    </ion-item>
-    @if (deviceImageSelectionAvailable) {
-      <ion-button fill="clear" type="button" (click)="selectDeviceImage()">Choose device image</ion-button>
-    }
-    @if (isInvalid('imageUrl')) {
-      <ion-note color="danger" role="alert">Enter a full URL beginning with http:// or https://.</ion-note>
+    <div class="festival-form__image-picker">
+      <div>
+        <p>Festival picture <span>(optional)</span></p>
+        <small>Choose an image from your photo library.</small>
+      </div>
+      <ion-button fill="outline" type="button" (click)="selectDeviceImage()">Choose photo</ion-button>
+      @if (form.controls.imageUrl.value) {
+        <ion-button fill="clear" type="button" (click)="form.controls.imageUrl.setValue('')">Remove</ion-button>
+      }
+    </div>
+    @if (form.controls.imageUrl.value) {
+      <img class="festival-form__image-preview" [src]="form.controls.imageUrl.value" alt="Selected festival picture preview" />
     }
     @if (imageSelectionError()) {
       <ion-note color="danger" role="alert">{{ imageSelectionError() }}</ion-note>
@@ -57,3 +54,24 @@
     <ion-button class="rr-button" type="submit">{{ submitLabel() }}</ion-button>
   </div>
 </form>
+
+<ion-modal class="festival-date-range-modal" [isOpen]="isDateRangePickerOpen()" (didDismiss)="cancelDateRangePicker()">
+  <div class="festival-date-range-picker">
+    <div class="festival-date-range-picker__heading">
+      <div>
+        <p>FESTIVAL DATES</p>
+        <h2>{{ dateRangeSelectionStep() === 'start' ? 'Choose the first day' : 'Choose the last day' }}</h2>
+      </div>
+      <ion-button fill="clear" type="button" (click)="cancelDateRangePicker()">Cancel</ion-button>
+    </div>
+    <p class="festival-date-range-picker__hint">
+      {{ dateRangeSelectionStep() === 'start' ? 'Select the festival start date.' : 'Now select the final festival date.' }}
+    </p>
+    <ion-datetime
+      [min]="minimumSelectableDate"
+      [value]="selectedDateRangeValue"
+      presentation="date"
+      (ionChange)="selectRangeDate($event)"
+    ></ion-datetime>
+  </div>
+</ion-modal>

@@ -34,3 +34,91 @@
 .festival-form__cancel {
   --color: var(--rr-text-muted);
 }
+
+.festival-form__image-picker {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 0.75rem;
+  margin: 0.75rem 0;
+}
+
+.festival-form__image-picker > div {
+  flex: 1 1 10rem;
+}
+
+.festival-form__image-picker p,
+.festival-form__image-picker small {
+  display: block;
+}
+
+.festival-form__image-picker p {
+  color: var(--rr-text);
+  font-weight: 800;
+  margin: 0;
+}
+
+.festival-form__image-picker p span,
+.festival-form__image-picker small {
+  color: var(--rr-text-muted);
+  font-weight: 400;
+}
+
+.festival-form__image-picker small {
+  margin-top: 0.125rem;
+}
+
+.festival-form__image-picker ion-button {
+  margin: 0;
+}
+
+.festival-form__image-preview {
+  border: 1px solid var(--rr-border);
+  border-radius: var(--rr-radius-control);
+  display: block;
+  height: 9rem;
+  margin: 0.5rem 0 0;
+  object-fit: cover;
+  width: 100%;
+}
+
+.festival-date-range-picker {
+  background: var(--rr-background);
+  color: var(--rr-text);
+  min-height: 100%;
+  padding: 1.25rem;
+}
+
+.festival-date-range-picker__heading {
+  align-items: flex-start;
+  display: flex;
+  justify-content: space-between;
+}
+
+.festival-date-range-picker__heading p {
+  color: var(--rr-primary-dark);
+  font-size: 0.6875rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  margin: 0 0 0.25rem;
+}
+
+.festival-date-range-picker__heading h2 {
+  font-size: 1.25rem;
+  margin: 0;
+}
+
+.festival-date-range-picker__heading ion-button {
+  --color: var(--rr-primary-dark);
+  margin: -0.5rem -0.5rem 0 0;
+}
+
+.festival-date-range-picker__hint {
+  color: var(--rr-text-muted);
+  margin: 0.75rem 0 0;
+}
+
+.festival-date-range-picker ion-datetime {
+  margin: 1rem auto 0;
+  max-width: 23rem;
+}

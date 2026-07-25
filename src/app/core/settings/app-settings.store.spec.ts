@@ -16,11 +16,11 @@ describe('AppSettingsStore', () => {
   it('persists an appearance mode with the colour theme and background image', () => {
     const store = new AppSettingsStore();
 
-    expect(store.saveSettings('https://example.com/background.jpg', 'purple', 'dark')).toBeTrue();
+    expect(store.saveSettings('data:image/jpeg;base64,background-image', 'purple', 'dark')).toBeTrue();
 
     const restoredStore = new AppSettingsStore();
     expect(restoredStore.appearanceMode()).toBe('dark');
     expect(restoredStore.themeColour()).toBe('purple');
-    expect(restoredStore.homeBackgroundImageUrl()).toBe('https://example.com/background.jpg');
+    expect(restoredStore.homeBackgroundImageUrl()).toBe('data:image/jpeg;base64,background-image');
   });
 });

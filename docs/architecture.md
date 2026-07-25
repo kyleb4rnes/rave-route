@@ -1,6 +1,6 @@
 # Rave Route architecture
 
-Rave Route is a mobile-first Ionic Angular application packaged for Android with Capacitor.
+Rave Route is a mobile-first Ionic Angular application packaged for Android with Capacitor. The web application remains platform-neutral so an iOS Capacitor project can be added on macOS when iPhone testing is introduced.
 
 ## Layers
 
@@ -9,7 +9,7 @@ Rave Route is a mobile-first Ionic Angular application packaged for Android with
 - `src/app/core/festivals/` owns the Festival model, date utilities, repository contract, local-storage repository, and signal-based store.
 - `src/app/core/settings/` owns persisted appearance preferences and theme-colour presets.
 - `src/app/home/` composes the home-screen experience from store state and presentation components.
-- `android/` is the generated Capacitor Android project. It contains platform configuration and generated icon/splash resources, while the application UI remains in `src/`.
+- `android/` is the generated Capacitor Android project. It contains platform configuration and generated icon/splash resources, while the application UI remains in `src/`. An `ios/` generated project is deliberately deferred until macOS/Xcode is available.
 
 ## Runtime flow
 
@@ -21,4 +21,10 @@ The store calls the repository before updating its local signal, keeping the dis
 
 ## Native boundary
 
-`capacitor.config.ts` identifies the app as `com.raveroute.app`. `npx cap sync android` copies the built Angular application into the Android project and refreshes native plugins. The Camera plugin is used only when Capacitor detects a native platform; the web experience continues to accept an image URL.
+`capacitor.config.ts` identifies the app as `com.raveroute.app`. `npx cap sync android` copies the built Angular application into the Android project and refreshes native plugins. The Camera plugin selects images from the device photo library for festival artwork and the optional app background; image URLs are no longer entered by users.
+
+## Deferred platform, security, and identity work
+
+- Add, configure, sign, and test the Capacitor iOS project from macOS/Xcode before claiming iPhone support.
+- Enable GitHub dependency alerts/security updates and code scanning when repository security settings are configured; include dependency audit review in release preparation.
+- Keep data local until account, authentication, authorisation, cloud storage, session, and migration requirements have been designed together.

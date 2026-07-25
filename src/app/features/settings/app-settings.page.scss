@@ -15,9 +15,7 @@ ion-content {
 .settings-page {
   background: transparent;
   box-sizing: border-box;
-  height: 100%;
   min-height: 100%;
-  overflow: hidden;
   position: relative;
 }
 
@@ -54,7 +52,7 @@ ion-content {
 .settings-form {
   animation: settings-content-enter 400ms 250ms ease-out both;
   background: var(--rr-background);
-  border-radius: var(--rr-radius-card);
+  border-radius: var(--rr-radius-card) var(--rr-radius-card) 0 0;
   margin-top: -1.25rem;
   min-height: calc(100vh - 5rem);
   padding: calc(var(--rr-spacing-page) + 0.5rem) var(--rr-spacing-page)
@@ -137,6 +135,31 @@ ion-content {
 
 .settings-form__hint {
   font-size: 0.8125rem;
+}
+
+.settings-background-image {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.settings-background-image img {
+  border: 1px solid var(--rr-border);
+  border-radius: var(--rr-radius-control);
+  display: block;
+  height: 9rem;
+  object-fit: cover;
+  width: 100%;
+}
+
+.settings-background-image__actions {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.settings-background-image__actions ion-button {
+  margin: 0;
 }
 
 .settings-form__actions {

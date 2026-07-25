@@ -118,6 +118,18 @@ Do not implement these unless they are explicitly brought into scope later:
 - Budgets
 - Maps
 
+Future platform, security, and account work, explicitly deferred:
+
+- iOS readiness: create and maintain the Capacitor iOS project on macOS, configure Apple signing, add the required native privacy descriptions, and validate Camera/photo-library behaviour on a physical iPhone.
+- Dependency and code security: enable GitHub Dependabot alerts and security updates, configure GitHub code scanning where the repository plan supports it, routinely review `npm audit`, and resolve or document relevant findings before release.
+- Accounts and authorisation: define the identity provider, sign-up/sign-in/sign-out journeys, account recovery, session handling, data ownership, authorisation rules, and a secure migration path from device-only local data before adding authentication or cloud synchronisation.
+- Production storage and resilience: replace base64 image data in browser local storage with suitable device-native storage, test upgrade persistence, and decide whether export, backup, and/or cloud migration is required before public release.
+- Release packaging: establish secure release-signing/key-management procedures, a versioning convention, signed Android App Bundle production builds, and a process for keeping Android target API requirements current.
+- Store onboarding and test distribution: set up and verify Google Play and Apple Developer/App Store Connect accounts, complete any required closed or beta testing, and maintain a physical-device test matrix.
+- Store presence and support: prepare final icon/splash assets, screenshots, listing copy, categories, content/age ratings, support contact details, reviewer notes, and a support/bug-report process.
+- Privacy and operational policy: publish an accurate privacy policy and store disclosures, decide whether Terms of Use are needed, keep permissions minimal, review the impact of any analytics/crash-reporting SDK before adding it, and define a release checklist, changelog, and rollback approach.
+- Timetable.lol data rights: before any public release or further use, review Timetable.lol's terms, licence, attribution requirements, source-data rights, redistribution permission, refresh policy, and takedown/contact process. Retain only data whose use is explicitly permitted; remove the bundled catalogue or obtain written permission if the terms do not clearly allow this use.
+
 Future Line-up work, explicitly deferred:
 
 - Bulk paste/import of set times
@@ -130,6 +142,7 @@ Future Line-up work, explicitly deferred:
 - 2026-07-17: Adopted `technical-development-plan.md` as the canonical Stage 0-19 delivery plan. Stage 0 remains open until all of its completion criteria are met.
 - 2026-07-17: Prepared the Stage 0 planning foundation. Adopted `main` with short-lived topic branches, focused Conventional Commit-style messages, kebab-case files, PascalCase types, camelCase values, and `--rr-` design tokens. Stage 0 remains open until the planning documents are reviewed and committed.
 - 2026-07-17: Confirmed that the MVP specification owns product outcome and rationale, while the technical plan owns implementation approach. Dependency additions require explicit developer approval, and stage completion requires full implementation, testing, and understanding.
+- 2026-07-25: Image URLs are no longer user-entered. Festival and app-background images are selected from the photo library and retained locally. Public-release planning now explicitly includes native image storage resilience, store onboarding, signing, privacy/disclosures, security scanning, and confirmation of Timetable.lol data rights.
 - 2026-07-20: Stage 1 uses standalone Angular bootstrap, standalone Ionic components, and route-level `loadComponent` lazy loading. Karma uses an existing Windows Edge installation as a fallback for its Chromium launcher when `CHROME_BIN` is not already configured.
 - 2026-07-20: Stage 2 uses normal content flow, responsive `clamp()` spacing, and CSS safe-area environment values for the mobile shell. Global styles own the neutral typography baseline; page styles own layout-specific spacing and alignment.
 - 2026-07-20: Stage 3 centralises Rave Route colours, spacing, radii, shadows, and Ionic colour mappings in `src/theme/variables.scss`. Components consume `--rr-*` tokens instead of defining raw brand colours.

@@ -20,6 +20,15 @@
 
 - At the end of each future development session, append a brief dated bullet list describing that session’s completed work, decisions, and verification.
 
+## 2026-07-25 — Device refinement and future roadmap
+
+- Replaced separate start/end controls with one two-step festival date-range calendar.
+- Made the App Settings page scrollable without displaying a web-style scrollbar, and corrected its bottom surface so scrolling no longer reveals the red transition layer.
+- Replaced user-entered image URLs with photo-library selection, previews, and removal controls for both festival artwork and the shared app background.
+- Synced the current web bundle and Camera plugin configuration into the Android project; lint, production build, and 23 unit tests passed.
+- Deferred iOS project readiness on macOS, GitHub/dependency security scanning, and the complete future account/authentication/authorisation design.
+- Recorded the wider public-release backlog: native image-storage resilience, signing and versioning, store onboarding/testing/listings, privacy and support operations, plus a required Timetable.lol licence and redistribution-rights review.
+
 ## 2026-07-23 — Festival line-ups
 
 - Added persisted manual festival set times with artist, day, start/end times, and optional stage.

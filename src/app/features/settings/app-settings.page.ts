@@ -1,14 +1,12 @@
 import { Location } from '@angular/common';
-import { Component, computed, inject, signal } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Component, inject, signal } from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import {
   IonButton,
   IonContent,
-  IonInput,
-  IonItem,
-  IonList,
   IonNote,
 } from '@ionic/angular/standalone';
+import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { AppHeaderComponent } from '../../components/app-header/app-header.component';
 import { AppSettingsStore } from '../../core/settings/app-settings.store';
 import { AppearanceMode, appearanceModeOptions } from '../../core/settings/appearance-modes';
@@ -23,9 +21,6 @@ import { ThemeColour, themeColourOptions } from '../../core/settings/theme-colou
     AppHeaderComponent,
     IonButton,
     IonContent,
-    IonInput,
-    IonItem,
-    IonList,
     IonNote,
     ReactiveFormsModule,
   ],
@@ -35,14 +30,12 @@ export class AppSettingsPage {
   private readonly appSettingsStore = inject(AppSettingsStore);
 
   readonly saveError = signal<string | null>(null);
+  readonly imageSelectionError = signal<string | null>(null);
   readonly isClosing = signal(false);
   readonly themeColourOptions = themeColourOptions;
   readonly appearanceModeOptions = appearanceModeOptions;
   readonly form = new FormGroup({
-    homeBackgroundImageUrl: new FormControl(this.appSettingsStore.homeBackgroundImageUrl(), {
-      nonNullable: true,
-      validators: [Validators.pattern(/^\s*(https?:\/\/|data:image\/).+\s*$/)],
-    }),
+    homeBackgroundImageUrl: new FormControl(this.appSettingsStore.homeBackgroundImageUrl(), { nonNullable: true }),
     themeColour: new FormControl<ThemeColour>(this.appSettingsStore.themeColour(), {
       nonNullable: true,
     }),
@@ -50,12 +43,6 @@ export class AppSettingsPage {
       nonNullable: true,
     }),
   });
-  readonly isBackgroundImageInvalid = computed(() => {
-    const control = this.form.controls.homeBackgroundImageUrl;
-
-    return control.invalid && control.touched;
-  });
-
   saveSettings(): void {
     this.form.markAllAsTouched();
     this.saveError.set(null);
@@ -85,6 +72,30 @@ export class AppSettingsPage {
 
   selectAppearanceMode(appearanceMode: AppearanceMode): void {
     this.form.controls.appearanceMode.setValue(appearanceMode);
+  }
+
+  async selectBackgroundImage(): Promise<void> {
+    this.imageSelectionError.set(null);
+
+    try {
+      const photo = await Camera.getPhoto({
+        quality: 70,
+        width: 1600,
+        allowEditing: false,
+        resultType: CameraResultType.DataUrl,
+        source: CameraSource.Photos,
+      });
+
+      if (photo.dataUrl) {
+        this.form.controls.homeBackgroundImageUrl.setValue(photo.dataUrl);
+      }
+    } catch {
+      this.imageSelectionError.set('We could not select that image. Please try again.');
+    }
+  }
+
+  clearBackgroundImage(): void {
+    this.form.controls.homeBackgroundImageUrl.setValue('');
   }
 
   closeSettings(): void {
