@@ -29,6 +29,16 @@
 - Deferred iOS project readiness on macOS, GitHub/dependency security scanning, and the complete future account/authentication/authorisation design.
 - Recorded the wider public-release backlog: native image-storage resilience, signing and versioning, store onboarding/testing/listings, privacy and support operations, plus a required Timetable.lol licence and redistribution-rights review.
 
+## 2026-07-26 — Active festival
+
+- Added an automatic Live now card above the Home-page festival route whenever a festival is in progress.
+- The card refreshes every minute and always presents the preferred current set and the next upcoming set when either exists, including later festival days.
+- Concurrent sets are counted and Must-see entries take priority; the card links directly to the festival Line-up.
+- Added focused utility coverage for active-festival detection, current/next schedule selection, and Must-see clash prioritisation.
+- Added a non-destructive Live festival demo seed to exercise current, next, Must-see clash, and later-day schedule states on a physical device.
+- Refined the Live card so it appears only during an active festival, with stage and time displayed on separate lines for mobile readability.
+- Corrected the festival date-range picker to use Ionic's inline-modal template pattern after a blank nested modal was found on device testing.
+
 ## 2026-07-23 — Festival line-ups
 
 - Added persisted manual festival set times with artist, day, start/end times, and optional stage.

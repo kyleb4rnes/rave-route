@@ -8,7 +8,7 @@ The project is part of **Project Freedom**, a personal mission focused on greate
 
 Post-MVP iteration on the v0.1.0 foundation
 
-The app persists festivals locally and supports festival CRUD, manual line-ups and set times, expandable cards, details, photo-library artwork/default images, accessible navigation, personal backgrounds, and selectable colour themes. The Android project uses the `com.raveroute.app` application ID and includes temporary generated icon and splash assets.
+The app persists festivals locally and supports festival CRUD, manual line-ups and set times, an automatic Live now view for active festivals, expandable cards, details, photo-library artwork/default images, accessible navigation, personal backgrounds, and selectable colour themes. The Android project uses the `com.raveroute.app` application ID and includes temporary generated icon and splash assets.
 
 ## MVP capabilities
 

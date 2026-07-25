@@ -56,22 +56,24 @@
 </form>
 
 <ion-modal class="festival-date-range-modal" [isOpen]="isDateRangePickerOpen()" (didDismiss)="cancelDateRangePicker()">
-  <div class="festival-date-range-picker">
-    <div class="festival-date-range-picker__heading">
-      <div>
-        <p>FESTIVAL DATES</p>
-        <h2>{{ dateRangeSelectionStep() === 'start' ? 'Choose the first day' : 'Choose the last day' }}</h2>
+  <ng-template>
+    <div class="festival-date-range-picker">
+      <div class="festival-date-range-picker__heading">
+        <div>
+          <p>FESTIVAL DATES</p>
+          <h2>{{ dateRangeSelectionStep() === 'start' ? 'Choose the first day' : 'Choose the last day' }}</h2>
+        </div>
+        <ion-button fill="clear" type="button" (click)="cancelDateRangePicker()">Cancel</ion-button>
       </div>
-      <ion-button fill="clear" type="button" (click)="cancelDateRangePicker()">Cancel</ion-button>
+      <p class="festival-date-range-picker__hint">
+        {{ dateRangeSelectionStep() === 'start' ? 'Select the festival start date.' : 'Now select the final festival date.' }}
+      </p>
+      <ion-datetime
+        [min]="minimumSelectableDate"
+        [value]="selectedDateRangeValue"
+        presentation="date"
+        (ionChange)="selectRangeDate($event)"
+      ></ion-datetime>
     </div>
-    <p class="festival-date-range-picker__hint">
-      {{ dateRangeSelectionStep() === 'start' ? 'Select the festival start date.' : 'Now select the final festival date.' }}
-    </p>
-    <ion-datetime
-      [min]="minimumSelectableDate"
-      [value]="selectedDateRangeValue"
-      presentation="date"
-      (ionChange)="selectRangeDate($event)"
-    ></ion-datetime>
-  </div>
+  </ng-template>
 </ion-modal>

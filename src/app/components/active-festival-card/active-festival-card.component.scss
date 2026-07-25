@@ -1,0 +1,120 @@
+.active-festival-card {
+  background: var(--rr-primary);
+  border-radius: var(--rr-radius-card);
+  color: var(--rr-primary-contrast);
+  overflow: hidden;
+}
+
+.active-festival-card__heading,
+.active-festival-card > h2,
+.active-festival-card__location {
+  margin-left: var(--rr-spacing-page);
+  margin-right: var(--rr-spacing-page);
+}
+
+.active-festival-card__heading {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  margin-top: var(--rr-spacing-page);
+}
+
+.active-festival-card__heading span,
+.active-festival-card__set > p {
+  font-size: 0.6875rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+}
+
+.active-festival-card__heading span {
+  align-items: center;
+  display: inline-flex;
+  gap: 0.375rem;
+}
+
+.active-festival-card__heading i {
+  animation: live-pulse 1.5s ease-in-out infinite;
+  background: currentColor;
+  border-radius: 50%;
+  height: 0.5rem;
+  width: 0.5rem;
+}
+
+.active-festival-card__heading p {
+  font-size: 0.75rem;
+  margin: 0;
+  opacity: 0.85;
+}
+
+.active-festival-card h2 {
+  font-size: 1.625rem;
+  line-height: 1.1;
+  margin-bottom: 0.25rem;
+  margin-top: 0.875rem;
+}
+
+.active-festival-card__location {
+  margin-bottom: 1rem;
+  margin-top: 0;
+  opacity: 0.85;
+}
+
+.active-festival-card__sets {
+  background: var(--rr-surface);
+  color: var(--rr-text);
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.active-festival-card__set {
+  display: grid;
+  gap: 0.25rem;
+  padding: 1rem;
+}
+
+.active-festival-card__set + .active-festival-card__set {
+  border-left: 1px solid var(--rr-border);
+}
+
+.active-festival-card__set > p {
+  color: var(--rr-primary-dark);
+  margin: 0 0 0.5rem;
+}
+
+.active-festival-card__set strong {
+  font-size: 0.9375rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.active-festival-card__set span,
+.active-festival-card__set small {
+  color: var(--rr-text-muted);
+  font-size: 0.75rem;
+}
+
+.active-festival-card__set span {
+  display: block;
+}
+
+.active-festival-card__set small {
+  align-items: center;
+  color: var(--rr-primary-dark);
+  display: inline-flex;
+  font-weight: 800;
+  gap: 0.25rem;
+}
+
+.active-festival-card__set ion-icon {
+  font-size: 0.875rem;
+}
+
+.active-festival-card > ion-button {
+  --color: var(--rr-primary-contrast);
+  margin: 0.125rem 0.5rem 0.25rem;
+}
+
+@keyframes live-pulse {
+  50% { opacity: 0.35; transform: scale(0.75); }
+}

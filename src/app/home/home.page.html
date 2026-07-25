@@ -2,6 +2,17 @@
 
 <ion-content>
   <main class="home-shell">
+    @if (activeFestival(); as festival) {
+      <app-active-festival-card
+        [festival]="festival"
+        [currentSet]="activeFestivalSchedule()?.currentSets?.[0]"
+        [currentSetCount]="activeFestivalSchedule()?.currentSets?.length ?? 0"
+        [nextSet]="activeFestivalSchedule()?.nextSets?.[0]"
+        [nextSetCount]="activeFestivalSchedule()?.nextSets?.length ?? 0"
+        (viewLineup)="viewLineup(festival.id)"
+      ></app-active-festival-card>
+    }
+
     <header class="page-intro">
       <p class="page-intro__eyebrow">YOUR FESTIVAL ROUTE</p>
       <h1>Make room for your next adventure.</h1>
@@ -86,6 +97,17 @@
           </div>
         }
       </section>
+    }
+
+    @if (!loading() && !error() && !activeFestival()) {
+      <button
+        class="live-demo-button"
+        type="button"
+        [disabled]="isCreatingLiveDemo()"
+        (click)="createLiveDemoFestival()"
+      >
+        {{ isCreatingLiveDemo() ? 'Creating live demo…' : 'Add live festival demo' }}
+      </button>
     }
 
     <ion-button class="rr-button add-festival-button" expand="block" [disabled]="loading()" (click)="openAddFestivalForm()">

@@ -1,0 +1,49 @@
+<section class="active-festival-card" aria-label="Current festival schedule">
+  <div class="active-festival-card__heading">
+    <span><i aria-hidden="true"></i> LIVE NOW</span>
+    <p>{{ formatDay(currentSet()?.day ?? nextSet()?.day ?? festival().startDate) }}</p>
+  </div>
+
+  <h2>{{ festival().title }}</h2>
+  <p class="active-festival-card__location">{{ festival().location }}</p>
+
+  <div class="active-festival-card__sets">
+    <section class="active-festival-card__set" aria-label="Now playing">
+      <p>NOW PLAYING</p>
+      @if (currentSet(); as set) {
+        <strong>{{ set.artist }}</strong>
+        <span>{{ set.stage || 'Stage to be confirmed' }}</span>
+        <span>{{ formatSetTime(set) }}</span>
+        @if (set.isMustSee) {
+          <small><ion-icon name="heart" aria-hidden="true"></ion-icon> Must-see</small>
+        }
+        @if (currentSetCount() > 1) {
+          <small>+ {{ currentSetCount() - 1 }} clash{{ currentSetCount() === 2 ? '' : 'es' }}</small>
+        }
+      } @else {
+        <strong>Nothing scheduled</strong>
+        <span>Take a breather — the next set is below.</span>
+      }
+    </section>
+
+    <section class="active-festival-card__set" aria-label="Up next">
+      <p>UP NEXT</p>
+      @if (nextSet(); as set) {
+        <strong>{{ set.artist }}</strong>
+        <span>{{ set.stage || 'Stage to be confirmed' }}</span>
+        <span>{{ formatSetTime(set) }}</span>
+        @if (nextSetCount() > 1) {
+          <small>+ {{ nextSetCount() - 1 }} at this time</small>
+        }
+      } @else {
+        <strong>No more sets listed</strong>
+        <span>Enjoy the rest of the festival.</span>
+      }
+    </section>
+  </div>
+
+  <ion-button fill="clear" type="button" (click)="viewLineup.emit()">
+    <ion-icon name="time-outline" slot="start" aria-hidden="true"></ion-icon>
+    Open line-up
+  </ion-button>
+</section>

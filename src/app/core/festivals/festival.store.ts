@@ -145,6 +145,7 @@ export class FestivalStore {
           startTime: draft.startTime,
           endTime: draft.endTime,
           stage: draft.stage.trim(),
+          ...(draft.isMustSee ? { isMustSee: true } : {}),
         },
       ],
       updatedAt: new Date().toISOString(),

@@ -134,7 +134,6 @@ Future Line-up work, explicitly deferred:
 
 - Bulk paste/import of set times
 - Additional automatic import providers beyond the supported Tomorrowland Belgium 2026 official presets and Timetable.lol community catalogue
-- Active festival view: choose a current festival and surface the set currently playing; resolve clashes by prioritising Must-see sets or presenting the simultaneous options for the user to choose.
 
 ## Decision Notes
 
@@ -143,6 +142,7 @@ Future Line-up work, explicitly deferred:
 - 2026-07-17: Prepared the Stage 0 planning foundation. Adopted `main` with short-lived topic branches, focused Conventional Commit-style messages, kebab-case files, PascalCase types, camelCase values, and `--rr-` design tokens. Stage 0 remains open until the planning documents are reviewed and committed.
 - 2026-07-17: Confirmed that the MVP specification owns product outcome and rationale, while the technical plan owns implementation approach. Dependency additions require explicit developer approval, and stage completion requires full implementation, testing, and understanding.
 - 2026-07-25: Image URLs are no longer user-entered. Festival and app-background images are selected from the photo library and retained locally. Public-release planning now explicitly includes native image storage resilience, store onboarding, signing, privacy/disclosures, security scanning, and confirmation of Timetable.lol data rights.
+- 2026-07-26: The Home page automatically surfaces a festival whose date range includes today. Its Live now card refreshes every minute, displays the current and next scheduled set when available, and prioritises Must-see sets during a same-time clash. Manual active-festival selection remains out of scope for now.
 - 2026-07-20: Stage 1 uses standalone Angular bootstrap, standalone Ionic components, and route-level `loadComponent` lazy loading. Karma uses an existing Windows Edge installation as a fallback for its Chromium launcher when `CHROME_BIN` is not already configured.
 - 2026-07-20: Stage 2 uses normal content flow, responsive `clamp()` spacing, and CSS safe-area environment values for the mobile shell. Global styles own the neutral typography baseline; page styles own layout-specific spacing and alignment.
 - 2026-07-20: Stage 3 centralises Rave Route colours, spacing, radii, shadows, and Ionic colour mappings in `src/theme/variables.scss`. Components consume `--rr-*` tokens instead of defining raw brand colours.

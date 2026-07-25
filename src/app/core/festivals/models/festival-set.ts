@@ -15,6 +15,7 @@ export interface FestivalSetDraft {
   startTime: string;
   endTime: string;
   stage: string;
+  isMustSee?: boolean;
 }
 
 export interface FestivalSetSource {

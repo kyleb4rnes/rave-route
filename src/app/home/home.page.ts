@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, DestroyRef, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import {
   IonButton,
@@ -9,10 +9,12 @@ import {
   IonToolbar,
 } from '@ionic/angular/standalone';
 import { AppHeaderComponent } from '../components/app-header/app-header.component';
+import { ActiveFestivalCardComponent } from '../components/active-festival-card/active-festival-card.component';
 import { CollapsedFestivalCardComponent } from '../components/collapsed-festival-card/collapsed-festival-card.component';
 import { EmptyFestivalStateComponent } from '../components/empty-festival-state/empty-festival-state.component';
 import { UpcomingFestivalCardComponent } from '../components/upcoming-festival-card/upcoming-festival-card.component';
 import { calculateDaysRemaining } from '../core/festivals/festival-date.utils';
+import { getActiveFestival, getActiveFestivalSchedule } from '../core/festivals/active-festival.utils';
 import { Festival } from '../core/festivals/models/festival';
 import { FestivalDraft } from '../core/festivals/models/festival-draft';
 import { FestivalStore } from '../core/festivals/festival.store';
@@ -26,6 +28,7 @@ import { FestivalFormComponent } from '../features/festivals/festival-form/festi
   imports: [
     CollapsedFestivalCardComponent,
     EmptyFestivalStateComponent,
+    ActiveFestivalCardComponent,
     AppHeaderComponent,
     IonButton,
     IonContent,
@@ -40,6 +43,7 @@ import { FestivalFormComponent } from '../features/festivals/festival-form/festi
 export class HomePage {
   private readonly festivalStore = inject(FestivalStore);
   private readonly router = inject(Router);
+  private readonly destroyRef = inject(DestroyRef);
 
   readonly allFestivals = this.festivalStore.allFestivals;
   readonly loading = this.festivalStore.loading;
@@ -50,7 +54,21 @@ export class HomePage {
   readonly isAddFestivalFormOpen = signal(false);
   readonly isPastFestivalsOpen = signal(false);
   readonly expandedFestivalId = signal<string | null>(null);
+  readonly isCreatingLiveDemo = signal(false);
+  readonly now = signal(new Date());
+  readonly activeFestival = computed(() => getActiveFestival(this.allFestivals(), this.now()));
+  readonly activeFestivalSchedule = computed(() => {
+    const festival = this.activeFestival();
+
+    return festival ? getActiveFestivalSchedule(festival, this.now()) : undefined;
+  });
   readonly addFestivalExperience: 'inline' | 'modal' = 'modal';
+
+  constructor() {
+    const refreshInterval = window.setInterval(() => this.now.set(new Date()), 60_000);
+
+    this.destroyRef.onDestroy(() => window.clearInterval(refreshInterval));
+  }
 
   openAddFestivalForm(): void {
     this.isAddFestivalFormOpen.set(true);
@@ -66,6 +84,43 @@ export class HomePage {
     if (festival) {
       this.closeAddFestivalForm();
     }
+  }
+
+  async createLiveDemoFestival(): Promise<void> {
+    if (this.isCreatingLiveDemo()) {
+      return;
+    }
+
+    this.isCreatingLiveDemo.set(true);
+    const now = new Date();
+    const festival = await this.festivalStore.addFestival({
+      title: 'Rave Route Live Demo',
+      startDate: this.toLocalDateKey(this.addDays(now, -1)),
+      endDate: this.toLocalDateKey(this.addDays(now, 1)),
+      location: 'Demo Grounds',
+      transportArranged: true,
+      accommodationArranged: true,
+    });
+
+    if (festival) {
+      const currentStart = this.addMinutes(now, -30);
+      const clashStart = this.addMinutes(now, -15);
+      const nextStart = this.addMinutes(now, 45);
+      const laterStart = this.addDays(now, 1);
+
+      const demoSets = [
+        this.createDemoSet('Bassline', currentStart, this.addMinutes(now, 30), 'Main Stage'),
+        this.createDemoSet('Your Must-see Set', clashStart, this.addMinutes(now, 45), 'The Warehouse', true),
+        this.createDemoSet('Next Horizon', nextStart, this.addMinutes(now, 105), 'Main Stage'),
+        this.createDemoSet('Tomorrow’s Opener', laterStart, this.addMinutes(laterStart, 60), 'The Warehouse'),
+      ];
+
+      for (const demoSet of demoSets) {
+        await this.festivalStore.addLineupSet(festival.id, demoSet);
+      }
+    }
+
+    this.isCreatingLiveDemo.set(false);
   }
 
   toggleFestival(festivalId: string): void {
@@ -120,5 +175,45 @@ export class HomePage {
 
   getAccommodationLabel(festival: Festival): string {
     return festival.accommodationArranged ? 'Accommodation arranged' : 'Accommodation to arrange';
+  }
+
+  private createDemoSet(
+    artist: string,
+    startsAt: Date,
+    endsAt: Date,
+    stage: string,
+    isMustSee = false,
+  ): { artist: string; day: string; startTime: string; endTime: string; stage: string; isMustSee?: boolean } {
+    return {
+      artist,
+      day: this.toLocalDateKey(startsAt),
+      startTime: this.toLocalTime(startsAt),
+      endTime: this.toLocalTime(endsAt),
+      stage,
+      ...(isMustSee ? { isMustSee } : {}),
+    };
+  }
+
+  private addMinutes(date: Date, minutes: number): Date {
+    return new Date(date.getTime() + minutes * 60_000);
+  }
+
+  private addDays(date: Date, days: number): Date {
+    const adjustedDate = new Date(date);
+    adjustedDate.setDate(adjustedDate.getDate() + days);
+
+    return adjustedDate;
+  }
+
+  private toLocalDateKey(value: Date): string {
+    const year = value.getFullYear();
+    const month = String(value.getMonth() + 1).padStart(2, '0');
+    const day = String(value.getDate()).padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
+  }
+
+  private toLocalTime(value: Date): string {
+    return `${String(value.getHours()).padStart(2, '0')}:${String(value.getMinutes()).padStart(2, '0')}`;
   }
 }

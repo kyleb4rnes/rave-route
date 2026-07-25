@@ -54,6 +54,21 @@ ion-content {
   margin: 0;
 }
 
+.live-demo-button {
+  align-self: center;
+  background: transparent;
+  border: 0;
+  color: var(--rr-text-muted);
+  font: inherit;
+  font-size: 0.8125rem;
+  padding: 0.25rem;
+  text-decoration: underline;
+}
+
+.live-demo-button:disabled {
+  opacity: 0.6;
+}
+
 .page-status {
   background: var(--rr-surface);
   border: 1px solid var(--rr-border);
