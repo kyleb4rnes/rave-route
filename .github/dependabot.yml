@@ -8,6 +8,14 @@ updates:
       - "kyleb4rnes"
     open-pull-requests-limit: 5
     groups:
-      development-dependencies:
-        dependency-type: "development"
+      # Angular packages share strict peer dependencies and must be reviewed as one tested upgrade.
+      angular-platform:
+        patterns:
+          - "@angular/*"
+          - "@angular-devkit/*"
+          - "@angular-eslint/*"
+        update-types: ["major", "minor", "patch"]
+      routine-dependencies:
+        patterns:
+          - "*"
         update-types: ["minor", "patch"]

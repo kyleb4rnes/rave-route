@@ -1,5 +1,11 @@
 # Development log
 
+## 2026-07-26 â€” Angular dependency safety
+
+- Configured Dependabot to group Angular core, Angular devkit, and Angular ESLint updates into one PR, preventing isolated framework-tooling upgrades.
+- Recorded that Angular major updates require a deliberate, fully verified upgrade rather than automatic merging.
+- Grouped all routine minor and patch dependency updates into one separate Dependabot PR.
+
 ## 2026-07-26 â€” GitHub security configuration
 
 - Confirmed that Dependabot alerts/security updates, private vulnerability reporting, and CodeQL default setup are enabled for the repository.
