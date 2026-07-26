@@ -82,21 +82,3 @@ ion-content {
 .page-status--error {
   border-color: var(--rr-primary);
 }
-
-.inline-form {
-  background: var(--rr-surface);
-  border: 1px solid var(--rr-border);
-  border-radius: var(--rr-radius-card);
-}
-
-.inline-form h2 {
-  color: var(--rr-text);
-  font-size: 1.25rem;
-  margin: var(--rr-spacing-page) var(--rr-spacing-page) 0;
-}
-
-ion-modal {
-  --border-radius: var(--rr-radius-card) var(--rr-radius-card) 0 0;
-  --height: min(90%, 42rem);
-  --width: min(100%, 36rem);
-}

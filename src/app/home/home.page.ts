@@ -1,13 +1,6 @@
 import { Component, computed, DestroyRef, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
-import {
-  IonButton,
-  IonContent,
-  IonHeader,
-  IonModal,
-  IonTitle,
-  IonToolbar,
-} from '@ionic/angular/standalone';
+import { IonButton, IonContent } from '@ionic/angular/standalone';
 import { AppHeaderComponent } from '../components/app-header/app-header.component';
 import { ActiveFestivalCardComponent } from '../components/active-festival-card/active-festival-card.component';
 import { CollapsedFestivalCardComponent } from '../components/collapsed-festival-card/collapsed-festival-card.component';
@@ -16,9 +9,7 @@ import { UpcomingFestivalCardComponent } from '../components/upcoming-festival-c
 import { calculateDaysRemaining, getUpcomingFestivals } from '../core/festivals/festival-date.utils';
 import { getActiveFestival, getActiveFestivalSchedule } from '../core/festivals/active-festival.utils';
 import { Festival } from '../core/festivals/models/festival';
-import { FestivalDraft } from '../core/festivals/models/festival-draft';
 import { FestivalStore } from '../core/festivals/festival.store';
-import { FestivalFormComponent } from '../features/festivals/festival-form/festival-form.component';
 
 @Component({
   selector: 'app-home',
@@ -32,12 +23,7 @@ import { FestivalFormComponent } from '../features/festivals/festival-form/festi
     AppHeaderComponent,
     IonButton,
     IonContent,
-    IonHeader,
-    IonModal,
-    IonTitle,
-    IonToolbar,
     UpcomingFestivalCardComponent,
-    FestivalFormComponent,
   ],
 })
 export class HomePage {
@@ -49,7 +35,6 @@ export class HomePage {
   readonly loading = this.festivalStore.loading;
   readonly error = this.festivalStore.error;
   readonly pastFestivals = this.festivalStore.pastFestivals;
-  readonly isAddFestivalFormOpen = signal(false);
   readonly isPastFestivalsOpen = signal(false);
   readonly expandedFestivalId = signal<string | null>(null);
   readonly isCreatingLiveDemo = signal(false);
@@ -67,7 +52,6 @@ export class HomePage {
 
     return festival ? getActiveFestivalSchedule(festival, this.now()) : undefined;
   });
-  readonly addFestivalExperience: 'inline' | 'modal' = 'modal';
 
   constructor() {
     const refreshInterval = window.setInterval(() => this.now.set(new Date()), 60_000);
@@ -76,19 +60,7 @@ export class HomePage {
   }
 
   openAddFestivalForm(): void {
-    this.isAddFestivalFormOpen.set(true);
-  }
-
-  closeAddFestivalForm(): void {
-    this.isAddFestivalFormOpen.set(false);
-  }
-
-  async createFestival(draft: FestivalDraft): Promise<void> {
-    const festival = await this.festivalStore.addFestival(draft);
-
-    if (festival) {
-      this.closeAddFestivalForm();
-    }
+    void this.router.navigate(['/festivals/add']);
   }
 
   async createLiveDemoFestival(): Promise<void> {

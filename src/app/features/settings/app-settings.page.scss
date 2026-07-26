@@ -173,8 +173,13 @@ ion-content {
 }
 
 .settings-page--closing .settings-page__hero,
-.settings-page--closing .settings-form {
+.settings-page--closing .settings-page__hero {
   animation: settings-content-exit 240ms ease-in both;
+  pointer-events: none;
+}
+
+.settings-page--closing .settings-form {
+  animation: settings-form-collapse 650ms cubic-bezier(0.4, 0, 0.2, 1) both;
   pointer-events: none;
 }
 
@@ -214,5 +219,11 @@ ion-content {
   to {
     opacity: 0;
     transform: translateY(1.5rem);
+  }
+}
+
+@keyframes settings-form-collapse {
+  to {
+    clip-path: inset(0 0 100% 0);
   }
 }

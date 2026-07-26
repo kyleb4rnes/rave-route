@@ -63,6 +63,10 @@ ion-content::part(scroll)::-webkit-scrollbar {
   display: none;
 }
 
+ion-modal ion-content {
+  --background: var(--rr-surface);
+}
+
 .appearance-mode-picker {
   display: grid;
   gap: 0.625rem;

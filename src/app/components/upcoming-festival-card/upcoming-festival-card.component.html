@@ -1,7 +1,9 @@
 <ion-card class="festival-card">
-  <div class="festival-card__image">
-    <app-festival-image [festivalTitle]="title()" [imageUrl]="imageUrl()"></app-festival-image>
-  </div>
+  @if (imageUrl()) {
+    <div class="festival-card__image">
+      <app-festival-image [festivalTitle]="title()" [imageUrl]="imageUrl()"></app-festival-image>
+    </div>
+  }
 
   <ion-card-header>
     <p class="festival-card__eyebrow">NEXT ADVENTURE</p>

@@ -114,26 +114,5 @@
       Add Festival
     </ion-button>
 
-    @if (addFestivalExperience === 'inline' && isAddFestivalFormOpen()) {
-      <section class="inline-form" aria-labelledby="inline-form-title">
-        <h2 id="inline-form-title">Add a festival</h2>
-        <app-festival-form (saved)="createFestival($event)" (cancelled)="closeAddFestivalForm()"></app-festival-form>
-      </section>
-    }
   </main>
-
-  @if (addFestivalExperience === 'modal') {
-    <ion-modal [isOpen]="isAddFestivalFormOpen()" (didDismiss)="closeAddFestivalForm()">
-      <ng-template>
-        <ion-header>
-          <ion-toolbar>
-            <ion-title>Add a festival</ion-title>
-          </ion-toolbar>
-        </ion-header>
-        <ion-content>
-          <app-festival-form (saved)="createFestival($event)" (cancelled)="closeAddFestivalForm()"></app-festival-form>
-        </ion-content>
-      </ng-template>
-    </ion-modal>
-  }
 </ion-content>

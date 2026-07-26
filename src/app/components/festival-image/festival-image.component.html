@@ -1,7 +1,3 @@
 @if (displayUrl()) {
   <img class="festival-image" [src]="displayUrl()" [alt]="festivalTitle() + ' festival image'" />
-} @else {
-  <div class="festival-image festival-image--placeholder" role="img" [attr.aria-label]="festivalTitle() + ' festival image placeholder'">
-    <span>Festival picture</span>
-  </div>
 }

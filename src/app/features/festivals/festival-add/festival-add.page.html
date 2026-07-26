@@ -1,0 +1,11 @@
+<app-header title="Add festival"></app-header>
+
+<ion-content>
+  <main class="festival-add">
+    <app-festival-form
+      submitLabel="Add festival"
+      (saved)="createFestival($event)"
+      (cancelled)="cancelCreating()"
+    ></app-festival-form>
+  </main>
+</ion-content>

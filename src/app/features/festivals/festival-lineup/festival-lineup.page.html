@@ -199,29 +199,12 @@
           </ion-header>
           <ion-content>
             <section class="lineup-import">
-              <p class="lineup-import__eyebrow">Line-up sources</p>
-              <h2>Choose a timetable</h2>
+              <p class="lineup-import__eyebrow">Community source</p>
+              <h2>Import a timetable</h2>
               <p>Importing only adds set times that match this festival's saved dates.</p>
 
-              <h3 class="lineup-import__source-heading">Official source · Tomorrowland</h3>
-              <div class="lineup-import__presets">
-                @for (preset of tomorrowlandPresets; track preset.id) {
-                  <ion-button
-                    [class.lineup-import__preset--selected]="selectedImportPreset()?.id === preset.id"
-                    class="lineup-import__preset"
-                    expand="block"
-                    fill="outline"
-                    type="button"
-                    (click)="selectImportPreset(preset)"
-                  >
-                    <span>{{ preset.label }}</span>
-                    <small>{{ preset.weekend }} · {{ formatDay(preset.startDate) }}–{{ formatDay(preset.endDate) }}</small>
-                  </ion-button>
-                }
-              </div>
-
               <section class="lineup-import__catalogue" aria-labelledby="timetable-lol-title">
-                <h3 id="timetable-lol-title">Community source · Timetable.lol</h3>
+                <h3 id="timetable-lol-title">Timetable.lol</h3>
                 <p>Community timetable data for festivals and events. It loads only when you browse the catalogue.</p>
                 <p class="lineup-import__attribution">Data provided by <a href="https://timetable.lol" rel="noopener noreferrer" target="_blank">Timetable.lol</a>.</p>
 

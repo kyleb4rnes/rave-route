@@ -7,6 +7,13 @@ export const routes: Routes = [
       import('./features/settings/app-settings.page').then(({ AppSettingsPage }) => AppSettingsPage),
   },
   {
+    path: 'festivals/add',
+    loadComponent: () =>
+      import('./features/festivals/festival-add/festival-add.page').then(
+        ({ FestivalAddPage }) => FestivalAddPage,
+      ),
+  },
+  {
     path: 'festivals/:festivalId/edit',
     loadComponent: () =>
       import('./features/festivals/festival-edit/festival-edit.page').then(

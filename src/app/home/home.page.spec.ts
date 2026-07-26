@@ -1,8 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideRouter } from '@angular/router';
+import { provideRouter, Router } from '@angular/router';
 import { FESTIVAL_REPOSITORY } from '../core/festivals/data/festival-repository.token';
 import { FestivalRepository } from '../core/festivals/data/festival.repository';
-import { FestivalDraft } from '../core/festivals/models/festival-draft';
 import { HomePage } from './home.page';
 
 const emptyFestivalRepository: FestivalRepository = {
@@ -34,19 +33,12 @@ describe('HomePage', () => {
     expect(component).toBeTruthy();
   });
 
-  it('closes the add festival experience after creating a festival', async () => {
-    const festivalDraft: FestivalDraft = {
-      title: 'Created Festival',
-      startDate: '2026-08-01',
-      endDate: '2026-08-03',
-      location: 'Bristol',
-      transportArranged: false,
-      accommodationArranged: false,
-    };
+  it('opens the dedicated add festival page', () => {
+    const router = TestBed.inject(Router);
+    spyOn(router, 'navigate').and.resolveTo(true);
 
     component.openAddFestivalForm();
-    await component.createFestival(festivalDraft);
 
-    expect(component.isAddFestivalFormOpen()).toBeFalse();
+    expect(router.navigate).toHaveBeenCalledWith(['/festivals/add']);
   });
 });

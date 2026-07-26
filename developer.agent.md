@@ -120,7 +120,8 @@ Do not implement these unless they are explicitly brought into scope later:
 ### Line-up
 
 - Bulk paste/import of set times.
-- Additional automatic import providers beyond the supported Tomorrowland Belgium 2026 official presets and Timetable.lol community catalogue.
+- Additional automatic import providers beyond the current Timetable.lol community catalogue.
+- Timetable.lol refresh strategy: decide whether the bundled catalogue should be refreshed through an approved automated process or a documented manual cadence, including source review, release timing, and failure handling.
 
 ## 11. Work to Complete Before First Public Release
 
@@ -162,7 +163,7 @@ Do not implement these unless they are explicitly brought into scope later:
 - 2026-07-21: Stage 19 release preparation records the MVP architecture, known limitations, and a pre-public-release checklist. The v0.1.0 Android debug APK was assembled successfully; store signing and iOS packaging remain deliberate follow-up work.
 - 2026-07-23: Use the shared `AppHeaderComponent` for consistent Back, Home, and Settings navigation. Back follows in-app history and hidden controls avoid no-op actions.
 - 2026-07-23: Line-up set times are persisted inside their parent festival. Manual entry remains supported alongside explicit, user-confirmed imports.
-- 2026-07-23: The first timetable provider is Tomorrowland Belgium 2026. Its Weekend 1 and Weekend 2 official CDN JSON endpoints are fetched only after the user selects a preset and previews it; source performance IDs support safe refreshes without replacing manual entries.
+- 2026-07-26: Timetable.lol is the only currently exposed timetable provider. The former direct Tomorrowland presets remain out of the interface because their data is available through the Timetable.lol catalogue; additional providers require an explicit product decision.
 - 2026-07-23: Timetable.lol is a separately labelled community timetable provider. A compact, versioned same-origin asset is generated with `npm run timetable-lol:sync`, loaded only when the user browses its searchable catalogue, and cached in memory for that app session; selected sets persist as normal Rave Route sets with `timetable-lol` source IDs.
 - 2026-07-23: Must-see is a persisted per-set preference. The Line-up heart filter applies only to the selected day and works in both schedule views.
 - 2026-07-23: Appearance is an explicit persisted Light or Dark setting, independent of the chosen accent colour. The optional custom background image remains the same source image; a mode-appropriate overlay keeps its content legible.

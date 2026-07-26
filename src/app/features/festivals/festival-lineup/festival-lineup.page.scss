@@ -2,6 +2,10 @@ ion-content {
   --background: var(--rr-app-background, var(--rr-background));
 }
 
+ion-modal ion-content {
+  --background: var(--rr-surface);
+}
+
 .festival-lineup {
   display: grid;
   gap: 1.5rem;
@@ -370,8 +374,7 @@ ion-modal.lineup-import-modal {
   color: var(--rr-text-muted);
 }
 
-.lineup-import__eyebrow,
-.lineup-import__source-heading {
+.lineup-import__eyebrow {
   color: var(--rr-primary-dark);
   font-size: 0.75rem;
   font-weight: 800;

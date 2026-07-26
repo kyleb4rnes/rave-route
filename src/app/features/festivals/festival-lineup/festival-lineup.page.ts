@@ -40,11 +40,6 @@ import { getDefaultLineupDay, getFestivalDays } from '../../../core/festivals/fe
 import { FestivalSet, FestivalSetDraft, FestivalSetImport } from '../../../core/festivals/models/festival-set';
 import { FestivalStore } from '../../../core/festivals/festival.store';
 import {
-  TomorrowlandLineupService,
-  TomorrowlandPreset,
-  TOMORROWLAND_PRESETS,
-} from '../../../core/festivals/imports/tomorrowland-lineup.service';
-import {
   isLineupImportPresetCompatible,
   LineupImportPreset,
 } from '../../../core/festivals/imports/lineup-import-preset';
@@ -109,7 +104,6 @@ type TimeSchedule = {
 export class FestivalLineupPage {
   private readonly route = inject(ActivatedRoute);
   private readonly festivalStore = inject(FestivalStore);
-  private readonly tomorrowlandLineupService = inject(TomorrowlandLineupService);
   private readonly timetableLolLineupService = inject(TimetableLolLineupService);
   private readonly festivalId = this.route.snapshot.paramMap.get('festivalId') ?? '';
 
@@ -132,7 +126,6 @@ export class FestivalLineupPage {
   readonly editError = signal<string | null>(null);
   readonly actionError = signal<string | null>(null);
   readonly saveError = signal<string | null>(null);
-  readonly tomorrowlandPresets = TOMORROWLAND_PRESETS;
   readonly filteredTimetableLolPresets = computed(() => {
     const searchTerm = this.timetableLolSearchTerm().trim().toLocaleLowerCase();
 
@@ -302,13 +295,9 @@ export class FestivalLineupPage {
     this.isImportPreviewLoading.set(true);
 
     try {
-      this.importedSets.set(
-        preset.provider === 'tomorrowland'
-          ? await this.tomorrowlandLineupService.loadSets(preset as TomorrowlandPreset, festival)
-          : await this.timetableLolLineupService.loadSets(preset as TimetableLolPreset, festival),
-      );
+      this.importedSets.set(await this.timetableLolLineupService.loadSets(preset as TimetableLolPreset, festival));
     } catch {
-      this.importError.set('We could not load the official timetable. Please try again.');
+      this.importError.set('We could not load that timetable. Please try again.');
     } finally {
       this.isImportPreviewLoading.set(false);
     }
