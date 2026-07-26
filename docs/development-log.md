@@ -1,5 +1,11 @@
 # Development log
 
+## 2026-07-26 â€” Native image storage
+
+- Added Capacitor Filesystem-backed private storage for festival and app-background images.
+- Replaced persisted base64 image data with lightweight internal file references; legacy images migrate automatically while remaining safe if migration cannot complete.
+- Removed replaced and deleted festival/background image files as a best-effort cleanup.
+
 ## 2026-07-21 — Initial project history
 
 - Prepared the Rave Route product, design, technical-plan, workflow, and agent guidance documents.

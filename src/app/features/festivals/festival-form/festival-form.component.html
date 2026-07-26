@@ -34,8 +34,8 @@
         <ion-button fill="clear" type="button" (click)="form.controls.imageUrl.setValue('')">Remove</ion-button>
       }
     </div>
-    @if (form.controls.imageUrl.value) {
-      <img class="festival-form__image-preview" [src]="form.controls.imageUrl.value" alt="Selected festival picture preview" />
+    @if (imagePreviewUrl()) {
+      <img class="festival-form__image-preview" [src]="imagePreviewUrl()" alt="Selected festival picture preview" />
     }
     @if (imageSelectionError()) {
       <ion-note color="danger" role="alert">{{ imageSelectionError() }}</ion-note>

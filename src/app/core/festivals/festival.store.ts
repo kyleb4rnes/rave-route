@@ -10,10 +10,12 @@ import { FestivalDraft } from './models/festival-draft';
 import { Festival } from './models/festival';
 import { FestivalSet, FestivalSetDraft, FestivalSetImport, LineupImportSummary } from './models/festival-set';
 import { FESTIVAL_REPOSITORY } from './data/festival-repository.token';
+import { ImageStorageService } from '../images/image-storage.service';
 
 @Injectable({ providedIn: 'root' })
 export class FestivalStore {
   private readonly repository = inject(FESTIVAL_REPOSITORY);
+  private readonly imageStorage = inject(ImageStorageService);
   private readonly festivalsSignal = signal<readonly Festival[]>([]);
   private readonly loadingSignal = signal(true);
   private readonly errorSignal = signal<string | null>(null);
@@ -57,21 +59,23 @@ export class FestivalStore {
 
   async addFestival(draft: FestivalDraft): Promise<Festival | undefined> {
     const timestamp = new Date().toISOString();
-    const festival: Festival = {
-      id: crypto.randomUUID(),
-      title: draft.title,
-      startDate: draft.startDate,
-      endDate: draft.endDate,
-      ...(draft.imageUrl ? { imageUrl: draft.imageUrl } : {}),
-      location: draft.location,
-      transportArranged: draft.transportArranged,
-      accommodationArranged: draft.accommodationArranged,
-      lineupSets: [],
-      createdAt: timestamp,
-      updatedAt: timestamp,
-    };
 
     try {
+      const imageUrl = await this.imageStorage.storeImage(draft.imageUrl ?? '');
+      const festival: Festival = {
+        id: crypto.randomUUID(),
+        title: draft.title,
+        startDate: draft.startDate,
+        endDate: draft.endDate,
+        ...(imageUrl ? { imageUrl } : {}),
+        location: draft.location,
+        transportArranged: draft.transportArranged,
+        accommodationArranged: draft.accommodationArranged,
+        lineupSets: [],
+        createdAt: timestamp,
+        updatedAt: timestamp,
+      };
+
       await this.repository.create(festival);
       this.festivalsSignal.set(sortFestivalsByStartDate([...this.allFestivals(), festival]));
 
@@ -90,14 +94,19 @@ export class FestivalStore {
       return undefined;
     }
 
-    const updatedFestival: Festival = {
-      ...existingFestival,
-      ...draft,
-      updatedAt: new Date().toISOString(),
-    };
-
     try {
+      const imageUrl = await this.imageStorage.storeImage(draft.imageUrl ?? '');
+      const updatedFestival: Festival = {
+        ...existingFestival,
+        ...draft,
+        ...(imageUrl ? { imageUrl } : { imageUrl: undefined }),
+        updatedAt: new Date().toISOString(),
+      };
+
       await this.repository.update(updatedFestival);
+      if (existingFestival.imageUrl !== imageUrl) {
+        void this.imageStorage.removeImage(existingFestival.imageUrl);
+      }
       this.festivalsSignal.set(
         sortFestivalsByStartDate(
           this.allFestivals().map((festival) =>
@@ -116,7 +125,9 @@ export class FestivalStore {
 
   async deleteFestival(id: string): Promise<boolean> {
     try {
+      const festival = this.getFestivalById(id);
       await this.repository.delete(id);
+      void this.imageStorage.removeImage(festival?.imageUrl);
       this.festivalsSignal.set(this.allFestivals().filter((festival) => festival.id !== id));
 
       return true;

@@ -1,4 +1,4 @@
-import { Component, effect, input, output, signal } from '@angular/core';
+import { Component, effect, inject, input, output, signal } from '@angular/core';
 import {
   AbstractControl,
   FormControl,
@@ -22,6 +22,7 @@ import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 
 import { FestivalDraft } from '../../../core/festivals/models/festival-draft';
 import { Festival } from '../../../core/festivals/models/festival';
+import { ImageStorageService } from '../../../core/images/image-storage.service';
 
 type FestivalFormControls = {
   title: FormControl<string>;
@@ -71,11 +72,14 @@ const dateRangeValidator: ValidatorFn = (control: AbstractControl): ValidationEr
   ],
 })
 export class FestivalFormComponent {
+  private readonly imageStorage = inject(ImageStorageService);
+
   readonly festival = input<Festival | null>(null);
   readonly submitLabel = input('Save festival');
   readonly saved = output<FestivalDraft>();
   readonly cancelled = output<void>();
   readonly imageSelectionError = signal<string | null>(null);
+  readonly imagePreviewUrl = signal('');
   readonly isDateRangePickerOpen = signal(false);
   readonly dateRangeSelectionStep = signal<'start' | 'end'>('start');
   readonly pendingStartDate = signal<string | null>(null);
@@ -117,6 +121,9 @@ export class FestivalFormComponent {
           : this.emptyFormValue(),
       );
     });
+
+    this.form.controls.imageUrl.valueChanges.subscribe((imageUrl) => this.resolveImagePreview(imageUrl));
+    this.resolveImagePreview(this.form.controls.imageUrl.value);
   }
 
   submit(): void {
@@ -258,5 +265,17 @@ export class FestivalFormComponent {
       month: 'short',
       year: 'numeric',
     }).format(new Date(`${value}T12:00:00`));
+  }
+
+  private resolveImagePreview(imageUrl: string): void {
+    void this.imageStorage.resolveImageUrl(imageUrl).then((resolvedUrl) => {
+      if (this.form.controls.imageUrl.value === imageUrl) {
+        this.imagePreviewUrl.set(resolvedUrl);
+      }
+    }).catch(() => {
+      if (this.form.controls.imageUrl.value === imageUrl) {
+        this.imagePreviewUrl.set('');
+      }
+    });
   }
 }

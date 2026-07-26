@@ -9,6 +9,7 @@ import {
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { AppHeaderComponent } from '../../components/app-header/app-header.component';
 import { AppSettingsStore } from '../../core/settings/app-settings.store';
+import { ImageStorageService } from '../../core/images/image-storage.service';
 import { AppearanceMode, appearanceModeOptions } from '../../core/settings/appearance-modes';
 import { ThemeColour, themeColourOptions } from '../../core/settings/theme-colours';
 
@@ -28,9 +29,11 @@ import { ThemeColour, themeColourOptions } from '../../core/settings/theme-colou
 export class AppSettingsPage {
   private readonly location = inject(Location);
   private readonly appSettingsStore = inject(AppSettingsStore);
+  private readonly imageStorage = inject(ImageStorageService);
 
   readonly saveError = signal<string | null>(null);
   readonly imageSelectionError = signal<string | null>(null);
+  readonly imagePreviewUrl = signal('');
   readonly isClosing = signal(false);
   readonly themeColourOptions = themeColourOptions;
   readonly appearanceModeOptions = appearanceModeOptions;
@@ -43,7 +46,13 @@ export class AppSettingsPage {
       nonNullable: true,
     }),
   });
-  saveSettings(): void {
+
+  constructor() {
+    this.form.controls.homeBackgroundImageUrl.valueChanges.subscribe((imageUrl) => this.resolveImagePreview(imageUrl));
+    this.resolveImagePreview(this.form.controls.homeBackgroundImageUrl.value);
+  }
+
+  async saveSettings(): Promise<void> {
     this.form.markAllAsTouched();
     this.saveError.set(null);
 
@@ -51,7 +60,7 @@ export class AppSettingsPage {
       return;
     }
 
-    const saved = this.appSettingsStore.saveSettings(
+    const saved = await this.appSettingsStore.saveSettings(
       this.form.controls.homeBackgroundImageUrl.value,
       this.form.controls.themeColour.value,
       this.form.controls.appearanceMode.value,
@@ -105,5 +114,17 @@ export class AppSettingsPage {
 
     this.isClosing.set(true);
     setTimeout(() => this.location.back(), 650);
+  }
+
+  private resolveImagePreview(imageUrl: string): void {
+    void this.imageStorage.resolveImageUrl(imageUrl).then((resolvedUrl) => {
+      if (this.form.controls.homeBackgroundImageUrl.value === imageUrl) {
+        this.imagePreviewUrl.set(resolvedUrl);
+      }
+    }).catch(() => {
+      if (this.form.controls.homeBackgroundImageUrl.value === imageUrl) {
+        this.imagePreviewUrl.set('');
+      }
+    });
   }
 }

@@ -2,6 +2,7 @@ import { Component, computed, effect, inject, signal } from '@angular/core';
 import { IonApp, IonRouterOutlet, IonSpinner } from '@ionic/angular/standalone';
 import { FestivalStore } from './core/festivals/festival.store';
 import { AppSettingsStore } from './core/settings/app-settings.store';
+import { ImageStorageService } from './core/images/image-storage.service';
 import { appearancePalettes } from './core/settings/appearance-modes';
 import { themeColourPresets } from './core/settings/theme-colours';
 
@@ -15,6 +16,8 @@ import { themeColourPresets } from './core/settings/theme-colours';
 export class AppComponent {
   private readonly festivalStore = inject(FestivalStore);
   private readonly appSettingsStore = inject(AppSettingsStore);
+  private readonly imageStorage = inject(ImageStorageService);
+  private readonly appBackgroundImageUrl = signal('');
   private readonly launchStateSignal = signal<'loading' | 'leaving' | 'complete'>('loading');
   private readonly launchStartedAt = Date.now();
   private exitTimer: ReturnType<typeof setTimeout> | undefined;
@@ -38,7 +41,7 @@ export class AppComponent {
     };
   });
   readonly appBackground = computed(() => {
-    const imageUrl = this.appSettingsStore.homeBackgroundImageUrl();
+    const imageUrl = this.appBackgroundImageUrl();
 
     return imageUrl
       ? `linear-gradient(var(--rr-background-overlay), var(--rr-background-overlay)), url("${encodeURI(imageUrl)}") center / cover fixed`
@@ -46,6 +49,20 @@ export class AppComponent {
   });
 
   constructor() {
+    effect(() => {
+      const imageUrl = this.appSettingsStore.homeBackgroundImageUrl();
+
+      void this.imageStorage.resolveImageUrl(imageUrl).then((resolvedUrl) => {
+        if (this.appSettingsStore.homeBackgroundImageUrl() === imageUrl) {
+          this.appBackgroundImageUrl.set(resolvedUrl);
+        }
+      }).catch(() => {
+        if (this.appSettingsStore.homeBackgroundImageUrl() === imageUrl) {
+          this.appBackgroundImageUrl.set('');
+        }
+      });
+    });
+
     effect(() => {
       if (!this.festivalStore.loading() && this.launchState() === 'loading' && !this.exitTimer) {
         const remainingDelay = Math.max(0, this.minimumLaunchDurationMs - (Date.now() - this.launchStartedAt));

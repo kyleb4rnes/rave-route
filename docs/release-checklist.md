@@ -20,7 +20,8 @@
 - [ ] Enable and review GitHub Dependabot alerts/security updates and code scanning before a public release.
 - [ ] Run and review a dependency vulnerability audit before a public release.
 - [ ] Design authentication, authorisation, account recovery, session handling, and local-data migration before introducing user accounts or cloud sync.
-- [ ] Move selected images out of browser local storage and test data retention through app upgrades, reinstalls, and storage-pressure scenarios.
+- [x] Store selected images as private Capacitor Filesystem files rather than base64 data in browser local storage.
+- [ ] Test image retention through app upgrades, reinstalls, and storage-pressure scenarios.
 - [ ] Establish release signing, versioning, and signed Android App Bundle delivery.
 - [ ] Prepare complete store listings: final icon/splash, screenshots, descriptions, classifications, support contact, and reviewer notes.
 - [ ] Publish an accurate privacy policy and complete current store privacy disclosures.

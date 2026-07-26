@@ -4,6 +4,8 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
+    assignees:
+      - "kyleb4rnes"
     open-pull-requests-limit: 5
     groups:
       development-dependencies:

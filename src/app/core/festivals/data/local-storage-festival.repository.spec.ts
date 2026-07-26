@@ -1,5 +1,7 @@
 import { Festival } from '../models/festival';
 import { LocalStorageFestivalRepository } from './local-storage-festival.repository';
+import { TestBed } from '@angular/core/testing';
+import { ImageStorageService } from '../../images/image-storage.service';
 
 const festival: Festival = {
   id: 'festival-id',
@@ -17,7 +19,15 @@ describe('LocalStorageFestivalRepository', () => {
 
   beforeEach(() => {
     localStorage.clear();
-    repository = new LocalStorageFestivalRepository();
+    TestBed.configureTestingModule({
+      providers: [
+        {
+          provide: ImageStorageService,
+          useValue: { storeImage: async (imageUrl: string) => imageUrl },
+        },
+      ],
+    });
+    repository = TestBed.runInInjectionContext(() => new LocalStorageFestivalRepository());
   });
 
   afterEach(() => localStorage.clear());

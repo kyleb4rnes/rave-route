@@ -57,8 +57,8 @@
         <p>Choose an optional image from your photo library for the app background.</p>
 
         <div class="settings-background-image">
-          @if (form.controls.homeBackgroundImageUrl.value) {
-            <img [src]="form.controls.homeBackgroundImageUrl.value" alt="Selected app background preview" />
+          @if (imagePreviewUrl()) {
+          <img [src]="imagePreviewUrl()" alt="Selected app background preview" />
           }
           <div class="settings-background-image__actions">
             <ion-button fill="outline" type="button" (click)="selectBackgroundImage()">Choose photo</ion-button>
