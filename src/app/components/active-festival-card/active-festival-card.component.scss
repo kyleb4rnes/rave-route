@@ -118,3 +118,14 @@
 @keyframes live-pulse {
   50% { opacity: 0.35; transform: scale(0.75); }
 }
+
+@media (max-width: 22.5rem) {
+  .active-festival-card__sets {
+    grid-template-columns: 1fr;
+  }
+
+  .active-festival-card__set + .active-festival-card__set {
+    border-left: 0;
+    border-top: 1px solid var(--rr-border);
+  }
+}

@@ -27,4 +27,4 @@
 - [ ] Establish release signing, versioning, and signed Android App Bundle delivery.
 - [ ] Prepare complete store listings: final icon/splash, screenshots, descriptions, classifications, support contact, and reviewer notes.
 - [ ] Publish an accurate privacy policy and complete current store privacy disclosures.
-- [ ] Review Timetable.lol's licence/terms and source-data rights; confirm redistribution and attribution permission, or remove the bundled catalogue before public release.
+- [ ] Before public launch, establish the production Rave Route URL and provide it to Timetable.lol for API-origin allowlisting. Validate live imports from the deployed web app and native builds, retain the agreed “Data provided by Timetable.lol” attribution, and document the agreed contact/takedown process.

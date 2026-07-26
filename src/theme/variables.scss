@@ -1,7 +1,7 @@
 :root {
   // Rave Route design tokens.
-  --rr-primary: #e52b38;
-  --rr-primary-dark: #bd1f2a;
+  --rr-primary: #d92332;
+  --rr-primary-dark: #ad1825;
   --rr-primary-contrast: #ffffff;
   --rr-accent: #ff6b6b;
   --rr-primary-soft: #fff0ee;
@@ -19,11 +19,11 @@
 
   // Ionic theme mappings.
   --ion-color-primary: var(--rr-primary);
-  --ion-color-primary-rgb: 229, 43, 56;
+  --ion-color-primary-rgb: 217, 35, 50;
   --ion-color-primary-contrast: var(--rr-primary-contrast);
   --ion-color-primary-contrast-rgb: 255, 255, 255;
   --ion-color-primary-shade: var(--rr-primary-dark);
-  --ion-color-primary-tint: #e94550;
+  --ion-color-primary-tint: #e54754;
 }
 
 ion-button.rr-button,

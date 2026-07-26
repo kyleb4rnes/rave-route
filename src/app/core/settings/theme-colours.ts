@@ -13,9 +13,9 @@ export type ThemeColourPreset = {
 export const themeColourPresets: Record<ThemeColour, ThemeColourPreset> = {
   red: {
     label: 'Red',
-    primary: '#e52b38',
-    primaryDark: '#bd1f2a',
-    primaryRgb: '229, 43, 56',
+    primary: '#d92332',
+    primaryDark: '#ad1825',
+    primaryRgb: '217, 35, 50',
     primarySoft: '#fff0ee',
     primarySoftDark: '#421d24',
     tint: '#e94550',
@@ -31,9 +31,9 @@ export const themeColourPresets: Record<ThemeColour, ThemeColourPreset> = {
   },
   green: {
     label: 'Green',
-    primary: '#159947',
-    primaryDark: '#137a39',
-    primaryRgb: '21, 153, 71',
+    primary: '#167a3f',
+    primaryDark: '#105f30',
+    primaryRgb: '22, 122, 63',
     primarySoft: '#ecfdf3',
     primarySoftDark: '#173b29',
     tint: '#22c55e',

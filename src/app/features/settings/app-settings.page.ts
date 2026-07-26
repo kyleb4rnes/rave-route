@@ -83,6 +83,30 @@ export class AppSettingsPage {
     this.form.controls.appearanceMode.setValue(appearanceMode);
   }
 
+  handleThemeColourKeydown(event: KeyboardEvent, index: number): void {
+    const nextIndex = this.getRadioOptionIndex(event.key, index, this.themeColourOptions.length);
+
+    if (nextIndex === null) {
+      return;
+    }
+
+    event.preventDefault();
+    this.selectThemeColour(this.themeColourOptions[nextIndex].id);
+    this.focusRadioOption(event.currentTarget, nextIndex);
+  }
+
+  handleAppearanceModeKeydown(event: KeyboardEvent, index: number): void {
+    const nextIndex = this.getRadioOptionIndex(event.key, index, this.appearanceModeOptions.length);
+
+    if (nextIndex === null) {
+      return;
+    }
+
+    event.preventDefault();
+    this.selectAppearanceMode(this.appearanceModeOptions[nextIndex].id);
+    this.focusRadioOption(event.currentTarget, nextIndex);
+  }
+
   async selectBackgroundImage(): Promise<void> {
     this.imageSelectionError.set(null);
 
@@ -126,5 +150,32 @@ export class AppSettingsPage {
         this.imagePreviewUrl.set('');
       }
     });
+  }
+
+  private getRadioOptionIndex(key: string, currentIndex: number, optionCount: number): number | null {
+    if (key === 'Home') {
+      return 0;
+    }
+
+    if (key === 'End') {
+      return optionCount - 1;
+    }
+
+    if (key === 'ArrowRight' || key === 'ArrowDown') {
+      return (currentIndex + 1) % optionCount;
+    }
+
+    if (key === 'ArrowLeft' || key === 'ArrowUp') {
+      return (currentIndex - 1 + optionCount) % optionCount;
+    }
+
+    return null;
+  }
+
+  private focusRadioOption(currentTarget: EventTarget | null, nextIndex: number): void {
+    const radioGroup = (currentTarget as HTMLElement | null)?.closest('[role="radiogroup"]');
+    const options = radioGroup?.querySelectorAll<HTMLButtonElement>('[role="radio"]');
+
+    options?.item(nextIndex)?.focus();
   }
 }

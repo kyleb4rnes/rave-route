@@ -14,9 +14,10 @@
         <p>Choose the app's primary colour.</p>
 
         <div class="theme-colour-picker" aria-labelledby="theme-colour-title" role="radiogroup">
-          @for (theme of themeColourOptions; track theme.id) {
+          @for (theme of themeColourOptions; track theme.id; let index = $index) {
             <button
               [attr.aria-checked]="form.controls.themeColour.value === theme.id"
+              [attr.tabindex]="form.controls.themeColour.value === theme.id ? 0 : -1"
               [class.theme-colour-picker__option--selected]="form.controls.themeColour.value === theme.id"
               [style.--theme-colour]="theme.primary"
               [style.--theme-colour-soft]="theme.primarySoft"
@@ -24,6 +25,7 @@
               role="radio"
               type="button"
               (click)="selectThemeColour(theme.id)"
+              (keydown)="handleThemeColourKeydown($event, index)"
             >
               <span aria-hidden="true"></span>
               {{ theme.label }}
@@ -37,14 +39,16 @@
         <p>Choose a light or dark app surface.</p>
 
         <div class="appearance-mode-picker" aria-labelledby="appearance-title" role="radiogroup">
-          @for (appearance of appearanceModeOptions; track appearance.id) {
+          @for (appearance of appearanceModeOptions; track appearance.id; let index = $index) {
             <button
               [attr.aria-checked]="form.controls.appearanceMode.value === appearance.id"
+              [attr.tabindex]="form.controls.appearanceMode.value === appearance.id ? 0 : -1"
               [class.appearance-mode-picker__option--selected]="form.controls.appearanceMode.value === appearance.id"
               class="appearance-mode-picker__option"
               role="radio"
               type="button"
               (click)="selectAppearanceMode(appearance.id)"
+              (keydown)="handleAppearanceModeKeydown($event, index)"
             >
               {{ appearance.label }}
             </button>

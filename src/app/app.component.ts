@@ -44,7 +44,7 @@ export class AppComponent {
     const imageUrl = this.appBackgroundImageUrl();
 
     return imageUrl
-      ? `linear-gradient(var(--rr-background-overlay), var(--rr-background-overlay)), url("${encodeURI(imageUrl)}") center / cover fixed`
+      ? `linear-gradient(var(--rr-background-overlay), var(--rr-background-overlay)), url("${encodeURI(imageUrl)}") center / cover no-repeat`
       : 'var(--rr-background)';
   });
 

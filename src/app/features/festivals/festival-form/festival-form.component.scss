@@ -122,3 +122,9 @@
   margin: 1rem auto 0;
   max-width: 23rem;
 }
+
+ion-modal.festival-date-range-modal {
+  --border-radius: var(--rr-radius-card);
+  --height: min(90dvh, 34rem);
+  --width: min(calc(100% - 1rem), 26rem);
+}

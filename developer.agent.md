@@ -132,7 +132,7 @@ Do not implement these unless they are explicitly brought into scope later:
 - Store onboarding and test distribution: set up and verify Google Play and Apple Developer/App Store Connect accounts, complete any required closed or beta testing, and maintain a physical-device test matrix.
 - Store presence and support: prepare final icon/splash assets, screenshots, listing copy, categories, content/age ratings, support contact details, reviewer notes, and a support/bug-report process.
 - Privacy and operational policy: publish an accurate privacy policy and store disclosures, decide whether Terms of Use are needed, keep permissions minimal, review the impact of any analytics/crash-reporting SDK before adding it, and define a release checklist, changelog, and rollback approach.
-- Timetable.lol data rights: before any public release or further use, review Timetable.lol's terms, licence, attribution requirements, source-data rights, redistribution permission, refresh policy, and takedown/contact process. Retain only data whose use is explicitly permitted; remove the bundled catalogue or obtain written permission if the terms do not clearly allow this use.
+- Timetable.lol production readiness: permission to use the data has been confirmed. Before public launch, establish the production Rave Route URL and provide it to Timetable.lol for API-origin allowlisting; validate live imports from the deployed web app and native builds, preserve clear attribution, and document the agreed contact/takedown process.
 
 ## Decision Notes
 
@@ -167,3 +167,4 @@ Do not implement these unless they are explicitly brought into scope later:
 - 2026-07-23: Must-see is a persisted per-set preference. The Line-up heart filter applies only to the selected day and works in both schedule views.
 - 2026-07-23: Appearance is an explicit persisted Light or Dark setting, independent of the chosen accent colour. The optional custom background image remains the same source image; a mode-appropriate overlay keeps its content legible.
 - 2026-07-23: Appearance preferences are local-device settings. Theme presets update app-level CSS tokens and optional background images apply across routed content.
+- 2026-07-26: Feature-specific layout, modal, and interaction styles belong to the owning feature stylesheet; global styles are reserved for design tokens, Ionic defaults, and genuinely shared behaviour. Component stylesheet budgets are sized to permit the Line-up page's intentional local ownership while retaining a build guard.

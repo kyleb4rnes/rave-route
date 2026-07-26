@@ -60,4 +60,4 @@ iOS packaging needs a Mac with Xcode and an Apple Developer account. On that Mac
 - The project owner/contact details and jurisdiction-specific review for the privacy policy draft.
 - Future accounts/cloud-sync direction after the device-only version 1 release, including data ownership, recovery, migration, and conflict handling.
 - Whether Terms of Use are required for the intended launch market.
-- Timetable.lol's written licence/permission, attribution terms, data-refresh expectations, and takedown contact. Do not distribute the bundled Timetable.lol catalogue unless this is resolved; otherwise remove it before public release.
+- Timetable.lol has granted permission to use its data and requested the visible “Data provided by Timetable.lol” attribution, which is implemented in the import flow. Before public release, provide the production app URL for API-origin allowlisting, validate the live integration, and retain its contact/takedown details.
