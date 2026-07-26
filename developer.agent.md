@@ -103,7 +103,7 @@ Before completing a stage, confirm:
 
 Stage checkboxes show roadmap progress, not permission to begin the next stage.
 
-## 10. Future Improvements to Avoid During MVP
+## 10. Additional Future Features
 
 Do not implement these unless they are explicitly brought into scope later:
 
@@ -119,7 +119,12 @@ Do not implement these unless they are explicitly brought into scope later:
 - Maps
 - Transport and accommodation planning: define and prioritise richer details beyond the current arranged/not-arranged toggles, such as bookings, timings, addresses, references, and reminders.
 
-Future platform, security, and account work, explicitly deferred:
+### Line-up
+
+- Bulk paste/import of set times.
+- Additional automatic import providers beyond the supported Tomorrowland Belgium 2026 official presets and Timetable.lol community catalogue.
+
+## 11. Work to Complete Before First Public Release
 
 - iOS readiness: create and maintain the Capacitor iOS project on macOS, configure Apple signing, add the required native privacy descriptions, and validate Camera/photo-library behaviour on a physical iPhone.
 - Dependency and code security: enable GitHub Dependabot alerts and security updates, configure GitHub code scanning where the repository plan supports it, routinely review `npm audit`, and resolve or document relevant findings before release.
@@ -130,13 +135,6 @@ Future platform, security, and account work, explicitly deferred:
 - Store presence and support: prepare final icon/splash assets, screenshots, listing copy, categories, content/age ratings, support contact details, reviewer notes, and a support/bug-report process.
 - Privacy and operational policy: publish an accurate privacy policy and store disclosures, decide whether Terms of Use are needed, keep permissions minimal, review the impact of any analytics/crash-reporting SDK before adding it, and define a release checklist, changelog, and rollback approach.
 - Timetable.lol data rights: before any public release or further use, review Timetable.lol's terms, licence, attribution requirements, source-data rights, redistribution permission, refresh policy, and takedown/contact process. Retain only data whose use is explicitly permitted; remove the bundled catalogue or obtain written permission if the terms do not clearly allow this use.
-
-Future Line-up work, explicitly deferred:
-
-- Bulk paste/import of set times
-- Additional automatic import providers beyond the supported Tomorrowland Belgium 2026 official presets and Timetable.lol community catalogue
-- Live festival Line-up entry: when opening the Line-up for an active festival, select the current festival day by default.
-- Live festival Home route: when a Live now card is present, start the “Your festival route” list with the next festival after the active one instead of repeating the active festival.
 
 ## Decision Notes
 

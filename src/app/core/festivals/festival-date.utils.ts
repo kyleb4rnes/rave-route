@@ -60,9 +60,17 @@ export function getFestivalDays(festival: Festival): string[] {
 }
 
 export function getDefaultLineupDay(festival: Festival, referenceDate = new Date()): string {
-  const today = toUtcStartOfDay(referenceDate).toISOString().slice(0, 10);
+  const today = toLocalDateKey(referenceDate);
 
   return today >= festival.startDate && today <= festival.endDate ? today : festival.startDate;
+}
+
+function toLocalDateKey(value: Date): string {
+  const year = value.getFullYear();
+  const month = String(value.getMonth() + 1).padStart(2, '0');
+  const day = String(value.getDate()).padStart(2, '0');
+
+  return `${year}-${month}-${day}`;
 }
 
 function toUtcStartOfDay(value: string | Date): Date {

@@ -27,7 +27,7 @@
       </section>
     } @else if (allFestivals().length === 0) {
       <app-empty-festival-state></app-empty-festival-state>
-    } @else if (nextFestival(); as festival) {
+    } @else if (routeNextFestival(); as festival) {
       <app-upcoming-festival-card
         [title]="festival.title"
         [location]="festival.location"
@@ -40,10 +40,10 @@
         (viewDetails)="viewFestival(festival.id)"
       ></app-upcoming-festival-card>
 
-      @if (laterUpcomingFestivals().length > 0) {
+      @if (routeLaterUpcomingFestivals().length > 0) {
         <section class="future-festivals" aria-labelledby="future-festivals-title">
           <h2 id="future-festivals-title">Later adventures</h2>
-          @for (futureFestival of laterUpcomingFestivals(); track futureFestival.id) {
+          @for (futureFestival of routeLaterUpcomingFestivals(); track futureFestival.id) {
             <app-collapsed-festival-card
               [title]="futureFestival.title"
               [dateLabel]="formatDateRange(futureFestival)"
@@ -61,7 +61,7 @@
       }
     } @else {
       <section class="page-status">
-        <p>You have no upcoming festivals yet. Add one to start planning.</p>
+        <p>{{ activeFestival() ? 'You have no festivals planned after the live one yet.' : 'You have no upcoming festivals yet. Add one to start planning.' }}</p>
       </section>
     }
 

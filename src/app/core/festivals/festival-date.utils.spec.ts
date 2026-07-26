@@ -1,6 +1,7 @@
 import { Festival } from './models/festival';
 import {
   calculateDaysRemaining,
+  getDefaultLineupDay,
   getNextFestival,
   getPastFestivals,
   getUpcomingFestivals,
@@ -66,5 +67,15 @@ describe('festival date utilities', () => {
     expect(calculateDaysRemaining('2026-08-14', referenceDate)).toBe(25);
     expect(calculateDaysRemaining('2026-07-20', referenceDate)).toBe(0);
     expect(calculateDaysRemaining('2026-07-01', referenceDate)).toBe(0);
+  });
+
+  it('defaults a live festival line-up to today', () => {
+    const liveFestival: Festival = {
+      ...festivals[0],
+      startDate: '2026-07-19',
+      endDate: '2026-07-21',
+    };
+
+    expect(getDefaultLineupDay(liveFestival, referenceDate)).toBe('2026-07-20');
   });
 });

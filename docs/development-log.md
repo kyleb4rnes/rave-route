@@ -41,6 +41,12 @@
 - Deferred two Live festival refinements: opening its Line-up should default to the current day, and Home should not repeat the active festival in “Your festival route”.
 - Recorded future discussion for richer transport and accommodation planning beyond the current arranged-status toggles.
 
+## 2026-07-26 — Active festival refinements
+
+- Aligned active-festival and Line-up day selection to the device's local date, so Live Line-up entry opens on today.
+- Excluded an active festival from the Home route cards, showing the next planned festival instead.
+- Reorganised deferred work into Additional Future Features and Work to Complete Before First Public Release.
+
 ## 2026-07-23 — Festival line-ups
 
 - Added persisted manual festival set times with artist, day, start/end times, and optional stage.

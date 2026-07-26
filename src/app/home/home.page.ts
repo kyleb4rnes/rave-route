@@ -13,7 +13,7 @@ import { ActiveFestivalCardComponent } from '../components/active-festival-card/
 import { CollapsedFestivalCardComponent } from '../components/collapsed-festival-card/collapsed-festival-card.component';
 import { EmptyFestivalStateComponent } from '../components/empty-festival-state/empty-festival-state.component';
 import { UpcomingFestivalCardComponent } from '../components/upcoming-festival-card/upcoming-festival-card.component';
-import { calculateDaysRemaining } from '../core/festivals/festival-date.utils';
+import { calculateDaysRemaining, getUpcomingFestivals } from '../core/festivals/festival-date.utils';
 import { getActiveFestival, getActiveFestivalSchedule } from '../core/festivals/active-festival.utils';
 import { Festival } from '../core/festivals/models/festival';
 import { FestivalDraft } from '../core/festivals/models/festival-draft';
@@ -48,8 +48,6 @@ export class HomePage {
   readonly allFestivals = this.festivalStore.allFestivals;
   readonly loading = this.festivalStore.loading;
   readonly error = this.festivalStore.error;
-  readonly nextFestival = this.festivalStore.nextFestival;
-  readonly laterUpcomingFestivals = this.festivalStore.laterUpcomingFestivals;
   readonly pastFestivals = this.festivalStore.pastFestivals;
   readonly isAddFestivalFormOpen = signal(false);
   readonly isPastFestivalsOpen = signal(false);
@@ -57,6 +55,13 @@ export class HomePage {
   readonly isCreatingLiveDemo = signal(false);
   readonly now = signal(new Date());
   readonly activeFestival = computed(() => getActiveFestival(this.allFestivals(), this.now()));
+  readonly routeUpcomingFestivals = computed(() =>
+    getUpcomingFestivals(this.allFestivals(), this.now()).filter(
+      (festival) => festival.id !== this.activeFestival()?.id,
+    ),
+  );
+  readonly routeNextFestival = computed(() => this.routeUpcomingFestivals()[0]);
+  readonly routeLaterUpcomingFestivals = computed(() => this.routeUpcomingFestivals().slice(1));
   readonly activeFestivalSchedule = computed(() => {
     const festival = this.activeFestival();
 
