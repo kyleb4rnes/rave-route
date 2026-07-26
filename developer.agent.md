@@ -107,9 +107,7 @@ Stage checkboxes show roadmap progress, not permission to begin the next stage.
 
 Do not implement these unless they are explicitly brought into scope later:
 
-- Backend services
-- Authentication
-- Cloud synchronisation
+- Accounts and cloud synchronisation: consider only after the device-only v1 release. Define the backend, authentication, data ownership, recovery, migration, and conflict-handling approach before implementation.
 - Payments
 - AI features
 - Social features
@@ -145,6 +143,8 @@ Do not implement these unless they are explicitly brought into scope later:
 - 2026-07-25: Image URLs are no longer user-entered. Festival and app-background images are selected from the photo library and retained locally. Public-release planning now explicitly includes native image storage resilience, store onboarding, signing, privacy/disclosures, security scanning, and confirmation of Timetable.lol data rights.
 - 2026-07-26: The Home page automatically surfaces a festival whose date range includes today. Its Live now card refreshes every minute, displays the current and next scheduled set when available, and prioritises Must-see sets during a same-time clash. Manual active-festival selection remains out of scope for now.
 - 2026-07-26: Selected festival and app-background images are stored as private Capacitor Filesystem files. Festival/settings records retain only an internal image reference; legacy base64 images migrate on read without being discarded if migration fails.
+- 2026-07-26: Release automation uses a GitHub Actions quality gate for lint, tests, and production build. Dependabot handles npm update PRs, while production dependency audits are run separately from development-toolchain findings.
+- 2026-07-26: Version 1 is deliberately device-only. Festivals, Line-ups, settings, and private images are not backed up or synchronised; accounts and cloud sync remain future considerations.
 - 2026-07-20: Stage 1 uses standalone Angular bootstrap, standalone Ionic components, and route-level `loadComponent` lazy loading. Karma uses an existing Windows Edge installation as a fallback for its Chromium launcher when `CHROME_BIN` is not already configured.
 - 2026-07-20: Stage 2 uses normal content flow, responsive `clamp()` spacing, and CSS safe-area environment values for the mobile shell. Global styles own the neutral typography baseline; page styles own layout-specific spacing and alignment.
 - 2026-07-20: Stage 3 centralises Rave Route colours, spacing, radii, shadows, and Ionic colour mappings in `src/theme/variables.scss`. Components consume `--rr-*` tokens instead of defining raw brand colours.

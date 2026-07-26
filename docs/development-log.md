@@ -1,5 +1,20 @@
 # Development log
 
+## 2026-07-26 â€” GitHub security configuration
+
+- Confirmed that Dependabot alerts/security updates, private vulnerability reporting, and CodeQL default setup are enabled for the repository.
+
+## 2026-07-26 â€” Version 1 storage decision
+
+- Confirmed that version 1 is deliberately device-only, with no backup, export, account, or cloud synchronisation.
+- Deferred accounts and cloud synchronisation to future considerations, pending a full data ownership and migration design.
+
+## 2026-07-26 â€” Release readiness foundation
+
+- Added GitHub Actions quality checks for every pull request and push to `main`.
+- Added a security reporting policy, a pre-release runbook, and a locally accurate privacy-policy draft.
+- Confirmed `npm audit --omit=dev` has no production dependency vulnerabilities; full-audit development-toolchain updates remain subject to compatibility review.
+
 ## 2026-07-26 â€” Native image storage
 
 - Added Capacitor Filesystem-backed private storage for festival and app-background images.

@@ -5,6 +5,8 @@
 - [x] Production Angular build succeeds.
 - [x] Lint succeeds.
 - [x] Unit tests pass.
+- [x] Pull-request quality gate checks lint, unit tests, and production builds.
+- [x] Security-reporting policy and an owner-completion release runbook are documented.
 - [x] Android debug APK is produced from the Capacitor Android project.
 - [x] Android application identifier is `com.raveroute.app`.
 - [x] Core journey has been reviewed: add, view, edit, delete, persistence, and image selection.
@@ -15,9 +17,9 @@
 - [ ] Run the complete journey on at least one physical Android device.
 - [ ] Replace the temporary icon and splash assets with final brand assets.
 - [ ] Define release signing and generate a signed release bundle.
-- [ ] Decide whether cloud backup/sync is required before public release.
+- [x] Version 1 storage decision: device-only, with no backup, export, accounts, or cloud synchronisation.
 - [ ] Package and test the iOS application on macOS with Xcode if iOS distribution is planned.
-- [ ] Enable and review GitHub Dependabot alerts/security updates and code scanning before a public release.
+- [x] Enabled GitHub Dependabot alerts/security updates, private vulnerability reporting, and CodeQL default setup.
 - [ ] Run and review a dependency vulnerability audit before a public release.
 - [ ] Design authentication, authorisation, account recovery, session handling, and local-data migration before introducing user accounts or cloud sync.
 - [x] Store selected images as private Capacitor Filesystem files rather than base64 data in browser local storage.
