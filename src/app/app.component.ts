@@ -23,7 +23,7 @@ export class AppComponent {
   private exitTimer: ReturnType<typeof setTimeout> | undefined;
 
   // Temporary development delay: remove or set to 0 once launch timing is approved.
-  private readonly minimumLaunchDurationMs = 2500;
+  private readonly minimumLaunchDurationMs = 0;
   private readonly exitAnimationDurationMs = 900;
 
   readonly launchState = this.launchStateSignal.asReadonly();
