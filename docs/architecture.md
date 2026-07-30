@@ -28,5 +28,5 @@ The store calls the repository before updating its local signal, keeping the dis
 ## Deferred platform, security, and identity work
 
 - Add, configure, sign, and test the Capacitor iOS project from macOS/Xcode before claiming iPhone support.
-- Enable GitHub dependency alerts/security updates and code scanning when repository security settings are configured; include dependency audit review in release preparation.
+- GitHub dependency alerts/security updates and CodeQL are enabled; include dependency-audit, Dependabot, and CodeQL review in release preparation.
 - Keep data local until account, authentication, authorisation, cloud storage, session, and migration requirements have been designed together.

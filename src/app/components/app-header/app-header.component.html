@@ -22,7 +22,7 @@
           <ion-icon aria-hidden="true" name="home-outline"></ion-icon>
         </ion-button>
       }
-      <ion-button aria-label="Open app settings" routerLink="/settings">
+      <ion-button [attr.aria-label]="isSettings() ? 'Close app settings' : 'Open app settings'" (click)="openSettings()">
         <ion-icon aria-hidden="true" name="settings-outline"></ion-icon>
       </ion-button>
     </ion-buttons>

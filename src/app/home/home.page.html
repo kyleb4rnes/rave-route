@@ -1,7 +1,7 @@
 <app-header title="Rave Route" [showLogo]="true"></app-header>
 
 <ion-content>
-  <main class="home-shell">
+  <main class="home-shell" [class.home-shell--empty]="!loading() && !error() && allFestivals().length === 0">
     @if (activeFestival(); as festival) {
       <app-active-festival-card
         [festival]="festival"
@@ -114,5 +114,23 @@
       Add Festival
     </ion-button>
 
+    @if (!loading() && !error() && allFestivals().length > 0) {
+      <button
+        class="clear-data-button"
+        type="button"
+        [disabled]="isClearingData()"
+        (click)="openClearDataConfirmation()"
+      >
+        {{ isClearingData() ? 'Clearing local data…' : 'Clear all local festival data' }}
+      </button>
+    }
   </main>
+
+  <ion-alert
+    [isOpen]="isClearDataAlertOpen()"
+    header="Clear local festival data?"
+    message="This removes every festival and its saved line-up from this device. This cannot be undone."
+    [buttons]="clearDataAlertButtons"
+    (didDismiss)="closeClearDataConfirmation()"
+  ></ion-alert>
 </ion-content>

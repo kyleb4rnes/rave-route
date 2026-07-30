@@ -3,5 +3,149 @@ ion-content {
 }
 
 .festival-add {
+  align-content: start;
+  display: grid;
+  gap: 0.75rem;
   min-height: 100%;
+  padding: var(--rr-spacing-page)
+    max(var(--rr-spacing-page), env(safe-area-inset-right))
+    calc(var(--rr-spacing-page) + env(safe-area-inset-bottom))
+    max(var(--rr-spacing-page), env(safe-area-inset-left));
+}
+
+.festival-add header p,
+.festival-add__selection > p {
+  color: var(--rr-primary-dark);
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  margin: 0 0 0.4rem;
+}
+
+.festival-add h1,
+.festival-add h2,
+.festival-add p {
+  color: var(--rr-text);
+  margin: 0;
+}
+
+.festival-add header h1 {
+  font-size: clamp(1.75rem, 8vw, 2.5rem);
+}
+
+.festival-add header > span,
+.festival-add__custom p {
+  color: var(--rr-text-muted);
+  display: block;
+  margin-top: 0.5rem;
+}
+
+.festival-add__search,
+.festival-add__selection,
+.festival-add__custom {
+  background: var(--rr-surface);
+  border: 1px solid var(--rr-border);
+  border-radius: var(--rr-radius-card);
+  padding: 0.875rem;
+}
+
+.festival-add__search h2,
+.festival-add__custom h2 {
+  font-size: 1rem;
+}
+
+.festival-add__search ion-searchbar {
+  --background: var(--rr-background);
+  --border-radius: var(--rr-radius-control);
+  --box-shadow: none;
+  --color: var(--rr-text);
+  padding: 0.5rem 0 0;
+}
+
+.festival-add__search ion-note,
+.festival-add > ion-note {
+  display: block;
+}
+
+.festival-add__loading {
+  align-items: center;
+  color: var(--rr-text-muted);
+  display: flex;
+  gap: 0.75rem;
+  padding: 0.75rem 0 0;
+}
+
+.festival-add__suggestions {
+  border: 1px solid var(--rr-border);
+  border-radius: var(--rr-radius-control);
+  overflow: hidden;
+}
+
+.festival-add__suggestions button {
+  align-items: center;
+  background: var(--rr-surface);
+  border: 0;
+  color: var(--rr-text);
+  display: flex;
+  font: inherit;
+  gap: 0.75rem;
+  justify-content: space-between;
+  padding: 0.875rem;
+  text-align: left;
+  width: 100%;
+}
+
+.festival-add__suggestions button + button {
+  border-top: 1px solid var(--rr-border);
+}
+
+.festival-add__suggestions span,
+.festival-add__suggestions small {
+  display: block;
+}
+
+.festival-add__suggestions small,
+.festival-add__selection > span,
+.festival-add__selection small {
+  color: var(--rr-text-muted);
+  margin-top: 0.25rem;
+}
+
+.festival-add__browse {
+  --border-color: var(--rr-primary);
+  --color: var(--rr-primary-dark);
+  font-weight: 800;
+  margin: 0;
+  min-height: 3rem;
+}
+
+.festival-add__selection {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.festival-add__selection > div {
+  align-items: center;
+  color: var(--rr-text);
+  display: flex;
+  gap: 0.5rem;
+}
+
+.festival-add__selection a {
+  color: var(--rr-primary-dark);
+  font-weight: 800;
+}
+
+.festival-add__selection ion-button {
+  margin: 0.75rem 0 0;
+}
+
+.festival-add__custom {
+  text-align: center;
+}
+
+.festival-add__custom ion-button {
+  --color: var(--rr-primary-dark);
+  font-weight: 800;
+  margin-bottom: -0.5rem;
 }

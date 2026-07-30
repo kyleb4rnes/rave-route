@@ -1,0 +1,56 @@
+<app-header title="Browse festivals"></app-header>
+
+<ion-content>
+  <main class="festival-browse">
+    <header>
+      <p>FESTIVAL CATALOGUE</p>
+      <h1>Find your next route</h1>
+      <span>Browse festivals with published timetable data.</span>
+    </header>
+
+    <ion-searchbar
+      aria-label="Filter festival catalogue"
+      debounce="150"
+      placeholder="Search festivals or a year"
+      (ionInput)="updateSearchTerm($event.detail.value)"
+    ></ion-searchbar>
+
+    @if (isLoading()) {
+      <div class="festival-browse__status" role="status">
+        <ion-spinner aria-label="Loading festivals"></ion-spinner>
+        <span>Loading festivals…</span>
+      </div>
+    } @else if (error()) {
+      <ion-note color="danger" role="alert">{{ error() }}</ion-note>
+    } @else {
+      <section class="festival-browse__list" aria-label="Available festivals">
+        @for (preset of filteredPresets(); track preset.id) {
+          <ion-button
+            class="festival-browse__festival"
+            expand="block"
+            fill="clear"
+            type="button"
+            (click)="selectFestival(preset)"
+          >
+            <span>
+              <strong>{{ preset.label }}</strong>
+              <small>
+                <ion-icon aria-hidden="true" name="calendar-outline"></ion-icon>
+                {{ formatDateRange(preset) }}
+              </small>
+              <small>{{ preset.setCount }} published sets</small>
+            </span>
+            <ion-icon aria-hidden="true" name="chevron-forward" slot="end"></ion-icon>
+          </ion-button>
+        } @empty {
+          <p class="festival-browse__empty">No festivals match that search.</p>
+        }
+      </section>
+    }
+
+    <small class="festival-browse__attribution">
+      Data provided by
+      <a href="https://timetable.lol" rel="noopener noreferrer" target="_blank">Timetable.lol</a>.
+    </small>
+  </main>
+</ion-content>

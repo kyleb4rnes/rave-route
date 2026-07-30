@@ -7,7 +7,7 @@ import {
   sortFestivalsByStartDate,
 } from './festival-date.utils';
 import { FestivalDraft } from './models/festival-draft';
-import { Festival } from './models/festival';
+import { Festival, isCustomFestival } from './models/festival';
 import { FestivalSet, FestivalSetDraft, FestivalSetImport, LineupImportSummary } from './models/festival-set';
 import { FESTIVAL_REPOSITORY } from './data/festival-repository.token';
 import { ImageStorageService } from '../images/image-storage.service';
@@ -57,6 +57,62 @@ export class FestivalStore {
     return this.allFestivals().find((festival) => festival.id === id);
   }
 
+  getFestivalByCatalogueSlug(eventSlug: string): Festival | undefined {
+    return this.allFestivals().find(
+      (festival) =>
+        festival.catalogueSource?.provider === 'timetable-lol' &&
+        festival.catalogueSource.eventSlug === eventSlug,
+    );
+  }
+
+  async addCatalogueFestival(
+    preset: {
+      eventSlug: string;
+      label: string;
+      startDate: string;
+      endDate: string;
+      sourceUrl: string;
+    },
+    importedSets: readonly FestivalSetImport[],
+  ): Promise<Festival | undefined> {
+    const existingFestival = this.getFestivalByCatalogueSlug(preset.eventSlug);
+
+    if (existingFestival) {
+      return existingFestival;
+    }
+
+    const timestamp = new Date().toISOString();
+    const festival: Festival = {
+      id: crypto.randomUUID(),
+      title: preset.label,
+      startDate: preset.startDate,
+      endDate: preset.endDate,
+      location: 'Location to be announced',
+      transportArranged: false,
+      accommodationArranged: false,
+      lineupSets: importedSets.map((set) => toFestivalSet(set)),
+      isCustom: false,
+      catalogueSource: {
+        provider: 'timetable-lol',
+        eventSlug: preset.eventSlug,
+        sourceUrl: preset.sourceUrl,
+      },
+      createdAt: timestamp,
+      updatedAt: timestamp,
+    };
+
+    try {
+      await this.repository.create(festival);
+      this.festivalsSignal.set(sortFestivalsByStartDate([...this.allFestivals(), festival]));
+
+      return festival;
+    } catch {
+      this.setStorageError();
+
+      return undefined;
+    }
+  }
+
   async addFestival(draft: FestivalDraft): Promise<Festival | undefined> {
     const timestamp = new Date().toISOString();
 
@@ -72,6 +128,7 @@ export class FestivalStore {
         transportArranged: draft.transportArranged,
         accommodationArranged: draft.accommodationArranged,
         lineupSets: [],
+        isCustom: true,
         createdAt: timestamp,
         updatedAt: timestamp,
       };
@@ -90,7 +147,7 @@ export class FestivalStore {
   async updateFestival(id: string, draft: FestivalDraft): Promise<Festival | undefined> {
     const existingFestival = this.getFestivalById(id);
 
-    if (!existingFestival) {
+    if (!existingFestival || !isCustomFestival(existingFestival)) {
       return undefined;
     }
 
@@ -123,6 +180,78 @@ export class FestivalStore {
     }
   }
 
+  async updateFestivalImage(id: string, imageUrl: string): Promise<boolean> {
+    const existingFestival = this.getFestivalById(id);
+
+    if (!existingFestival) {
+      return false;
+    }
+
+    let storedImageUrl = '';
+
+    try {
+      storedImageUrl = await this.imageStorage.storeImage(imageUrl);
+      const updatedFestival: Festival = {
+        ...existingFestival,
+        ...(storedImageUrl ? { imageUrl: storedImageUrl } : { imageUrl: undefined }),
+        updatedAt: new Date().toISOString(),
+      };
+
+      await this.repository.update(updatedFestival);
+      if (existingFestival.imageUrl !== storedImageUrl) {
+        void this.imageStorage.removeImage(existingFestival.imageUrl);
+      }
+      this.festivalsSignal.set(
+        this.allFestivals().map((festival) =>
+          festival.id === updatedFestival.id ? updatedFestival : festival,
+        ),
+      );
+
+      return true;
+    } catch {
+      if (storedImageUrl && storedImageUrl !== existingFestival.imageUrl) {
+        void this.imageStorage.removeImage(storedImageUrl);
+      }
+      this.setStorageError();
+
+      return false;
+    }
+  }
+
+  async updateFestivalArrangements(
+    id: string,
+    transportArranged: boolean,
+    accommodationArranged: boolean,
+  ): Promise<boolean> {
+    const existingFestival = this.getFestivalById(id);
+
+    if (!existingFestival) {
+      return false;
+    }
+
+    const updatedFestival: Festival = {
+      ...existingFestival,
+      transportArranged,
+      accommodationArranged,
+      updatedAt: new Date().toISOString(),
+    };
+
+    try {
+      await this.repository.update(updatedFestival);
+      this.festivalsSignal.set(
+        this.allFestivals().map((festival) =>
+          festival.id === updatedFestival.id ? updatedFestival : festival,
+        ),
+      );
+
+      return true;
+    } catch {
+      this.setStorageError();
+
+      return false;
+    }
+  }
+
   async deleteFestival(id: string): Promise<boolean> {
     try {
       const festival = this.getFestivalById(id);
@@ -132,6 +261,25 @@ export class FestivalStore {
 
       return true;
     } catch {
+      this.setStorageError();
+
+      return false;
+    }
+  }
+
+  async clearAllFestivals(): Promise<boolean> {
+    const festivals = [...this.allFestivals()];
+
+    try {
+      for (const festival of festivals) {
+        await this.repository.delete(festival.id);
+        void this.imageStorage.removeImage(festival.imageUrl);
+      }
+      this.festivalsSignal.set([]);
+
+      return true;
+    } catch {
+      await this.loadFestivals();
       this.setStorageError();
 
       return false;

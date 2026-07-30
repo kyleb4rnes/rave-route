@@ -1,4 +1,9 @@
-<app-header title="App settings" [interceptBack]="true" (backRequested)="closeSettings()"></app-header>
+<app-header
+  title="App settings"
+  [interceptBack]="true"
+  (backRequested)="closeSettings()"
+  (settingsRequested)="closeSettings()"
+></app-header>
 
 <ion-content>
   <main class="settings-page" [class.settings-page--closing]="isClosing()">

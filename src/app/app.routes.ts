@@ -14,6 +14,20 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'festivals/browse',
+    loadComponent: () =>
+      import('./features/festivals/festival-browse/festival-browse.page').then(
+        ({ FestivalBrowsePage }) => FestivalBrowsePage,
+      ),
+  },
+  {
+    path: 'festivals/custom',
+    loadComponent: () =>
+      import('./features/festivals/festival-custom/festival-custom.page').then(
+        ({ FestivalCustomPage }) => FestivalCustomPage,
+      ),
+  },
+  {
     path: 'festivals/:festivalId/edit',
     loadComponent: () =>
       import('./features/festivals/festival-edit/festival-edit.page').then(

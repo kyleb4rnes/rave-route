@@ -70,8 +70,18 @@ export class TimetableLolLineupService {
   }
 
   async loadSets(preset: TimetableLolPreset, festival: Festival): Promise<FestivalSetImport[]> {
+    return this.loadPresetSets(preset, getFestivalDays(festival));
+  }
+
+  async loadAllSets(preset: TimetableLolPreset): Promise<FestivalSetImport[]> {
+    return this.loadPresetSets(preset, getPresetDays(preset));
+  }
+
+  private async loadPresetSets(
+    preset: TimetableLolPreset,
+    festivalDays: readonly string[],
+  ): Promise<FestivalSetImport[]> {
     const index = await this.loadIndex();
-    const festivalDays = getFestivalDays(festival);
     const importedAt = new Date().toISOString();
     const sets: FestivalSetImport[] = [];
 
@@ -122,6 +132,10 @@ export class TimetableLolLineupService {
   }
 }
 
+function getPresetDays(preset: TimetableLolPreset): string[] {
+  return getDateRange(preset.startDate, preset.endDate);
+}
+
 function isTimetableLolAct(value: unknown): value is Required<TimetableLolAct> {
   if (!value || typeof value !== 'object') {
     return false;
@@ -141,11 +155,15 @@ function isTimetableLolAct(value: unknown): value is Required<TimetableLolAct> {
 }
 
 function getFestivalDays(festival: Festival): string[] {
-  const days: string[] = [];
-  const endDate = new Date(`${festival.endDate}T00:00:00.000Z`);
-  const currentDate = new Date(`${festival.startDate}T00:00:00.000Z`);
+  return getDateRange(festival.startDate, festival.endDate);
+}
 
-  while (currentDate <= endDate) {
+function getDateRange(startDate: string, endDate: string): string[] {
+  const days: string[] = [];
+  const finalDate = new Date(`${endDate}T00:00:00.000Z`);
+  const currentDate = new Date(`${startDate}T00:00:00.000Z`);
+
+  while (currentDate <= finalDate) {
     days.push(currentDate.toISOString().slice(0, 10));
     currentDate.setUTCDate(currentDate.getUTCDate() + 1);
   }

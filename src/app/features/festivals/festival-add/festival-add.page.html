@@ -2,10 +2,85 @@
 
 <ion-content>
   <main class="festival-add">
-    <app-festival-form
-      submitLabel="Add festival"
-      (saved)="createFestival($event)"
-      (cancelled)="cancelCreating()"
-    ></app-festival-form>
+    <header>
+      <p>FIND YOUR FESTIVAL</p>
+      <h1>Where are you heading?</h1>
+      <span>Choose a festival and its published line-up will be added automatically.</span>
+    </header>
+
+    <section class="festival-add__search" aria-labelledby="festival-search-title">
+      <h2 id="festival-search-title">Search festivals</h2>
+      <ion-searchbar
+        aria-label="Search festival catalogue"
+        debounce="150"
+        placeholder="Start typing a festival name"
+        [value]="searchTerm()"
+        (ionInput)="updateSearchTerm($event.detail.value)"
+      ></ion-searchbar>
+
+      @if (isLoading()) {
+        <div class="festival-add__loading" role="status">
+          <ion-spinner aria-label="Loading festival catalogue"></ion-spinner>
+          <span>Loading festivals…</span>
+        </div>
+      } @else if (searchTerm().trim().length > 0 && searchTerm().trim().length < 2) {
+        <ion-note>Enter at least two letters to see suggestions.</ion-note>
+      } @else if (suggestions().length > 0 && !selectedPreset()) {
+        <div class="festival-add__suggestions">
+          @for (preset of suggestions(); track preset.id) {
+            <button type="button" (click)="selectPreset(preset)">
+              <span>
+                <strong>{{ preset.label }}</strong>
+                <small>{{ formatDateRange(preset) }} · {{ preset.setCount }} sets</small>
+              </span>
+              <ion-icon aria-hidden="true" name="chevron-forward"></ion-icon>
+            </button>
+          }
+        </div>
+      } @else if (searchTerm().trim().length >= 2 && !selectedPreset()) {
+        <ion-note>No festivals match that search. You can create a custom festival instead.</ion-note>
+      }
+    </section>
+
+    @if (selectedPreset(); as preset) {
+      <section class="festival-add__selection" aria-labelledby="selected-festival-title">
+        <p>READY TO ADD</p>
+        <h2 id="selected-festival-title">{{ preset.label }}</h2>
+        <div>
+          <ion-icon aria-hidden="true" name="calendar-outline"></ion-icon>
+          <span>{{ formatDateRange(preset) }}</span>
+        </div>
+        <span>{{ preset.setCount }} published sets</span>
+        <span>Location to be announced</span>
+        <small>
+          Data provided by
+          <a href="https://timetable.lol" rel="noopener noreferrer" target="_blank">Timetable.lol</a>.
+        </small>
+        <ion-button class="rr-button" expand="block" [disabled]="isAdding()" type="button" (click)="addFestival()">
+          @if (isAdding()) {
+            <ion-spinner aria-label="Adding festival"></ion-spinner>
+          } @else if (isAlreadyAdded(preset)) {
+            Open festival
+          } @else {
+            Add festival & line-up
+          }
+        </ion-button>
+      </section>
+    }
+
+    <ion-button class="festival-add__browse" expand="block" fill="outline" type="button" (click)="browseFestivals()">
+      <ion-icon aria-hidden="true" name="search-outline" slot="start"></ion-icon>
+      Browse festivals
+    </ion-button>
+
+    @if (error()) {
+      <ion-note color="danger" role="alert">{{ error() }}</ion-note>
+    }
+
+    <section class="festival-add__custom">
+      <h2>Can’t find it?</h2>
+      <p>Add an unsupported event manually. Custom line-ups are not available in this first catalogue flow.</p>
+      <ion-button fill="clear" type="button" (click)="createCustomFestival()">Create custom festival</ion-button>
+    </section>
   </main>
 </ion-content>

@@ -112,6 +112,103 @@ describe('FestivalStore', () => {
     expect((await repository.getAll()).map((festival) => festival.id)).toContain(createdFestival.id);
   });
 
+  it('creates a catalogue festival and its line-up once', async () => {
+    const repository = new InMemoryFestivalRepository();
+    const store = createStore(repository);
+    await store.loadFestivals();
+    const preset = {
+      eventSlug: 'catalogue-festival-2026',
+      label: 'Catalogue Festival',
+      startDate: '2026-08-01',
+      endDate: '2026-08-03',
+      sourceUrl: 'https://timetable.lol/data/example.json',
+    };
+    const importedSets = [
+      {
+        artist: 'Catalogue artist',
+        day: '2026-08-01',
+        startTime: '18:00',
+        endTime: '19:00',
+        stage: 'Main stage',
+        source: {
+          provider: 'timetable-lol' as const,
+          performanceId: 'catalogue-set',
+          sourceUrl: preset.sourceUrl,
+          importedAt: '2026-07-30T00:00:00.000Z',
+        },
+      },
+    ];
+
+    const createdFestival = await store.addCatalogueFestival(preset, importedSets);
+    const duplicateResult = await store.addCatalogueFestival(preset, importedSets);
+
+    expect(createdFestival?.catalogueSource).toEqual({
+      provider: 'timetable-lol',
+      eventSlug: preset.eventSlug,
+      sourceUrl: preset.sourceUrl,
+    });
+    expect(createdFestival?.location).toBe('Location to be announced');
+    expect(createdFestival?.lineupSets?.[0]).toEqual(
+      jasmine.objectContaining({
+        artist: 'Catalogue artist',
+        source: jasmine.objectContaining({ performanceId: 'catalogue-set' }),
+      }),
+    );
+    expect(duplicateResult?.id).toBe(createdFestival?.id);
+    expect((await repository.getAll()).length).toBe(1);
+  });
+
+  it('does not update a catalogue festival', async () => {
+    const store = createStore(
+      new InMemoryFestivalRepository([
+        {
+          ...nextFestival,
+          isCustom: false,
+          catalogueSource: {
+            provider: 'timetable-lol',
+            eventSlug: 'catalogue-festival-2026',
+            sourceUrl: 'https://timetable.lol/data/example.json',
+          },
+        },
+      ]),
+    );
+    await store.loadFestivals();
+
+    const updatedFestival = await store.updateFestival('next', {
+      title: 'Attempted change',
+      startDate: '2026-08-14',
+      endDate: '2026-08-16',
+      location: 'Somerset',
+      transportArranged: true,
+      accommodationArranged: true,
+    });
+
+    expect(updatedFestival).toBeUndefined();
+    expect(store.getFestivalById('next')?.title).toBe('Next Festival');
+  });
+
+  it('updates personal arrangements for a catalogue festival', async () => {
+    const store = createStore(
+      new InMemoryFestivalRepository([
+        {
+          ...nextFestival,
+          isCustom: false,
+          catalogueSource: {
+            provider: 'timetable-lol',
+            eventSlug: 'catalogue-festival-2026',
+            sourceUrl: 'https://timetable.lol/data/example.json',
+          },
+        },
+      ]),
+    );
+    await store.loadFestivals();
+
+    expect(await store.updateFestivalArrangements('next', false, false)).toBeTrue();
+    expect(store.getFestivalById('next')).toEqual(
+      jasmine.objectContaining({ transportArranged: false, accommodationArranged: false }),
+    );
+  });
+
   it('updates and deletes a persisted festival', async () => {
     const repository = new InMemoryFestivalRepository([nextFestival]);
     const store = createStore(repository);
@@ -130,6 +227,16 @@ describe('FestivalStore', () => {
     expect(store.getFestivalById('next')?.location).toBe('Bristol');
     expect(await store.deleteFestival('next')).toBeTrue();
     expect(store.getFestivalById('next')).toBeUndefined();
+    expect(await repository.getAll()).toEqual([]);
+  });
+
+  it('clears every persisted festival', async () => {
+    const repository = new InMemoryFestivalRepository([nextFestival, laterFestival]);
+    const store = createStore(repository);
+    await store.loadFestivals();
+
+    expect(await store.clearAllFestivals()).toBeTrue();
+    expect(store.allFestivals()).toEqual([]);
     expect(await repository.getAll()).toEqual([]);
   });
 

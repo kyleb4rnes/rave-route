@@ -1,6 +1,6 @@
 import { Component, computed, DestroyRef, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
-import { IonButton, IonContent } from '@ionic/angular/standalone';
+import { IonAlert, IonButton, IonContent } from '@ionic/angular/standalone';
 import { AppHeaderComponent } from '../components/app-header/app-header.component';
 import { ActiveFestivalCardComponent } from '../components/active-festival-card/active-festival-card.component';
 import { CollapsedFestivalCardComponent } from '../components/collapsed-festival-card/collapsed-festival-card.component';
@@ -21,6 +21,7 @@ import { FestivalStore } from '../core/festivals/festival.store';
     EmptyFestivalStateComponent,
     ActiveFestivalCardComponent,
     AppHeaderComponent,
+    IonAlert,
     IonButton,
     IonContent,
     UpcomingFestivalCardComponent,
@@ -38,6 +39,12 @@ export class HomePage {
   readonly isPastFestivalsOpen = signal(false);
   readonly expandedFestivalId = signal<string | null>(null);
   readonly isCreatingLiveDemo = signal(false);
+  readonly isClearDataAlertOpen = signal(false);
+  readonly isClearingData = signal(false);
+  readonly clearDataAlertButtons = [
+    { text: 'Cancel', role: 'cancel' },
+    { text: 'Clear data', role: 'destructive', handler: () => void this.clearAllFestivalData() },
+  ];
   readonly now = signal(new Date());
   readonly activeFestival = computed(() => getActiveFestival(this.allFestivals(), this.now()));
   readonly routeUpcomingFestivals = computed(() =>
@@ -120,6 +127,26 @@ export class HomePage {
 
   retryLoadingFestivals(): void {
     void this.festivalStore.loadFestivals();
+  }
+
+  openClearDataConfirmation(): void {
+    this.isClearDataAlertOpen.set(true);
+  }
+
+  closeClearDataConfirmation(): void {
+    this.isClearDataAlertOpen.set(false);
+  }
+
+  private async clearAllFestivalData(): Promise<void> {
+    this.closeClearDataConfirmation();
+
+    if (this.isClearingData()) {
+      return;
+    }
+
+    this.isClearingData.set(true);
+    await this.festivalStore.clearAllFestivals();
+    this.isClearingData.set(false);
   }
 
   formatDateRange(festival: Festival): string {

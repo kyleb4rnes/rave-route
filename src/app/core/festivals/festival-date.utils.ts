@@ -1,6 +1,7 @@
 import { Festival } from './models/festival';
 
 const millisecondsPerDay = 24 * 60 * 60 * 1000;
+const festivalDayRolloverMinutes = 6 * 60;
 
 export function sortFestivalsByStartDate(festivals: readonly Festival[]): Festival[] {
   return [...festivals].sort(
@@ -63,6 +64,17 @@ export function getDefaultLineupDay(festival: Festival, referenceDate = new Date
   const today = toLocalDateKey(referenceDate);
 
   return today >= festival.startDate && today <= festival.endDate ? today : festival.startDate;
+}
+
+/**
+ * Festival days commonly run through the following morning. Keep overnight sets
+ * on their source day, but place anything before 06:00 after the evening schedule.
+ */
+export function getFestivalDayTimeSortValue(time: string): number {
+  const [hourPart = '0', minutePart = '0'] = time.split(':');
+  const minutes = Number(hourPart) * 60 + Number(minutePart);
+
+  return minutes < festivalDayRolloverMinutes ? minutes + millisecondsPerDay / 60 : minutes;
 }
 
 function toLocalDateKey(value: Date): string {

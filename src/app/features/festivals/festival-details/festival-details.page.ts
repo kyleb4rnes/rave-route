@@ -4,13 +4,21 @@ import {
   IonAlert,
   IonButton,
   IonContent,
+  IonIcon,
+  IonNote,
+  IonToggle,
 } from '@ionic/angular/standalone';
+import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
+import { addIcons } from 'ionicons';
+import { cameraOutline } from 'ionicons/icons';
 
 import { AppHeaderComponent } from '../../../components/app-header/app-header.component';
 import { FestivalImageComponent } from '../../../components/festival-image/festival-image.component';
 import { calculateDaysRemaining } from '../../../core/festivals/festival-date.utils';
-import { Festival } from '../../../core/festivals/models/festival';
+import { Festival, isCustomFestival } from '../../../core/festivals/models/festival';
 import { FestivalStore } from '../../../core/festivals/festival.store';
+
+addIcons({ cameraOutline });
 
 @Component({
   selector: 'app-festival-details',
@@ -23,6 +31,9 @@ import { FestivalStore } from '../../../core/festivals/festival.store';
     IonAlert,
     IonButton,
     IonContent,
+    IonIcon,
+    IonNote,
+    IonToggle,
     RouterLink,
   ],
 })
@@ -35,6 +46,10 @@ export class FestivalDetailsPage {
   readonly loading = this.festivalStore.loading;
   readonly festival = computed(() => this.festivalStore.getFestivalById(this.festivalId));
   readonly isDeleteAlertOpen = signal(false);
+  readonly isUpdatingImage = signal(false);
+  readonly imageUpdateError = signal<string | null>(null);
+  readonly isUpdatingArrangements = signal(false);
+  readonly arrangementUpdateError = signal<string | null>(null);
   readonly deleteAlertButtons = [
     { text: 'Cancel', role: 'cancel' },
     { text: 'Delete', role: 'destructive', handler: () => void this.deleteFestival() },
@@ -59,16 +74,78 @@ export class FestivalDetailsPage {
       : `${daysRemaining} ${daysRemaining === 1 ? 'day' : 'days'} to go`;
   }
 
-  getTransportLabel(festival: Festival): string {
-    return festival.transportArranged ? 'Transport arranged' : 'Transport to arrange';
-  }
-
-  getAccommodationLabel(festival: Festival): string {
-    return festival.accommodationArranged ? 'Accommodation arranged' : 'Accommodation to arrange';
+  isCustomFestival(festival: Festival): boolean {
+    return isCustomFestival(festival);
   }
 
   editFestival(): void {
     void this.router.navigate(['/festivals', this.festivalId, 'edit']);
+  }
+
+  async selectFestivalPhoto(): Promise<void> {
+    if (this.isUpdatingImage()) {
+      return;
+    }
+
+    this.imageUpdateError.set(null);
+
+    try {
+      const photo = await Camera.getPhoto({
+        quality: 70,
+        width: 1200,
+        allowEditing: false,
+        resultType: CameraResultType.DataUrl,
+        source: CameraSource.Photos,
+      });
+
+      if (!photo.dataUrl) {
+        return;
+      }
+
+      this.isUpdatingImage.set(true);
+      if (!(await this.festivalStore.updateFestivalImage(this.festivalId, photo.dataUrl))) {
+        this.imageUpdateError.set('We could not save that photo. Please try again.');
+      }
+    } catch {
+      this.imageUpdateError.set('We could not select that photo. Please try again.');
+    } finally {
+      this.isUpdatingImage.set(false);
+    }
+  }
+
+  async removeFestivalPhoto(): Promise<void> {
+    if (this.isUpdatingImage()) {
+      return;
+    }
+
+    this.imageUpdateError.set(null);
+    this.isUpdatingImage.set(true);
+
+    if (!(await this.festivalStore.updateFestivalImage(this.festivalId, ''))) {
+      this.imageUpdateError.set('We could not remove that photo. Please try again.');
+    }
+
+    this.isUpdatingImage.set(false);
+  }
+
+  async updateTransportArrangement(event: CustomEvent<{ checked: boolean }>): Promise<void> {
+    const festival = this.festival();
+
+    if (!festival) {
+      return;
+    }
+
+    await this.updateArrangements(event.detail.checked, festival.accommodationArranged ?? false);
+  }
+
+  async updateAccommodationArrangement(event: CustomEvent<{ checked: boolean }>): Promise<void> {
+    const festival = this.festival();
+
+    if (!festival) {
+      return;
+    }
+
+    await this.updateArrangements(festival.transportArranged, event.detail.checked);
   }
 
   openDeleteConfirmation(): void {
@@ -85,5 +162,27 @@ export class FestivalDetailsPage {
     if (await this.festivalStore.deleteFestival(this.festivalId)) {
       await this.router.navigateByUrl('/home');
     }
+  }
+
+  private async updateArrangements(
+    transportArranged: boolean,
+    accommodationArranged: boolean,
+  ): Promise<void> {
+    if (this.isUpdatingArrangements()) {
+      return;
+    }
+
+    this.arrangementUpdateError.set(null);
+    this.isUpdatingArrangements.set(true);
+
+    if (!(await this.festivalStore.updateFestivalArrangements(
+      this.festivalId,
+      transportArranged,
+      accommodationArranged,
+    ))) {
+      this.arrangementUpdateError.set('We could not save your arrangements. Please try again.');
+    }
+
+    this.isUpdatingArrangements.set(false);
   }
 }

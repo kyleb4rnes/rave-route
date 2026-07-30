@@ -1,9 +1,66 @@
 .empty-state {
   background: var(--rr-surface);
-  border: 1px dashed var(--rr-border);
+  border: 1px solid var(--rr-border);
   border-radius: var(--rr-radius-card);
-  padding: 1.5rem;
+  overflow: hidden;
+  padding: 1.25rem;
+  position: relative;
   text-align: center;
+}
+
+.empty-state__border {
+  color: var(--rr-primary);
+  height: 100%;
+  inset: 0;
+  opacity: 0.55;
+  pointer-events: none;
+  position: absolute;
+  width: 100%;
+}
+
+.empty-state__border-path {
+  fill: none;
+  stroke: currentColor;
+  stroke-dasharray: 1.2 2.2;
+  stroke-linecap: round;
+  stroke-width: 0.55;
+  animation: empty-state-route-border 18s linear infinite;
+}
+
+.empty-state__route {
+  height: 2.75rem;
+  margin: 0 auto 0.75rem;
+  position: relative;
+  width: min(12rem, 72%);
+}
+
+.empty-state__route-line {
+  border-top: 2px dashed var(--rr-primary);
+  left: 0;
+  position: absolute;
+  right: 1rem;
+  top: 1.35rem;
+}
+
+.empty-state__route-marker {
+  background: var(--rr-primary);
+  border: 3px solid var(--rr-primary-soft);
+  border-radius: 50% 50% 50% 0;
+  height: 1.35rem;
+  position: absolute;
+  right: 0;
+  top: 0.65rem;
+  transform: rotate(-45deg);
+  width: 1.35rem;
+  animation: empty-state-marker-pulse 3.5s ease-in-out infinite;
+}
+
+.empty-state__eyebrow {
+  color: var(--rr-primary-dark);
+  font-size: 0.6875rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  margin: 0 0 0.4rem;
 }
 
 .empty-state h2 {
@@ -15,4 +72,47 @@
 .empty-state p {
   color: var(--rr-text-muted);
   margin: 0.5rem 0 0;
+}
+
+.empty-state__benefits {
+  color: var(--rr-text-muted);
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 0.75rem;
+  font-weight: 700;
+  gap: 0.4rem 0.75rem;
+  justify-content: center;
+  list-style: none;
+  margin: 1rem 0 0;
+  padding: 0;
+}
+
+.empty-state__benefits li::before {
+  color: var(--rr-primary);
+  content: '•';
+  margin-right: 0.3rem;
+}
+
+@keyframes empty-state-route-border {
+  to {
+    stroke-dashoffset: -100;
+  }
+}
+
+@keyframes empty-state-marker-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--rr-primary) 35%, transparent);
+  }
+
+  50% {
+    box-shadow: 0 0 0 0.45rem color-mix(in srgb, var(--rr-primary) 0%, transparent);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .empty-state__border-path,
+  .empty-state__route-marker {
+    animation: none;
+  }
 }

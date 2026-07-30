@@ -112,6 +112,7 @@ Do not implement these unless they are explicitly brought into scope later:
 - AI features
 - Social features
 - Music playback
+- Help and onboarding: show a Help button in the Home header in place of the Home button, only while already on Home. It should expand using the Settings-page transition into a "How it works" page that explains the expected end-to-end user flow.
 - Packing lists
 - Budgets
 - Maps
@@ -122,18 +123,19 @@ Do not implement these unless they are explicitly brought into scope later:
 - Bulk paste/import of set times.
 - Additional automatic import providers beyond the current Timetable.lol community catalogue.
 - Timetable.lol refresh strategy: decide whether the bundled catalogue should be refreshed through an approved automated process or a documented manual cadence, including source review, release timing, and failure handling.
+- Festival location metadata: find and approve a reliable source for festival locations and images. Until then, catalogue additions use "Location to be announced".
 
 ## 11. Work to Complete Before First Public Release
 
 - iOS readiness: create and maintain the Capacitor iOS project on macOS, configure Apple signing, add the required native privacy descriptions, and validate Camera/photo-library behaviour on a physical iPhone.
-- Dependency and code security: enable GitHub Dependabot alerts and security updates, configure GitHub code scanning where the repository plan supports it, routinely review `npm audit`, and resolve or document relevant findings before release.
-- Accounts and authorisation: define the identity provider, sign-up/sign-in/sign-out journeys, account recovery, session handling, data ownership, authorisation rules, and a secure migration path from device-only local data before adding authentication or cloud synchronisation.
+- Dependency and code security: Dependabot alerts/security updates and CodeQL are enabled. Routinely review `npm audit`, Dependabot pull requests, and CodeQL findings, resolving or documenting relevant findings before release.
 - Production storage and resilience: test image retention through app upgrades, reinstalls, and storage-pressure scenarios, then decide whether export, backup, and/or cloud migration is required before public release.
 - Release packaging: establish secure release-signing/key-management procedures, a versioning convention, signed Android App Bundle production builds, and a process for keeping Android target API requirements current.
 - Store onboarding and test distribution: set up and verify Google Play and Apple Developer/App Store Connect accounts, complete any required closed or beta testing, and maintain a physical-device test matrix.
 - Store presence and support: prepare final icon/splash assets, screenshots, listing copy, categories, content/age ratings, support contact details, reviewer notes, and a support/bug-report process.
 - Privacy and operational policy: publish an accurate privacy policy and store disclosures, decide whether Terms of Use are needed, keep permissions minimal, review the impact of any analytics/crash-reporting SDK before adding it, and define a release checklist, changelog, and rollback approach.
 - Timetable.lol production readiness: permission to use the data has been confirmed. Before public launch, establish the production Rave Route URL and provide it to Timetable.lol for API-origin allowlisting; validate live imports from the deployed web app and native builds, preserve clear attribution, and document the agreed contact/takedown process.
+- Catalogue validation: confirm the bundled festival catalogue is current before each release and verify that catalogue selection creates the festival and its complete read-only line-up atomically.
 
 ## Decision Notes
 

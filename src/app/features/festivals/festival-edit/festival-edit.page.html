@@ -5,12 +5,20 @@
     @if (loading()) {
       <p class="festival-edit__status" role="status" aria-live="polite">Loading festival…</p>
     } @else if (festival(); as selectedFestival) {
+      @if (isEditable()) {
       <app-festival-form
         [festival]="selectedFestival"
         submitLabel="Save changes"
         (saved)="saveFestival($event)"
         (cancelled)="cancelEditing()"
       ></app-festival-form>
+      } @else {
+        <section class="festival-edit__status">
+          <h1>Festival details are managed by the catalogue</h1>
+          <p>Only custom festivals can be edited.</p>
+          <ion-button fill="clear" (click)="cancelEditing()">Return to festival</ion-button>
+        </section>
+      }
     } @else {
       <section class="festival-edit__status">
         <h1>Festival not found</h1>

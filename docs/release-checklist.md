@@ -21,7 +21,6 @@
 - [ ] Package and test the iOS application on macOS with Xcode if iOS distribution is planned.
 - [x] Enabled GitHub Dependabot alerts/security updates, private vulnerability reporting, and CodeQL default setup.
 - [ ] Run and review a dependency vulnerability audit before a public release.
-- [ ] Design authentication, authorisation, account recovery, session handling, and local-data migration before introducing user accounts or cloud sync.
 - [x] Store selected images as private Capacitor Filesystem files rather than base64 data in browser local storage.
 - [ ] Test image retention through app upgrades, reinstalls, and storage-pressure scenarios.
 - [ ] Establish release signing, versioning, and signed Android App Bundle delivery.

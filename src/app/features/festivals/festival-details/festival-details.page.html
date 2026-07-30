@@ -5,9 +5,17 @@
     @if (loading()) {
       <p class="festival-details__status" role="status" aria-live="polite">Loading festival…</p>
     } @else if (festival(); as selectedFestival) {
-      <div class="festival-details__image">
-        <app-festival-image [festivalTitle]="selectedFestival.title" [imageUrl]="selectedFestival.imageUrl"></app-festival-image>
-      </div>
+      @if (selectedFestival.imageUrl) {
+        <div class="festival-details__image">
+          <app-festival-image [festivalTitle]="selectedFestival.title" [imageUrl]="selectedFestival.imageUrl"></app-festival-image>
+          <div class="festival-details__image-actions">
+            <button aria-label="Change festival photo" [disabled]="isUpdatingImage()" type="button" (click)="selectFestivalPhoto()">
+              <ion-icon aria-hidden="true" name="camera-outline"></ion-icon>
+            </button>
+            <button class="festival-details__remove-image" [disabled]="isUpdatingImage()" type="button" (click)="removeFestivalPhoto()">Remove</button>
+          </div>
+        </div>
+      }
 
       <section aria-labelledby="festival-title">
         <p class="festival-details__eyebrow">YOUR ADVENTURE</p>
@@ -16,27 +24,66 @@
       </section>
 
       <dl class="festival-details__facts">
-        <div>
-          <dt>Where</dt>
-          <dd>{{ selectedFestival.location }}</dd>
+        <div class="festival-details__info-card">
+          <div>
+            <dt>Where</dt>
+            <dd>{{ selectedFestival.location }}</dd>
+          </div>
+          <div>
+            <dt>When</dt>
+            <dd>{{ formatDateRange(selectedFestival) }}</dd>
+          </div>
         </div>
-        <div>
-          <dt>When</dt>
-          <dd>{{ formatDateRange(selectedFestival) }}</dd>
-        </div>
-        <div>
-          <dt>Travel</dt>
-          <dd>{{ getTransportLabel(selectedFestival) }}</dd>
-        </div>
-        <div>
-          <dt>Stay</dt>
-          <dd>{{ getAccommodationLabel(selectedFestival) }}</dd>
+        <div class="festival-details__plan-card">
+          <div class="festival-details__arrangement-field">
+            <dt>Travel</dt>
+            <dd>
+              <ion-toggle
+                [checked]="selectedFestival.transportArranged"
+                [disabled]="isUpdatingArrangements()"
+                (ionChange)="updateTransportArrangement($event)"
+              >
+                Transport arranged
+              </ion-toggle>
+            </dd>
+          </div>
+          <div class="festival-details__arrangement-field">
+            <dt>Stay</dt>
+            <dd>
+              <ion-toggle
+                [checked]="selectedFestival.accommodationArranged ?? false"
+                [disabled]="isUpdatingArrangements()"
+                (ionChange)="updateAccommodationArrangement($event)"
+              >
+                Accommodation arranged
+              </ion-toggle>
+            </dd>
+          </div>
         </div>
       </dl>
 
+      @if (arrangementUpdateError()) {
+        <ion-note class="festival-details__arrangement-error" color="danger" role="alert">{{ arrangementUpdateError() }}</ion-note>
+      }
+
+      @if (!selectedFestival.imageUrl) {
+        <button class="festival-details__photo-option" [disabled]="isUpdatingImage()" type="button" (click)="selectFestivalPhoto()">
+          <ion-icon aria-hidden="true" name="camera-outline"></ion-icon>
+          <span>
+            <strong>Add photo</strong>
+            <small>Choose one from your photo library.</small>
+          </span>
+        </button>
+      }
+      @if (imageUpdateError()) {
+        <ion-note class="festival-details__image-error" color="danger" role="alert">{{ imageUpdateError() }}</ion-note>
+      }
+
       <div class="festival-details__actions">
         <ion-button class="rr-button" expand="block" [routerLink]="['/festivals', selectedFestival.id, 'lineup']">LINE UP</ion-button>
-        <ion-button class="rr-button" expand="block" (click)="editFestival()">Edit festival</ion-button>
+        @if (isCustomFestival(selectedFestival)) {
+          <ion-button class="rr-button" expand="block" (click)="editFestival()">Edit festival</ion-button>
+        }
         <ion-button color="danger" expand="block" fill="outline" (click)="openDeleteConfirmation()">Delete festival</ion-button>
       </div>
     } @else {

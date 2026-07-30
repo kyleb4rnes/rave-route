@@ -2,6 +2,7 @@ import { Festival } from './models/festival';
 import {
   calculateDaysRemaining,
   getDefaultLineupDay,
+  getFestivalDayTimeSortValue,
   getNextFestival,
   getPastFestivals,
   getUpcomingFestivals,
@@ -77,5 +78,10 @@ describe('festival date utilities', () => {
     };
 
     expect(getDefaultLineupDay(liveFestival, referenceDate)).toBe('2026-07-20');
+  });
+
+  it('places overnight sets after the evening schedule without changing their day', () => {
+    expect(getFestivalDayTimeSortValue('23:30')).toBeLessThan(getFestivalDayTimeSortValue('00:15'));
+    expect(getFestivalDayTimeSortValue('06:00')).toBeLessThan(getFestivalDayTimeSortValue('05:59'));
   });
 });

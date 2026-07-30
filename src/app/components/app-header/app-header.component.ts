@@ -39,7 +39,9 @@ export class AppHeaderComponent {
   readonly showLogo = input(false);
   readonly interceptBack = input(false);
   readonly backRequested = output<void>();
+  readonly settingsRequested = output<void>();
   readonly isHome = computed(() => this.currentUrl() === '/home');
+  readonly isSettings = computed(() => this.currentUrl() === '/settings');
   readonly canGoBack = computed(() => {
     this.currentUrl();
 
@@ -54,5 +56,15 @@ export class AppHeaderComponent {
     }
 
     this.location.back();
+  }
+
+  openSettings(): void {
+    if (this.isSettings()) {
+      this.settingsRequested.emit();
+
+      return;
+    }
+
+    void this.router.navigate(['/settings']);
   }
 }

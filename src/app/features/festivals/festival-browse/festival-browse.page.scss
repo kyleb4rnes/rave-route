@@ -1,0 +1,110 @@
+ion-content {
+  --background: var(--rr-app-background, var(--rr-background));
+}
+
+.festival-browse {
+  align-content: start;
+  display: grid;
+  gap: 1rem;
+  min-height: 100%;
+  padding: var(--rr-spacing-page)
+    max(var(--rr-spacing-page), env(safe-area-inset-right))
+    calc(var(--rr-spacing-page) + env(safe-area-inset-bottom))
+    max(var(--rr-spacing-page), env(safe-area-inset-left));
+}
+
+.festival-browse header p {
+  color: var(--rr-primary-dark);
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  margin: 0 0 0.4rem;
+}
+
+.festival-browse h1 {
+  color: var(--rr-text);
+  font-size: clamp(1.75rem, 8vw, 2.5rem);
+  margin: 0;
+}
+
+.festival-browse header span {
+  color: var(--rr-text-muted);
+  display: block;
+  margin-top: 0.5rem;
+}
+
+.festival-browse > ion-searchbar {
+  --background: var(--rr-surface);
+  --border-radius: var(--rr-radius-control);
+  --box-shadow: none;
+  --color: var(--rr-text);
+  padding: 0;
+}
+
+.festival-browse__list {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.festival-browse__festival {
+  --background: var(--rr-surface);
+  --color: var(--rr-text);
+  height: auto;
+  margin: 0;
+  min-height: 5.5rem;
+  text-align: left;
+}
+
+.festival-browse__festival::part(native) {
+  border: 1px solid var(--rr-border);
+  border-radius: var(--rr-radius-card);
+  padding: 0.875rem 1rem;
+}
+
+.festival-browse__festival > span {
+  display: grid;
+  gap: 0.3rem;
+  width: 100%;
+}
+
+.festival-browse__festival strong,
+.festival-browse__festival small {
+  display: block;
+}
+
+.festival-browse__festival small {
+  align-items: center;
+  color: var(--rr-text-muted);
+  display: flex;
+  font-size: 0.75rem;
+  gap: 0.35rem;
+}
+
+.festival-browse__status {
+  align-items: center;
+  color: var(--rr-text-muted);
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.festival-browse__empty {
+  background: var(--rr-surface);
+  border: 1px solid var(--rr-border);
+  border-radius: var(--rr-radius-card);
+  color: var(--rr-text-muted);
+  margin: 0;
+  padding: 1rem;
+  text-align: center;
+}
+
+.festival-browse__attribution {
+  color: var(--rr-text-muted);
+  text-align: center;
+}
+
+.festival-browse__attribution a {
+  color: var(--rr-primary-dark);
+  font-weight: 800;
+}
