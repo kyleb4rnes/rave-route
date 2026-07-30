@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Festival } from '../models/festival';
 import { FestivalSetImport } from '../models/festival-set';
 import { LineupImportPreset } from './lineup-import-preset';
+import { getTimetableLolLocation } from './timetable-lol-location-catalogue';
 
 const timetableLolSourceUrl = 'https://timetable.lol/data/artist-act-index.json?v=20260710-artist-bookings-refresh';
 const timetableLolAssetUrl = 'assets/timetables/timetable-lol-artist-act-index.json';
@@ -10,6 +11,7 @@ const timetableLolAssetUrl = 'assets/timetables/timetable-lol-artist-act-index.j
 export interface TimetableLolPreset extends LineupImportPreset {
   provider: 'timetable-lol';
   eventSlug: string;
+  location?: Festival['locationMetadata'];
 }
 
 interface TimetableLolAct {
@@ -63,6 +65,7 @@ export class TimetableLolLineupService {
         sourceUrl: timetableLolSourceUrl,
         setCount: event.setCount,
         eventSlug,
+        location: getTimetableLolLocation(eventSlug),
       }))
       .sort((firstPreset, secondPreset) =>
         firstPreset.startDate.localeCompare(secondPreset.startDate) || firstPreset.label.localeCompare(secondPreset.label),

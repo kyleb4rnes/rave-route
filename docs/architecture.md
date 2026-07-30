@@ -19,6 +19,8 @@ The Home page derives an active festival from today's local date and refreshes i
 
 The store calls the repository before updating its local signal, keeping the displayed state aligned with persisted data. Date grouping, countdown calculations, and line-up day selection are pure utilities. Reusable card components receive data through signal inputs and notify their parents through signal outputs.
 
+Timetable.lol catalogue records are enriched by a reviewed, version-controlled location map. The map supplies a display name and city-level coordinates when a festival is added, and safely backfills the same metadata for existing imported festivals. The app does not perform device-side geocoding requests.
+
 `AppSettingsStore` persists the optional background image and selected theme colour. `AppComponent` applies those settings as app-level CSS custom properties, so routed pages share the same background and theme tokens without reloading.
 
 ## Native boundary

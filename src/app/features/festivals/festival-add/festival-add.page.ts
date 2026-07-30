@@ -1,5 +1,6 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, DestroyRef, computed, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
   IonButton,
   IonContent,
@@ -38,6 +39,7 @@ addIcons({ calendarOutline, chevronForward, searchOutline });
 export class FestivalAddPage {
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
+  private readonly destroyRef = inject(DestroyRef);
   private readonly festivalStore = inject(FestivalStore);
   private readonly timetableService = inject(TimetableLolLineupService);
 
@@ -47,6 +49,7 @@ export class FestivalAddPage {
   readonly isLoading = signal(true);
   readonly isAdding = signal(false);
   readonly error = signal<string | null>(null);
+  private selectedEventSlug: string | null = null;
   readonly suggestions = computed(() => {
     const query = this.searchTerm().trim().toLocaleLowerCase();
 
@@ -60,6 +63,10 @@ export class FestivalAddPage {
   });
 
   constructor() {
+    this.route.queryParamMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params) => {
+      this.selectedEventSlug = params.get('event');
+      this.selectRoutePreset();
+    });
     void this.loadCatalogue();
   }
 
@@ -142,16 +149,19 @@ export class FestivalAddPage {
       const presets = await this.timetableService.loadPresets();
       this.presets.set(presets);
 
-      const selectedSlug = this.route.snapshot.queryParamMap.get('event');
-      const selectedPreset = presets.find((preset) => preset.eventSlug === selectedSlug);
-
-      if (selectedPreset) {
-        this.selectPreset(selectedPreset);
-      }
+      this.selectRoutePreset();
     } catch {
       this.error.set('We could not load the festival catalogue. Please try again.');
     } finally {
       this.isLoading.set(false);
+    }
+  }
+
+  private selectRoutePreset(): void {
+    const selectedPreset = this.presets().find((preset) => preset.eventSlug === this.selectedEventSlug);
+
+    if (selectedPreset) {
+      this.selectPreset(selectedPreset);
     }
   }
 }

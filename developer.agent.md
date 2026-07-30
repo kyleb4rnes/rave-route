@@ -118,12 +118,16 @@ Do not implement these unless they are explicitly brought into scope later:
 - Maps
 - Transport and accommodation planning: define and prioritise richer details beyond the current arranged/not-arranged toggles, such as bookings, timings, addresses, references, and reminders.
 
+### High-priority catalogue work
+
+- Automatic location enrichment for newly discovered Timetable.lol festivals: select and configure an approved geocoding provider, use it only in the developer-run catalogue refresh process, accept only high-confidence results, and flag anything uncertain for manual review. Never add device-side geocoding or expose an API key in the app.
+
 ### Line-up
 
 - Bulk paste/import of set times.
 - Additional automatic import providers beyond the current Timetable.lol community catalogue.
-- Timetable.lol refresh strategy: decide whether the bundled catalogue should be refreshed through an approved automated process or a documented manual cadence, including source review, release timing, and failure handling.
-- Festival location metadata: find and approve a reliable source for festival locations and images. Until then, catalogue additions use "Location to be announced".
+- Festival-style browsing filters: add catalogue metadata and filters for styles such as Techno, House, and Drum & Bass. This is non-priority work.
+- Timetable.lol refresh strategy: decide whether the bundled catalogue should be refreshed through an approved automated process or a documented manual cadence, including source review, release timing, failure handling, and review of the bundled location metadata.
 
 ## 11. Work to Complete Before First Public Release
 
@@ -135,7 +139,7 @@ Do not implement these unless they are explicitly brought into scope later:
 - Store presence and support: prepare final icon/splash assets, screenshots, listing copy, categories, content/age ratings, support contact details, reviewer notes, and a support/bug-report process.
 - Privacy and operational policy: publish an accurate privacy policy and store disclosures, decide whether Terms of Use are needed, keep permissions minimal, review the impact of any analytics/crash-reporting SDK before adding it, and define a release checklist, changelog, and rollback approach.
 - Timetable.lol production readiness: permission to use the data has been confirmed. Before public launch, establish the production Rave Route URL and provide it to Timetable.lol for API-origin allowlisting; validate live imports from the deployed web app and native builds, preserve clear attribution, and document the agreed contact/takedown process.
-- Catalogue validation: confirm the bundled festival catalogue is current before each release and verify that catalogue selection creates the festival and its complete read-only line-up atomically.
+- Catalogue validation: confirm the bundled festival catalogue and its reviewed location metadata are current before each release and verify that catalogue selection creates the festival and its complete read-only line-up atomically.
 
 ## Decision Notes
 

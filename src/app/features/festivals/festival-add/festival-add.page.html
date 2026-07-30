@@ -51,7 +51,7 @@
           <span>{{ formatDateRange(preset) }}</span>
         </div>
         <span>{{ preset.setCount }} published sets</span>
-        <span>Location to be announced</span>
+        <span>{{ preset.location?.displayName ?? 'Location to be announced' }}</span>
         <small>
           Data provided by
           <a href="https://timetable.lol" rel="noopener noreferrer" target="_blank">Timetable.lol</a>.

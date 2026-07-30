@@ -1,5 +1,14 @@
 import { FestivalSet } from './festival-set';
 
+export interface FestivalLocation {
+  displayName: string;
+  latitude: number;
+  longitude: number;
+  precision: 'city' | 'venue';
+  source: string;
+  verifiedAt: string;
+}
+
 export interface FestivalCatalogueSource {
   provider: 'timetable-lol';
   eventSlug: string;
@@ -13,6 +22,7 @@ export interface Festival {
   endDate: string;
   imageUrl?: string;
   location: string;
+  locationMetadata?: FestivalLocation;
   transportArranged: boolean;
   accommodationArranged?: boolean;
   lineupSets?: readonly FestivalSet[];

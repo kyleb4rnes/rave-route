@@ -11,6 +11,7 @@ import { Festival, isCustomFestival } from './models/festival';
 import { FestivalSet, FestivalSetDraft, FestivalSetImport, LineupImportSummary } from './models/festival-set';
 import { FESTIVAL_REPOSITORY } from './data/festival-repository.token';
 import { ImageStorageService } from '../images/image-storage.service';
+import { getTimetableLolLocation } from './imports/timetable-lol-location-catalogue';
 
 @Injectable({ providedIn: 'root' })
 export class FestivalStore {
@@ -44,7 +45,7 @@ export class FestivalStore {
     try {
       const festivals = await this.repository.getAll();
 
-      this.festivalsSignal.set(sortFestivalsByStartDate(festivals));
+      this.festivalsSignal.set(sortFestivalsByStartDate(await this.applyCatalogueLocations(festivals)));
     } catch {
       this.festivalsSignal.set([]);
       this.errorSignal.set('We could not load your festivals. Please try again.');
@@ -72,6 +73,7 @@ export class FestivalStore {
       startDate: string;
       endDate: string;
       sourceUrl: string;
+      location?: Festival['locationMetadata'];
     },
     importedSets: readonly FestivalSetImport[],
   ): Promise<Festival | undefined> {
@@ -87,7 +89,8 @@ export class FestivalStore {
       title: preset.label,
       startDate: preset.startDate,
       endDate: preset.endDate,
-      location: 'Location to be announced',
+      location: preset.location?.displayName ?? 'Location to be announced',
+      ...(preset.location ? { locationMetadata: preset.location } : {}),
       transportArranged: false,
       accommodationArranged: false,
       lineupSets: importedSets.map((set) => toFestivalSet(set)),
@@ -284,6 +287,36 @@ export class FestivalStore {
 
       return false;
     }
+  }
+
+  private async applyCatalogueLocations(festivals: readonly Festival[]): Promise<readonly Festival[]> {
+    const updatedFestivals: Festival[] = [];
+
+    for (const festival of festivals) {
+      const location = festival.catalogueSource
+        ? getTimetableLolLocation(festival.catalogueSource.eventSlug)
+        : undefined;
+
+      if (!location || festival.locationMetadata) {
+        updatedFestivals.push(festival);
+        continue;
+      }
+
+      const updatedFestival: Festival = {
+        ...festival,
+        location: location.displayName,
+        locationMetadata: location,
+      };
+
+      try {
+        await this.repository.update(updatedFestival);
+        updatedFestivals.push(updatedFestival);
+      } catch {
+        updatedFestivals.push(festival);
+      }
+    }
+
+    return updatedFestivals;
   }
 
   async addLineupSet(festivalId: string, draft: FestivalSetDraft): Promise<boolean> {

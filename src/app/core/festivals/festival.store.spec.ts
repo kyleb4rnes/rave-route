@@ -122,6 +122,14 @@ describe('FestivalStore', () => {
       startDate: '2026-08-01',
       endDate: '2026-08-03',
       sourceUrl: 'https://timetable.lol/data/example.json',
+      location: {
+        displayName: 'Example City, Netherlands',
+        latitude: 52.123,
+        longitude: 5.123,
+        precision: 'city' as const,
+        source: 'Rave Route curated catalogue',
+        verifiedAt: '2026-07-30',
+      },
     };
     const importedSets = [
       {
@@ -147,7 +155,8 @@ describe('FestivalStore', () => {
       eventSlug: preset.eventSlug,
       sourceUrl: preset.sourceUrl,
     });
-    expect(createdFestival?.location).toBe('Location to be announced');
+    expect(createdFestival?.location).toBe('Example City, Netherlands');
+    expect(createdFestival?.locationMetadata).toEqual(preset.location);
     expect(createdFestival?.lineupSets?.[0]).toEqual(
       jasmine.objectContaining({
         artist: 'Catalogue artist',
@@ -156,6 +165,29 @@ describe('FestivalStore', () => {
     );
     expect(duplicateResult?.id).toBe(createdFestival?.id);
     expect((await repository.getAll()).length).toBe(1);
+  });
+
+  it('backfills a reviewed location for existing catalogue festivals', async () => {
+    const repository = new InMemoryFestivalRepository([
+      {
+        ...nextFestival,
+        isCustom: false,
+        location: 'Location to be announced',
+        catalogueSource: {
+          provider: 'timetable-lol',
+          eventSlug: 'tml_w1_2026',
+          sourceUrl: 'https://timetable.lol/data/example.json',
+        },
+      },
+    ]);
+    const store = createStore(repository);
+
+    await store.loadFestivals();
+
+    expect(store.getFestivalById('next')?.location).toBe('Boom, Belgium');
+    expect(store.getFestivalById('next')?.locationMetadata).toEqual(
+      jasmine.objectContaining({ precision: 'city', source: 'Rave Route curated catalogue' }),
+    );
   });
 
   it('does not update a catalogue festival', async () => {
