@@ -2,11 +2,23 @@ import { FestivalSet } from './festival-set';
 
 export interface FestivalLocation {
   displayName: string;
-  latitude: number;
-  longitude: number;
+  venue?: string;
+  city?: string;
+  region?: string;
+  country?: string;
+  address?: string;
+  latitude?: number;
+  longitude?: number;
   precision: 'city' | 'venue';
   source: string;
   verifiedAt: string;
+}
+
+export interface FestivalTicketLinks {
+  ticketUrl?: string;
+  resaleTicketUrl?: string;
+  price?: string;
+  currency?: string;
 }
 
 export interface FestivalCatalogueSource {
@@ -23,6 +35,7 @@ export interface Festival {
   imageUrl?: string;
   location: string;
   locationMetadata?: FestivalLocation;
+  ticketLinks?: FestivalTicketLinks;
   transportArranged: boolean;
   accommodationArranged?: boolean;
   lineupSets?: readonly FestivalSet[];

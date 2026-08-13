@@ -115,19 +115,17 @@ Do not implement these unless they are explicitly brought into scope later:
 - Help and onboarding: show a Help button in the Home header in place of the Home button, only while already on Home. It should expand using the Settings-page transition into a "How it works" page that explains the expected end-to-end user flow.
 - Packing lists
 - Budgets
-- Maps
+- Maps: decide whether to add geocoding for coordinates and navigation, since the Timetable.lol API provides venue/address metadata but not coordinates.
 - Transport and accommodation planning: define and prioritise richer details beyond the current arranged/not-arranged toggles, such as bookings, timings, addresses, references, and reminders.
-
-### High-priority catalogue work
-
-- Automatic location enrichment for newly discovered Timetable.lol festivals: select and configure an approved geocoding provider, use it only in the developer-run catalogue refresh process, accept only high-confidence results, and flag anything uncertain for manual review. Never add device-side geocoding or expose an API key in the app.
 
 ### Line-up
 
 - Bulk paste/import of set times.
 - Additional automatic import providers beyond the current Timetable.lol community catalogue.
+- Coming-soon or untimed catalogue events: decide whether users should be able to add these before their set times are published. They are excluded from the current import flow.
+- Ticket and resale links: decide how and where to expose the Timetable.lol API metadata that is already stored for imported festivals.
 - Festival-style browsing filters: add catalogue metadata and filters for styles such as Techno, House, and Drum & Bass. This is non-priority work.
-- Timetable.lol refresh strategy: decide whether the bundled catalogue should be refreshed through an approved automated process or a documented manual cadence, including source review, release timing, failure handling, and review of the bundled location metadata.
+- Timetable.lol refresh strategy: establish a refresh cadence and review process for the API-backed bundled catalogue, including skipped-event review, release timing, and failure handling.
 
 ## 11. Work to Complete Before First Public Release
 
@@ -153,6 +151,7 @@ Do not implement these unless they are explicitly brought into scope later:
 - 2026-07-26: Release automation uses a GitHub Actions quality gate for lint, tests, and production build. Dependabot handles npm update PRs, while production dependency audits are run separately from development-toolchain findings.
 - 2026-07-26: Dependabot groups Angular core, devkit, and Angular ESLint packages into one update PR because their peer dependencies must remain version-aligned. Major Angular PRs require deliberate compatibility review and full verification before merging.
 - 2026-07-26: Dependabot groups all non-Angular minor and patch dependency updates into one routine PR; major updates remain separate for deliberate review.
+- 2026-08-13: Dependabot grouping is configured separately for version and security updates. Angular platform packages remain isolated from the routine bundle in both paths because their peer dependencies must be version-aligned.
 - 2026-07-26: Version 1 is deliberately device-only. Festivals, Line-ups, settings, and private images are not backed up or synchronised; accounts and cloud sync remain future considerations.
 - 2026-07-20: Stage 1 uses standalone Angular bootstrap, standalone Ionic components, and route-level `loadComponent` lazy loading. Karma uses an existing Windows Edge installation as a fallback for its Chromium launcher when `CHROME_BIN` is not already configured.
 - 2026-07-20: Stage 2 uses normal content flow, responsive `clamp()` spacing, and CSS safe-area environment values for the mobile shell. Global styles own the neutral typography baseline; page styles own layout-specific spacing and alignment.

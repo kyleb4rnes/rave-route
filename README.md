@@ -26,7 +26,7 @@ See [MVP specification](docs/mvp-specification.md) for the full scope.
 
 ## Refreshing the Timetable.lol catalogue
 
-Run `npm run timetable-lol:sync` to fetch the configured Timetable.lol source and generate the compact bundled timetable asset used by the community import catalogue. Review the resulting asset before committing it. The app visibly attributes imported catalogue data as “Data provided by Timetable.lol”.
+Run `npm run timetable-lol:sync` to fetch Timetable.lol's public events and planner-data API endpoints and generate the compact bundled catalogue used by the community import flow. Only live events with importable timed sets are included; the script reports skipped events and malformed rows for review before committing. The app visibly attributes imported catalogue data as “Data provided by Timetable.lol”.
 
 ## Technical direction
 

@@ -74,6 +74,8 @@ export class FestivalStore {
       endDate: string;
       sourceUrl: string;
       location?: Festival['locationMetadata'];
+      imageUrl?: string;
+      ticketLinks?: Festival['ticketLinks'];
     },
     importedSets: readonly FestivalSetImport[],
   ): Promise<Festival | undefined> {
@@ -91,6 +93,8 @@ export class FestivalStore {
       endDate: preset.endDate,
       location: preset.location?.displayName ?? 'Location to be announced',
       ...(preset.location ? { locationMetadata: preset.location } : {}),
+      ...(preset.imageUrl ? { imageUrl: preset.imageUrl } : {}),
+      ...(preset.ticketLinks ? { ticketLinks: preset.ticketLinks } : {}),
       transportArranged: false,
       accommodationArranged: false,
       lineupSets: importedSets.map((set) => toFestivalSet(set)),

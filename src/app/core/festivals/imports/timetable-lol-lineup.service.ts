@@ -1,71 +1,66 @@
 import { Injectable } from '@angular/core';
 
-import { Festival } from '../models/festival';
+import { Festival, FestivalLocation, FestivalTicketLinks } from '../models/festival';
 import { FestivalSetImport } from '../models/festival-set';
 import { LineupImportPreset } from './lineup-import-preset';
-import { getTimetableLolLocation } from './timetable-lol-location-catalogue';
 
-const timetableLolSourceUrl = 'https://timetable.lol/data/artist-act-index.json?v=20260710-artist-bookings-refresh';
-const timetableLolAssetUrl = 'assets/timetables/timetable-lol-artist-act-index.json';
+const timetableLolAssetUrl = 'assets/timetables/timetable-lol-catalogue.json';
 
 export interface TimetableLolPreset extends LineupImportPreset {
   provider: 'timetable-lol';
   eventSlug: string;
-  location?: Festival['locationMetadata'];
+  location?: FestivalLocation;
+  imageUrl?: string;
+  ticketLinks?: FestivalTicketLinks;
 }
 
-interface TimetableLolAct {
+interface TimetableLolCatalogue {
+  events?: unknown;
+}
+
+interface TimetableLolCatalogueEvent {
   eventSlug: string;
-  eventTitle: string;
-  eventDate: string;
-  label: string;
-  start: string;
-  end: string;
-  stage: string;
+  title: string;
+  startDate: string;
+  endDate: string;
+  sourceUrl: string;
+  location?: FestivalLocation;
+  imageUrl?: string;
+  tickets?: FestivalTicketLinks;
+  sets: TimetableLolCatalogueSet[];
 }
 
-interface TimetableLolIndex {
-  actsBySetKey?: unknown;
+interface TimetableLolCatalogueSet {
+  performanceId: string;
+  artist: string;
+  day: string;
+  startTime: string;
+  endTime: string;
+  stage: string;
 }
 
 @Injectable({ providedIn: 'root' })
 export class TimetableLolLineupService {
-  private index: Record<string, unknown> | null = null;
+  private catalogue: readonly TimetableLolCatalogueEvent[] | null = null;
 
   async loadPresets(): Promise<TimetableLolPreset[]> {
-    const index = await this.loadIndex();
-    const events = new Map<string, { title: string; startDate: string; endDate: string; setCount: number }>();
+    const events = await this.loadCatalogue();
 
-    for (const value of Object.keys(index)) {
-      const act = index[value];
-
-      if (!isTimetableLolAct(act)) {
-        continue;
-      }
-
-      const existing = events.get(act.eventSlug);
-
-      events.set(act.eventSlug, {
-        title: act.eventTitle,
-        startDate: existing?.startDate && existing.startDate < act.eventDate ? existing.startDate : act.eventDate,
-        endDate: existing?.endDate && existing.endDate > act.eventDate ? existing.endDate : act.eventDate,
-        setCount: (existing?.setCount ?? 0) + 1,
-      });
-    }
-
-    return [...events.entries()]
-      .map(([eventSlug, event]) => ({
-        id: `timetable-lol:${eventSlug}`,
+    return events
+      .map((event) => ({
+        id: `timetable-lol:${event.eventSlug}`,
         provider: 'timetable-lol' as const,
         sourceLabel: 'Timetable.lol community timetable',
         label: event.title,
-        detail: `${event.setCount} published sets`,
+        detail: `${event.sets.length} published sets`,
         startDate: event.startDate,
         endDate: event.endDate,
-        sourceUrl: timetableLolSourceUrl,
-        setCount: event.setCount,
-        eventSlug,
-        location: getTimetableLolLocation(eventSlug),
+        sourceUrl: event.sourceUrl,
+        setCount: event.sets.length,
+        eventSlug: event.eventSlug,
+        ...(event.location ? { location: event.location } : {}),
+        ...(event.imageUrl ? { imageUrl: event.imageUrl } : {}),
+        ...(event.tickets ? { ticketLinks: event.tickets } : {}),
       }))
       .sort((firstPreset, secondPreset) =>
         firstPreset.startDate.localeCompare(secondPreset.startDate) || firstPreset.label.localeCompare(secondPreset.label),
@@ -77,43 +72,41 @@ export class TimetableLolLineupService {
   }
 
   async loadAllSets(preset: TimetableLolPreset): Promise<FestivalSetImport[]> {
-    return this.loadPresetSets(preset, getPresetDays(preset));
+    return this.loadPresetSets(preset);
   }
 
   private async loadPresetSets(
     preset: TimetableLolPreset,
-    festivalDays: readonly string[],
+    festivalDays?: readonly string[],
   ): Promise<FestivalSetImport[]> {
-    const index = await this.loadIndex();
-    const importedAt = new Date().toISOString();
-    const sets: FestivalSetImport[] = [];
+    const event = (await this.loadCatalogue()).find((catalogueEvent) => catalogueEvent.eventSlug === preset.eventSlug);
 
-    for (const [setKey, value] of Object.entries(index)) {
-      if (!isTimetableLolAct(value) || value.eventSlug !== preset.eventSlug || !festivalDays.includes(value.eventDate)) {
-        continue;
-      }
-
-      sets.push({
-        artist: value.label.trim(),
-        day: value.eventDate,
-        startTime: value.start.slice(0, 5),
-        endTime: value.end.slice(0, 5),
-        stage: value.stage.trim(),
-        source: {
-          provider: 'timetable-lol',
-          performanceId: setKey,
-          sourceUrl: timetableLolSourceUrl,
-          importedAt,
-        },
-      });
+    if (!event) {
+      throw new Error('The selected community timetable could not be found.');
     }
 
-    return sets;
+    const importedAt = new Date().toISOString();
+
+    return event.sets
+      .filter((set) => !festivalDays || festivalDays.includes(set.day))
+      .map((set) => ({
+        artist: set.artist,
+        day: set.day,
+        startTime: set.startTime,
+        endTime: set.endTime,
+        stage: set.stage,
+        source: {
+          provider: 'timetable-lol' as const,
+          performanceId: set.performanceId,
+          sourceUrl: event.sourceUrl,
+          importedAt,
+        },
+      }));
   }
 
-  private async loadIndex(): Promise<Record<string, unknown>> {
-    if (this.index) {
-      return this.index;
+  private async loadCatalogue(): Promise<readonly TimetableLolCatalogueEvent[]> {
+    if (this.catalogue) {
+      return this.catalogue;
     }
 
     const response = await fetch(timetableLolAssetUrl);
@@ -123,48 +116,57 @@ export class TimetableLolLineupService {
     }
 
     const data: unknown = await response.json();
-    const actsBySetKey = (data as TimetableLolIndex).actsBySetKey;
+    const events = (data as TimetableLolCatalogue).events;
 
-    if (!actsBySetKey || typeof actsBySetKey !== 'object' || Array.isArray(actsBySetKey)) {
+    if (!Array.isArray(events) || !events.every(isTimetableLolCatalogueEvent)) {
       throw new Error('The community timetable format was not recognised.');
     }
 
-    this.index = actsBySetKey as Record<string, unknown>;
+    this.catalogue = events;
 
-    return this.index;
+    return this.catalogue;
   }
 }
 
-function getPresetDays(preset: TimetableLolPreset): string[] {
-  return getDateRange(preset.startDate, preset.endDate);
-}
-
-function isTimetableLolAct(value: unknown): value is Required<TimetableLolAct> {
+function isTimetableLolCatalogueEvent(value: unknown): value is TimetableLolCatalogueEvent {
   if (!value || typeof value !== 'object') {
     return false;
   }
 
-  const act = value as Partial<TimetableLolAct>;
+  const event = value as Partial<TimetableLolCatalogueEvent>;
 
   return (
-    typeof act.eventSlug === 'string' &&
-    typeof act.eventTitle === 'string' &&
-    typeof act.eventDate === 'string' &&
-    typeof act.label === 'string' &&
-    typeof act.start === 'string' &&
-    typeof act.end === 'string' &&
-    typeof act.stage === 'string'
+    typeof event.eventSlug === 'string' &&
+    typeof event.title === 'string' &&
+    typeof event.startDate === 'string' &&
+    typeof event.endDate === 'string' &&
+    typeof event.sourceUrl === 'string' &&
+    Array.isArray(event.sets) &&
+    event.sets.every(isTimetableLolCatalogueSet)
+  );
+}
+
+function isTimetableLolCatalogueSet(value: unknown): value is TimetableLolCatalogueSet {
+  if (!value || typeof value !== 'object') {
+    return false;
+  }
+
+  const set = value as Partial<TimetableLolCatalogueSet>;
+
+  return (
+    typeof set.performanceId === 'string' &&
+    typeof set.artist === 'string' &&
+    typeof set.day === 'string' &&
+    typeof set.startTime === 'string' &&
+    typeof set.endTime === 'string' &&
+    typeof set.stage === 'string'
   );
 }
 
 function getFestivalDays(festival: Festival): string[] {
-  return getDateRange(festival.startDate, festival.endDate);
-}
-
-function getDateRange(startDate: string, endDate: string): string[] {
   const days: string[] = [];
-  const finalDate = new Date(`${endDate}T00:00:00.000Z`);
-  const currentDate = new Date(`${startDate}T00:00:00.000Z`);
+  const finalDate = new Date(`${festival.endDate}T00:00:00.000Z`);
+  const currentDate = new Date(`${festival.startDate}T00:00:00.000Z`);
 
   while (currentDate <= finalDate) {
     days.push(currentDate.toISOString().slice(0, 10));

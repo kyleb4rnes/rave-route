@@ -130,6 +130,12 @@ describe('FestivalStore', () => {
         source: 'Rave Route curated catalogue',
         verifiedAt: '2026-07-30',
       },
+      imageUrl: 'https://api.timetable.lol/api/events/example/images/example.webp',
+      ticketLinks: {
+        ticketUrl: 'https://tickets.example.com',
+        price: '55.00',
+        currency: 'EUR',
+      },
     };
     const importedSets = [
       {
@@ -157,6 +163,8 @@ describe('FestivalStore', () => {
     });
     expect(createdFestival?.location).toBe('Example City, Netherlands');
     expect(createdFestival?.locationMetadata).toEqual(preset.location);
+    expect(createdFestival?.imageUrl).toBe(preset.imageUrl);
+    expect(createdFestival?.ticketLinks).toEqual(preset.ticketLinks);
     expect(createdFestival?.lineupSets?.[0]).toEqual(
       jasmine.objectContaining({
         artist: 'Catalogue artist',

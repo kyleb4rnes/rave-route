@@ -9,13 +9,38 @@ updates:
     open-pull-requests-limit: 5
     groups:
       # Angular packages share strict peer dependencies and must be reviewed as one tested upgrade.
-      angular-platform:
+      # This group is deliberately first: Dependabot assigns a dependency to the
+      # first group it matches.
+      angular-platform-version-updates:
+        applies-to: "version-updates"
         patterns:
           - "@angular/*"
           - "@angular-devkit/*"
           - "@angular-eslint/*"
         update-types: ["major", "minor", "patch"]
-      routine-dependencies:
+      # Keep routine, non-Angular version changes in one reviewable PR.
+      routine-version-updates:
+        applies-to: "version-updates"
         patterns:
           - "*"
+        exclude-patterns:
+          - "@angular/*"
+          - "@angular-devkit/*"
+          - "@angular-eslint/*"
         update-types: ["minor", "patch"]
+      # Group security alerts too; groups default to version updates unless this
+      # is stated explicitly.
+      angular-platform-security-updates:
+        applies-to: "security-updates"
+        patterns:
+          - "@angular/*"
+          - "@angular-devkit/*"
+          - "@angular-eslint/*"
+      routine-security-updates:
+        applies-to: "security-updates"
+        patterns:
+          - "*"
+        exclude-patterns:
+          - "@angular/*"
+          - "@angular-devkit/*"
+          - "@angular-eslint/*"
