@@ -26,15 +26,6 @@
   transform: translateY(-0.5rem);
 }
 
-.launch-screen__mark {
-  color: var(--rr-primary-contrast);
-  font-size: clamp(4.5rem, 24vw, 7rem);
-  font-weight: 900;
-  letter-spacing: -0.12em;
-  line-height: 0.8;
-  padding-right: 0.12em;
-}
-
 .launch-screen ion-spinner {
   --color: var(--rr-primary-contrast);
   height: 2rem;

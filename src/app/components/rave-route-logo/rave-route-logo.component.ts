@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, input } from '@angular/core';
 
 @Component({
   selector: 'app-rave-route-logo',
@@ -6,4 +6,6 @@ import { Component } from '@angular/core';
   styleUrls: ['./rave-route-logo.component.scss'],
   standalone: true,
 })
-export class RaveRouteLogoComponent {}
+export class RaveRouteLogoComponent {
+  readonly variant = input<'default' | 'launch'>('default');
+}

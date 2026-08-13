@@ -26,6 +26,11 @@
                 "output": "assets"
               },
               {
+                "glob": "rave-route-logo.svg",
+                "input": "resources",
+                "output": "assets/brand"
+              },
+              {
                 "glob": "**/*.svg",
                 "input": "node_modules/ionicons/dist/ionicons/svg",
                 "output": "./svg"
@@ -104,6 +109,11 @@
                 "glob": "**/*",
                 "input": "src/assets",
                 "output": "assets"
+              },
+              {
+                "glob": "rave-route-logo.svg",
+                "input": "resources",
+                "output": "assets/brand"
               },
               {
                 "glob": "**/*.svg",

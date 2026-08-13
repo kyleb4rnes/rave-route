@@ -112,6 +112,7 @@ Do not implement these unless they are explicitly brought into scope later:
 - AI features
 - Social features
 - Music playback
+- Brand refinement: revisit the RR-road logo before public release, starting with a lighter or white letter treatment so it remains clear against the red launch surface and future brand backgrounds.
 - Help and onboarding: show a Help button in the Home header in place of the Home button, only while already on Home. It should expand using the Settings-page transition into a "How it works" page that explains the expected end-to-end user flow.
 - Packing lists
 - Budgets

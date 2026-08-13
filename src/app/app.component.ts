@@ -5,13 +5,14 @@ import { AppSettingsStore } from './core/settings/app-settings.store';
 import { ImageStorageService } from './core/images/image-storage.service';
 import { appearancePalettes } from './core/settings/appearance-modes';
 import { themeColourPresets } from './core/settings/theme-colours';
+import { RaveRouteLogoComponent } from './components/rave-route-logo/rave-route-logo.component';
 
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
   styleUrls: ['app.component.scss'],
   standalone: true,
-  imports: [IonApp, IonRouterOutlet, IonSpinner],
+  imports: [IonApp, IonRouterOutlet, IonSpinner, RaveRouteLogoComponent],
 })
 export class AppComponent {
   private readonly festivalStore = inject(FestivalStore);
@@ -23,7 +24,7 @@ export class AppComponent {
   private exitTimer: ReturnType<typeof setTimeout> | undefined;
 
   // Temporary development delay: remove or set to 0 once launch timing is approved.
-  private readonly minimumLaunchDurationMs = 0;
+  private readonly minimumLaunchDurationMs = 5000;
   private readonly exitAnimationDurationMs = 900;
 
   readonly launchState = this.launchStateSignal.asReadonly();
