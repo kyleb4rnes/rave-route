@@ -33,12 +33,88 @@ ion-content {
   margin-top: 0.5rem;
 }
 
-.festival-browse > ion-searchbar {
+.festival-browse__search-row {
+  align-items: center;
+  display: grid;
+  gap: 0.5rem;
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+
+.festival-browse__search-row ion-searchbar {
   --background: var(--rr-surface);
   --border-radius: var(--rr-radius-control);
   --box-shadow: none;
   --color: var(--rr-text);
+  height: 2.75rem;
   padding: 0;
+}
+
+.festival-browse__search-row ion-searchbar::part(container) {
+  height: 100%;
+}
+
+.festival-browse__filter-toggle {
+  --background: var(--rr-surface);
+  --color: var(--rr-primary-dark);
+  height: 2.75rem;
+  margin: 0;
+  position: relative;
+  width: 2.75rem;
+}
+
+.festival-browse__filter-toggle::part(native) {
+  border: 1px solid var(--rr-border);
+  border-radius: var(--rr-radius-control);
+  padding: 0;
+}
+
+.festival-browse__filter-count {
+  align-items: center;
+  background: var(--rr-primary);
+  border: 2px solid var(--rr-surface);
+  border-radius: 50%;
+  color: var(--rr-primary-contrast);
+  display: flex;
+  font-size: 0.625rem;
+  font-weight: 800;
+  height: 1.15rem;
+  justify-content: center;
+  position: absolute;
+  right: -0.15rem;
+  top: -0.2rem;
+  width: 1.15rem;
+}
+
+.festival-browse__filters {
+  background: var(--rr-surface);
+  border: 1px solid var(--rr-border);
+  border-radius: var(--rr-radius-card);
+  box-shadow: var(--rr-shadow-card);
+  display: grid;
+  overflow: hidden;
+  padding: 0.35rem 0.75rem 0.75rem;
+}
+
+.festival-browse__filters ion-item {
+  --background: transparent;
+  --color: var(--rr-text);
+  --inner-padding-end: 0;
+  --padding-start: 0;
+}
+
+.festival-browse__filters ion-label {
+  font-weight: 700;
+}
+
+.festival-browse__filters ion-select {
+  color: var(--rr-text-muted);
+  max-width: 62%;
+}
+
+.festival-browse__filter-actions {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 0.75rem;
 }
 
 .festival-browse__list {

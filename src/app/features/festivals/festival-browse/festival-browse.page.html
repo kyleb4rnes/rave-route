@@ -8,12 +8,100 @@
       <span>Browse festivals with published timetable data.</span>
     </header>
 
-    <ion-searchbar
-      aria-label="Filter festival catalogue"
-      debounce="150"
-      placeholder="Search festivals or a year"
-      (ionInput)="updateSearchTerm($event.detail.value)"
-    ></ion-searchbar>
+    <div class="festival-browse__search-row">
+      <ion-searchbar
+        aria-label="Search festival catalogue"
+        debounce="150"
+        placeholder="Search festivals or a year"
+        (ionInput)="updateSearchTerm($event.detail.value)"
+      ></ion-searchbar>
+      <ion-button
+        class="festival-browse__filter-toggle"
+        fill="clear"
+        type="button"
+        aria-label="Show festival filters"
+        aria-controls="festival-filters"
+        [attr.aria-expanded]="showFilters()"
+        (click)="toggleFilters()"
+      >
+        <ion-icon aria-hidden="true" name="filter-outline"></ion-icon>
+        @if (activeFilterCount() > 0) {
+          <span class="festival-browse__filter-count" aria-label="Active filters">{{ activeFilterCount() }}</span>
+        }
+      </ion-button>
+    </div>
+
+    @if (showFilters()) {
+      <section class="festival-browse__filters" id="festival-filters" aria-label="Festival filters">
+        <ion-item>
+          <ion-label>Country</ion-label>
+          <ion-select
+            aria-label="Filter by country"
+            interface="alert"
+            [value]="filters().country"
+            (ionChange)="updateCountry($event.detail.value)"
+          >
+            <ion-select-option value="">Any country</ion-select-option>
+            @for (country of countries(); track country) {
+              <ion-select-option [value]="country">{{ formatCountry(country) }}</ion-select-option>
+            }
+          </ion-select>
+        </ion-item>
+
+        <ion-item>
+          <ion-label>City</ion-label>
+          <ion-select
+            aria-label="Filter by city"
+            interface="alert"
+            [disabled]="!filters().country || cities().length === 0"
+            [value]="filters().city"
+            (ionChange)="updateCity($event.detail.value)"
+          >
+            <ion-select-option value="">Any city</ion-select-option>
+            @for (city of cities(); track city) {
+              <ion-select-option [value]="city">{{ city }}</ion-select-option>
+            }
+          </ion-select>
+        </ion-item>
+
+        <ion-item>
+          <ion-label>When</ion-label>
+          <ion-select
+            aria-label="Filter by date"
+            interface="alert"
+            [value]="filters().dateRange"
+            (ionChange)="updateDateRange($event.detail.value)"
+          >
+            <ion-select-option value="all">Any date</ion-select-option>
+            <ion-select-option value="upcoming">Upcoming</ion-select-option>
+            <ion-select-option value="next-3-months">Next 3 months</ion-select-option>
+            <ion-select-option value="next-6-months">Next 6 months</ion-select-option>
+            <ion-select-option value="this-year">This year</ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <ion-item>
+          <ion-label>Duration</ion-label>
+          <ion-select
+            aria-label="Filter by duration"
+            interface="alert"
+            [value]="filters().duration"
+            (ionChange)="updateDuration($event.detail.value)"
+          >
+            <ion-select-option value="all">Any length</ion-select-option>
+            <ion-select-option value="one-day">One day</ion-select-option>
+            <ion-select-option value="multi-day">Multi-day</ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <div class="festival-browse__filter-actions">
+          <ion-button fill="clear" type="button" [disabled]="activeFilterCount() === 0" (click)="clearFilters()">
+            Clear all
+          </ion-button>
+          <ion-button type="button" (click)="closeFilters()">Done</ion-button>
+        </div>
+      </section>
+    }
 
     @if (isLoading()) {
       <div class="festival-browse__status" role="status">
@@ -43,7 +131,7 @@
             <ion-icon aria-hidden="true" name="chevron-forward" slot="end"></ion-icon>
           </ion-button>
         } @empty {
-          <p class="festival-browse__empty">No festivals match that search.</p>
+          <p class="festival-browse__empty">No festivals match your search and filters.</p>
         }
       </section>
     }

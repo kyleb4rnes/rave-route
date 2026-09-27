@@ -4,20 +4,35 @@ import {
   IonButton,
   IonContent,
   IonIcon,
+  IonItem,
+  IonLabel,
   IonNote,
   IonSearchbar,
+  IonSelect,
+  IonSelectOption,
   IonSpinner,
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { calendarOutline, chevronForward } from 'ionicons/icons';
+import { calendarOutline, chevronForward, filterOutline } from 'ionicons/icons';
 
 import { AppHeaderComponent } from '../../../components/app-header/app-header.component';
 import {
   TimetableLolLineupService,
   TimetableLolPreset,
 } from '../../../core/festivals/imports/timetable-lol-lineup.service';
+import {
+  BrowseDateRange,
+  BrowseDuration,
+  countActiveBrowseFilters,
+  defaultTimetableLolBrowseFilters,
+  filterTimetableLolPresets,
+  formatCountry,
+  getCities,
+  getCountries,
+  TimetableLolBrowseFilters,
+} from '../../../core/festivals/imports/timetable-lol-browse-filter.utils';
 
-addIcons({ calendarOutline, chevronForward });
+addIcons({ calendarOutline, chevronForward, filterOutline });
 
 @Component({
   selector: 'app-festival-browse',
@@ -29,8 +44,12 @@ addIcons({ calendarOutline, chevronForward });
     IonButton,
     IonContent,
     IonIcon,
+    IonItem,
+    IonLabel,
     IonNote,
     IonSearchbar,
+    IonSelect,
+    IonSelectOption,
     IonSpinner,
   ],
 })
@@ -40,18 +59,16 @@ export class FestivalBrowsePage {
 
   readonly presets = signal<readonly TimetableLolPreset[]>([]);
   readonly searchTerm = signal('');
+  readonly filters = signal<TimetableLolBrowseFilters>(defaultTimetableLolBrowseFilters);
+  readonly showFilters = signal(false);
   readonly isLoading = signal(true);
   readonly error = signal<string | null>(null);
-  readonly filteredPresets = computed(() => {
-    const query = this.searchTerm().trim().toLocaleLowerCase();
-
-    return this.presets().filter(
-      (preset) =>
-        !query ||
-        preset.label.toLocaleLowerCase().includes(query) ||
-        preset.startDate.includes(query),
-    );
-  });
+  readonly countries = computed(() => getCountries(this.presets()));
+  readonly cities = computed(() => getCities(this.presets(), this.filters().country));
+  readonly activeFilterCount = computed(() => countActiveBrowseFilters(this.filters()));
+  readonly filteredPresets = computed(() =>
+    filterTimetableLolPresets(this.presets(), this.searchTerm(), this.filters()),
+  );
 
   constructor() {
     void this.loadCatalogue();
@@ -59,6 +76,35 @@ export class FestivalBrowsePage {
 
   updateSearchTerm(value: string | null | undefined): void {
     this.searchTerm.set(value ?? '');
+  }
+
+  toggleFilters(): void {
+    this.showFilters.update((showFilters) => !showFilters);
+  }
+
+  closeFilters(): void {
+    this.showFilters.set(false);
+  }
+
+  clearFilters(): void {
+    this.filters.set(defaultTimetableLolBrowseFilters);
+  }
+
+  updateCountry(value: unknown): void {
+    const country = typeof value === 'string' ? value : '';
+    this.filters.update((filters) => ({ ...filters, country, city: '' }));
+  }
+
+  updateCity(value: unknown): void {
+    this.updateFilters({ city: typeof value === 'string' ? value : '' });
+  }
+
+  updateDateRange(value: unknown): void {
+    this.updateFilters({ dateRange: isDateRange(value) ? value : 'all' });
+  }
+
+  updateDuration(value: unknown): void {
+    this.updateFilters({ duration: isDuration(value) ? value : 'all' });
   }
 
   selectFestival(preset: TimetableLolPreset): void {
@@ -80,6 +126,14 @@ export class FestivalBrowsePage {
     return preset.startDate === preset.endDate ? start : `${start} – ${end}`;
   }
 
+  formatCountry(country: string): string {
+    return formatCountry(country);
+  }
+
+  private updateFilters(changes: Partial<TimetableLolBrowseFilters>): void {
+    this.filters.update((filters) => ({ ...filters, ...changes }));
+  }
+
   private async loadCatalogue(): Promise<void> {
     try {
       this.presets.set(await this.timetableService.loadPresets());
@@ -89,4 +143,12 @@ export class FestivalBrowsePage {
       this.isLoading.set(false);
     }
   }
+}
+
+function isDateRange(value: unknown): value is BrowseDateRange {
+  return ['all', 'upcoming', 'next-3-months', 'next-6-months', 'this-year'].includes(value as string);
+}
+
+function isDuration(value: unknown): value is BrowseDuration {
+  return ['all', 'one-day', 'multi-day'].includes(value as string);
 }
