@@ -1,6 +1,6 @@
 import { Component, computed, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { IonButton, IonContent } from '@ionic/angular/standalone';
+import { IonButton, IonContent } from '@ionic/angular';
 
 import { AppHeaderComponent } from '../../../components/app-header/app-header.component';
 import { FestivalDraft } from '../../../core/festivals/models/festival-draft';

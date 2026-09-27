@@ -8,7 +8,7 @@ import {
   IonNote,
   IonSegment,
   IonSegmentButton,
-} from '@ionic/angular/standalone';
+} from '@ionic/angular';
 import { addIcons } from 'ionicons';
 import { heart, heartOutline, layersOutline, timeOutline } from 'ionicons/icons';
 

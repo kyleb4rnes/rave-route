@@ -7,7 +7,7 @@ import {
   IonIcon,
   IonNote,
   IonToggle,
-} from '@ionic/angular/standalone';
+} from '@ionic/angular';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { addIcons } from 'ionicons';
 import { cameraOutline } from 'ionicons/icons';

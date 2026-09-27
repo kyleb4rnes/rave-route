@@ -1,5 +1,5 @@
 import { Component, input, output } from '@angular/core';
-import { IonButton, IonIcon } from '@ionic/angular/standalone';
+import { IonButton, IonIcon } from '@ionic/angular';
 import { addIcons } from 'ionicons';
 import { chevronDown, chevronForward } from 'ionicons/icons';
 

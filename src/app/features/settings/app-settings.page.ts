@@ -5,7 +5,7 @@ import {
   IonButton,
   IonContent,
   IonNote,
-} from '@ionic/angular/standalone';
+} from '@ionic/angular';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { AppHeaderComponent } from '../../components/app-header/app-header.component';
 import { AppSettingsStore } from '../../core/settings/app-settings.store';

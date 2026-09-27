@@ -1,6 +1,6 @@
 import { Component, computed, DestroyRef, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
-import { IonAlert, IonButton, IonContent } from '@ionic/angular/standalone';
+import { IonAlert, IonButton, IonContent } from '@ionic/angular';
 import { AppHeaderComponent } from '../components/app-header/app-header.component';
 import { ActiveFestivalCardComponent } from '../components/active-festival-card/active-festival-card.component';
 import { CollapsedFestivalCardComponent } from '../components/collapsed-festival-card/collapsed-festival-card.component';

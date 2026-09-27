@@ -7,7 +7,7 @@ import {
   IonButton,
   IonChip,
   IonLabel,
-} from '@ionic/angular/standalone';
+} from '@ionic/angular';
 import { FestivalImageComponent } from '../festival-image/festival-image.component';
 
 @Component({

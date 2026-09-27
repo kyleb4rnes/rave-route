@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { IonContent } from '@ionic/angular/standalone';
+import { IonContent } from '@ionic/angular';
 
 import { AppHeaderComponent } from '../../../components/app-header/app-header.component';
 import { FestivalStore } from '../../../core/festivals/festival.store';

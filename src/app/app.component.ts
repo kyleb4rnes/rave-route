@@ -1,5 +1,5 @@
 import { Component, computed, effect, inject, signal } from '@angular/core';
-import { IonApp, IonRouterOutlet, IonSpinner } from '@ionic/angular/standalone';
+import { IonApp, IonRouterOutlet, IonSpinner } from '@ionic/angular';
 import { FestivalStore } from './core/festivals/festival.store';
 import { AppSettingsStore } from './core/settings/app-settings.store';
 import { ImageStorageService } from './core/images/image-storage.service';

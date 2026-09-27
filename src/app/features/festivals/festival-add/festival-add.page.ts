@@ -8,7 +8,7 @@ import {
   IonNote,
   IonSearchbar,
   IonSpinner,
-} from '@ionic/angular/standalone';
+} from '@ionic/angular';
 import { addIcons } from 'ionicons';
 import { calendarOutline, chevronForward, searchOutline } from 'ionicons/icons';
 

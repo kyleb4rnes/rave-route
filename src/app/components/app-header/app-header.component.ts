@@ -8,7 +8,7 @@ import {
   IonIcon,
   IonTitle,
   IonToolbar,
-} from '@ionic/angular/standalone';
+} from '@ionic/angular';
 import { addIcons } from 'ionicons';
 import { chevronBack, homeOutline, settingsOutline } from 'ionicons/icons';
 import { filter, map } from 'rxjs';

@@ -1,4 +1,4 @@
-import { Component, effect, inject, input, output, signal } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, effect, inject, input, output, signal } from '@angular/core';
 import {
   AbstractControl,
   FormControl,
@@ -17,7 +17,7 @@ import {
   IonModal,
   IonNote,
   IonToggle,
-} from '@ionic/angular/standalone';
+} from '@ionic/angular';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 
 import { FestivalDraft } from '../../../core/festivals/models/festival-draft';
@@ -70,6 +70,7 @@ const dateRangeValidator: ValidatorFn = (control: AbstractControl): ValidationEr
     IonToggle,
     ReactiveFormsModule,
   ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class FestivalFormComponent {
   private readonly imageStorage = inject(ImageStorageService);

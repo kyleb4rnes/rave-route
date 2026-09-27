@@ -1,4 +1,4 @@
-import { AnimationBuilder, createAnimation } from '@ionic/angular/standalone';
+import { AnimationBuilder, createAnimation } from '@ionic/angular';
 
 type PageTransitionOptions = {
   direction?: 'back' | 'forward';
