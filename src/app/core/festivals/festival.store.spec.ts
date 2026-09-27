@@ -74,6 +74,15 @@ const pastFestival: Festival = {
 };
 
 describe('FestivalStore', () => {
+  beforeEach(() => {
+    jasmine.clock().install();
+    jasmine.clock().mockDate(new Date('2026-07-01T12:00:00.000Z'));
+  });
+
+  afterEach(() => {
+    jasmine.clock().uninstall();
+  });
+
   it('loads repository data and derives home-page festival groups', async () => {
     const store = createStore(new InMemoryFestivalRepository([laterFestival, pastFestival, nextFestival]));
 
