@@ -17,14 +17,19 @@ export class ImageStorageService {
     if (isRemoteImage(imageUrl) && Capacitor.isNativePlatform()) {
       const path = `${imageDirectory}/${crypto.randomUUID()}.${getFileExtensionFromUrl(imageUrl)}`;
 
-      await this.ensureImageDirectory();
-      await Filesystem.downloadFile({
-        url: imageUrl,
-        path,
-        directory: Directory.Data,
-      });
+      try {
+        await this.ensureImageDirectory();
+        await Filesystem.downloadFile({
+          url: imageUrl,
+          path,
+          directory: Directory.Data,
+        });
 
-      return `${imageReferencePrefix}${path}`;
+        return `${imageReferencePrefix}${path}`;
+      } catch {
+        // Image caching must never prevent a catalogue festival from being added.
+        return imageUrl;
+      }
     }
 
     if (!isDataImage(imageUrl)) {
