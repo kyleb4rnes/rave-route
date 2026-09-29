@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      @if (canGoBack()) {
+      @if (canGoBack() && !isSettings() && !isHelp()) {
         <ion-button aria-label="Go back" (click)="goBack()">
           <ion-icon aria-hidden="true" name="chevron-back"></ion-icon>
         </ion-button>
