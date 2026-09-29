@@ -1,0 +1,43 @@
+<app-header title="BUDGET"></app-header>
+
+<ion-content>
+  <main class="festival-budget">
+    @if (festival(); as selectedFestival) {
+      <header>
+        <p class="festival-budget__eyebrow">PLAN YOUR ADVENTURE</p>
+        <h1>{{ selectedFestival.title }}</h1>
+        <p>Keep your festival spending in one place.</p>
+      </header>
+
+      <section class="festival-budget__summary" aria-label="Budget summary">
+        <div><span>Budget</span><strong>{{ formatAmount(budget().limit) }}</strong></div>
+        <div><span>Spent</span><strong>{{ formatAmount(totalSpent()) }}</strong></div>
+        <div [class.is-over]="remaining() < 0"><span>{{ remaining() < 0 ? 'Over by' : 'Remaining' }}</span><strong>{{ formatAmount(Math.abs(remaining())) }}</strong></div>
+      </section>
+
+      <section class="festival-budget__card" aria-labelledby="budget-settings-title">
+        <h2 id="budget-settings-title">Budget settings</h2>
+        <ion-item lines="none"><ion-input label="Total budget" type="number" min="0" [value]="budget().limit" (ionInput)="updateLimit($event)"></ion-input></ion-item>
+        <ion-item lines="none"><ion-select label="Currency" [value]="budget().currency" (ionChange)="updateCurrency($event)"><ion-select-option value="GBP">GBP (£)</ion-select-option><ion-select-option value="EUR">EUR (€)</ion-select-option><ion-select-option value="USD">USD ($)</ion-select-option></ion-select></ion-item>
+      </section>
+
+      <section class="festival-budget__card" aria-labelledby="add-expense-title">
+        <h2 id="add-expense-title">Add expense</h2>
+        <ion-item lines="none"><ion-input label="What is it?" placeholder="e.g. Train ticket" [value]="description()" (ionInput)="updateDescription($event)"></ion-input></ion-item>
+        <ion-item lines="none"><ion-input label="Amount" type="number" min="0" placeholder="0.00" [value]="amount()" (ionInput)="updateAmount($event)"></ion-input></ion-item>
+        <ion-item lines="none"><ion-select label="Category" [value]="category()" (ionChange)="updateCategory($event)"><ion-select-option value="tickets">Tickets</ion-select-option><ion-select-option value="travel">Travel</ion-select-option><ion-select-option value="stay">Stay</ion-select-option><ion-select-option value="food">Food</ion-select-option><ion-select-option value="drinks">Drinks</ion-select-option><ion-select-option value="other">Other</ion-select-option></ion-select></ion-item>
+        <ion-button class="rr-button" expand="block" type="button" (click)="addExpense()">Add expense</ion-button>
+      </section>
+
+      <section aria-labelledby="expenses-title">
+        <h2 id="expenses-title">Expenses</h2>
+        @if (budget().items.length === 0) { <p class="festival-budget__empty">No expenses added yet.</p> }
+        @for (item of budget().items; track item.id) {
+          <article class="festival-budget__expense"><div><strong>{{ item.description }}</strong><small>{{ categoryLabel(item.category) }}</small></div><strong>{{ formatAmount(item.amount) }}</strong><button type="button" [attr.aria-label]="'Remove ' + item.description" (click)="removeExpense(item.id)">Remove</button></article>
+        }
+      </section>
+
+      <ion-button fill="clear" [routerLink]="['/festivals', festivalId]">Back to festival</ion-button>
+    } @else { <p>Festival not found.</p> }
+  </main>
+</ion-content>

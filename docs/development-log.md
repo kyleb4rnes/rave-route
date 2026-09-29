@@ -10,6 +10,11 @@
 
 - Added ticket and resale actions to Festival Details when catalogue metadata provides external ticket destinations.
 - Kept links optional for custom festivals and festivals without ticket information, with safe external-link behavior and catalogue price context when available.
+## 2026-09-29 — Festival budgets
+
+- Added a device-only budget page per festival with a total limit, currency selection, expense categories, remaining/over-budget summary, and removable expense entries.
+- Persisted budget data in local storage under a versioned key and added focused service coverage for persistence and item changes.
+- Added a Budget action from Festival Details. Full verification is pending because this isolated worktree has no installed node modules and the repository's current zone.js peer dependency prevents a plain `npm install`.
 
 ## 2026-07-26 â€” Angular dependency safety
 

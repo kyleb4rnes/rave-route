@@ -40,6 +40,13 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'festivals/:festivalId/budget',
+    loadComponent: () =>
+      import('./features/festivals/festival-budget/festival-budget.page').then(
+        ({ FestivalBudgetPage }) => FestivalBudgetPage,
+      ),
+  },
+  {
     path: 'festivals/:festivalId/lineup',
     loadComponent: () =>
       import('./features/festivals/festival-lineup/festival-lineup.page').then(
