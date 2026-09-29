@@ -25,9 +25,9 @@ ion-content {
 .help-page__backdrop {
   animation: help-backdrop-expand 650ms cubic-bezier(0.4, 0, 0.2, 1) both;
   background: var(--rr-primary);
-  height: 14rem;
-  inset: 0 0 auto;
+  inset: 0;
   position: absolute;
+  transform-origin: top;
   z-index: 0;
 }
 
@@ -37,6 +37,7 @@ ion-content {
   border-radius: var(--rr-radius-card) var(--rr-radius-card) 0 0;
   margin-top: -1.25rem;
   min-height: calc(100vh - 5rem);
+  overflow: hidden;
   padding: calc(var(--rr-spacing-page) + 0.5rem) max(var(--rr-spacing-page), env(safe-area-inset-left))
     calc(2rem + env(safe-area-inset-bottom)) max(var(--rr-spacing-page), env(safe-area-inset-right));
   position: relative;
