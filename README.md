@@ -1,18 +1,18 @@
 # Rave Route
 
-Rave Route is a mobile-first festival planner. Its first MVP will help users keep upcoming festivals in one place and feel more excited about their next event.
+Rave Route is a mobile-first festival planner that helps users keep upcoming festivals in one place and feel more excited about their next event.
 
 The project is part of **Project Freedom**, a personal mission focused on greater freedom, stronger finances and health, more travel, and improved software engineering skills.
 
 ## Project status
 
-Post-MVP iteration on the v0.1.0 foundation, with Android beta preparation underway.
+Active product development is underway, with Android beta preparation underway.
 
 The app persists festival plans locally and supports catalogue-first festival browsing, Timetable.lol imports, festival CRUD, line-ups and set times, an automatic Live now view for active festivals, expandable cards, ticket and resale links, packing lists, budgets, photo-library artwork, accessible navigation, personal backgrounds, selectable colour themes, Help, and Settings. The Android project uses the `com.raveroute.app` application ID and currently has an unsigned/debug-oriented release setup.
 
-## MVP capabilities
+## Current capabilities
 
-The current MVP foundation lets a user:
+The current product lets a user:
 
 - See their next festival emphasised on the home screen.
 - See later festivals as collapsed cards.
@@ -26,7 +26,7 @@ The current MVP foundation lets a user:
 - Personalise the app with a background image, Light or Dark appearance, and one of five theme-colour presets.
 - Keep festival data locally between app restarts.
 
-See [MVP specification](docs/mvp-specification.md) for the current scope and known deferred work.
+See [product specification](docs/product-specification.md) for the current scope and known deferred work.
 
 ## Refreshing the Timetable.lol catalogue
 
@@ -40,11 +40,11 @@ Run `npm run timetable-lol:sync` to fetch Timetable.lol's public events and plan
 - Angular signals
 - Typed reactive forms
 - Jasmine and Karma
-- Local device storage for the MVP
+- Local device storage for the current release
 
 ## Project documents
 
-- [MVP specification](docs/mvp-specification.md)
+- [Product specification](docs/product-specification.md)
 - [Design philosophy](docs/design-philosophy.md)
 - [Technical development plan](technical-development-plan.md)
 - [Development workflow](docs/development-workflow.md)
@@ -83,7 +83,7 @@ Run the project from Android Studio on an emulator or a physical Android device.
 
 ## Known limitations
 
-- Festival data stays on the current device/browser only; there is no account, sync, backup, or cloud storage in this MVP.
+- Festival data stays on the current device/browser only; there is currently no account, sync, backup, or cloud storage.
 - Device-selected images are stored alongside local festival data, so many large images can exhaust browser/device storage.
 - The Android project still needs release signing, an Android App Bundle, Play Console setup, and beta testing before public distribution.
 - iOS has not been packaged or tested because that requires macOS and Xcode.

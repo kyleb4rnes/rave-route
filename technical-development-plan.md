@@ -1,6 +1,6 @@
 # Rave Route — Technical Development Plan
 
-> Status: Stages 0–19 are complete. This document is retained as the historical learning and implementation record for the v0.1 foundation. Current product priorities and Play beta preparation are tracked in `developer.agent.md`, `docs/release-checklist.md`, and `docs/pre-release-runbook.md`.
+> Status: Stages 0–19 are complete. This document is retained as the historical learning and implementation record for the initial foundation. Current product priorities and Play beta preparation are tracked in `developer.agent.md`, `docs/release-checklist.md`, and `docs/pre-release-runbook.md`.
 
 ## Purpose
 
@@ -36,9 +36,9 @@ Use:
 - Signal-based component inputs and outputs where appropriate
 - Typed reactive forms
 - Jest
-- Local device storage for the MVP
+- Local device storage for the initial foundation
 
-Do not introduce a backend, authentication or cloud hosting during the first MVP.
+Do not introduce a backend, authentication or cloud hosting without an explicit product decision.
 
 ---
 
@@ -58,7 +58,7 @@ For every stage, ask AI to:
 
 Do not ask AI to:
 
-- Build the whole MVP at once.
+- Build the whole product at once.
 - Generate architecture for features not yet needed.
 - Add abstractions without explaining their purpose.
 - Install unnecessary dependencies.
@@ -86,7 +86,7 @@ Create a clean workspace and define how the project will be managed.
 
 - Create a Git repository.
 - Add a README.
-- Add an MVP specification.
+- Add a product specification.
 - Add the design philosophy.
 - Add this technical plan.
 - Decide on naming conventions.
@@ -922,7 +922,7 @@ Understand:
 
 ## Objective
 
-Make the MVP comfortable and inclusive to use.
+Make the product comfortable and inclusive to use.
 
 ## Tasks
 
@@ -952,7 +952,7 @@ Review:
 
 ---
 
-# Stage 18 — MVP testing and polish
+# Stage 18 — Testing and polish
 
 ## Objective
 
@@ -993,11 +993,11 @@ Manually test:
 
 ## Suggested commit
 
-`test: complete rave route mvp coverage`
+`test: complete Rave Route coverage`
 
 ---
 
-# Stage 19 — MVP release
+# Stage 19 — Release preparation
 
 ## Objective
 
@@ -1032,7 +1032,7 @@ A user can:
 
 ## Suggested release tag
 
-`v0.1.0-mvp`
+`v0.1.0`
 
 ---
 

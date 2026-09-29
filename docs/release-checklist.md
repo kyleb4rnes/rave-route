@@ -1,4 +1,4 @@
-# Rave Route v0.1.0 MVP release checklist
+# Rave Route public release checklist
 
 ## Verified for this release candidate
 

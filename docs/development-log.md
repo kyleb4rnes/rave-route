@@ -1,8 +1,14 @@
 # Development log
 
+## 2026-09-29 — Product direction and future work
+
+- Reframed current documentation around ongoing product development rather than an MVP milestone.
+- Added prioritised future work for first-run welcome/setup, Light and Dark appearance refinement, and music playback research covering royalty-free audio or a Spotify connection.
+- Kept the product intentionally local-first while those future decisions remain open.
+
 ## 2026-09-29 — Documentation refresh
 
-- Updated the README, MVP specification, architecture notes, privacy-policy draft, release checklist, and pre-release runbook to reflect catalogue browsing, Timetable.lol imports, ticket metadata, packing lists, budgets, Help, Settings, and overlay navigation.
+- Updated the README, product specification, architecture notes, privacy-policy draft, release checklist, and pre-release runbook to reflect catalogue browsing, Timetable.lol imports, ticket metadata, packing lists, budgets, Help, Settings, and overlay navigation.
 - Marked the original Stage 0–19 plan as historical and moved current priorities to the developer guide and release documents.
 - Added the Google Play beta path, including signed App Bundle, Play App Signing, listing assets, and the current Closed testing requirements.
 

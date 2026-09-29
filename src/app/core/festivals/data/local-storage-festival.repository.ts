@@ -33,7 +33,13 @@ export class LocalStorageFestivalRepository implements FestivalRepository {
         try {
           const imageUrl = await this.imageStorage.storeImage(festival.imageUrl);
 
-          return imageUrl === festival.imageUrl ? festival : { ...festival, imageUrl };
+          if (imageUrl) {
+            return imageUrl === festival.imageUrl ? festival : { ...festival, imageUrl };
+          }
+
+          const { imageUrl: _uncachedImageUrl, ...festivalWithoutImage } = festival;
+
+          return festivalWithoutImage;
         } catch {
           // Keep legacy data available if the device file system is temporarily unavailable.
           return festival;

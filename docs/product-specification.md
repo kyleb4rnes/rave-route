@@ -1,6 +1,6 @@
-# Rave Route MVP Specification
+# Rave Route Product Specification
 
-This document describes the v0.1 MVP foundation and the current local-first feature set. The staged implementation plan is complete through Stage 19; remaining work is release preparation and explicitly deferred features.
+This document describes the current local-first product and its intended user experience. The original staged implementation plan is complete through Stage 19; remaining work is ongoing product development, release preparation, and explicitly deferred features.
 
 ## Product goal
 
@@ -12,7 +12,7 @@ A user can open Rave Route, immediately recognise their next festival, inspect l
 
 ## Functional requirements
 
-The MVP must allow a user to:
+The product must allow a user to:
 
 1. Open the application on mobile.
 2. See the Rave Route logo on the home screen.
@@ -56,7 +56,7 @@ The application will also maintain identifiers and creation/update timestamps ne
 - No account or network connection is required for core festival-planning use. The catalogue is bundled during development/release refreshes; the app does not call Timetable.lol directly on the user's device.
 - The interface is designed mobile-first and packaged with Capacitor.
 
-## Out of scope
+## Deferred decisions
 
 The current product still does not include:
 
@@ -69,10 +69,10 @@ The current product still does not include:
 - Maps
 - Complex image upload or cloud image storage
 
-## Delivered post-MVP enhancements
+## Current product surface
 
-The current application also includes catalogue browsing/import, ticket metadata, packing lists, budgets, configurable app backgrounds, persistent theme-colour presets, Help, Settings, and full line-up views. These remain local-device features and do not change the MVP's no-account, no-network core constraint.
+The current application also includes catalogue browsing/import, ticket metadata, packing lists, budgets, configurable app backgrounds, persistent theme-colour presets, Help, Settings, and full line-up views. These remain local-device features and do not currently require an account or cloud service.
 
-## MVP acceptance outcome
+## Product outcome
 
 A user can install or open Rave Route, create festival plans, see the next plan emphasised, inspect later plans, edit or delete them, and return later without losing the locally stored data.

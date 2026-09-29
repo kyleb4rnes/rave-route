@@ -8,18 +8,18 @@ Act as the project's Principal Developer and Technical Architect. Guide developm
 
 - Prioritise clarity, maintainability, and learning.
 - Explain important decisions before implementation.
-- Protect the agreed MVP scope.
+- Protect the agreed product direction and keep future work intentional.
 - Leave the application runnable after every implementation stage.
 
 ## 2. Project Summary
 
 Rave Route is a mobile-first festival planner and the software project within Project Freedom. It should become a real, polished, useful product while helping its developer strengthen software engineering skills.
 
-The MVP specification describes why the product exists, what outcome it should provide, and which user capabilities matter. The technical development plan describes how we will build that outcome, stage by stage.
+The product specification describes why the product exists, what outcome it should provide, and which user capabilities matter. The technical development plan describes how the original foundation was built, stage by stage.
 
-## 3. MVP Summary
+## 3. Product Summary
 
-The MVP lets a user:
+Rave Route lets a user:
 
 - View the Rave Route logo and their upcoming festivals on mobile.
 - See the next festival emphasised and later festivals collapsed.
@@ -38,7 +38,7 @@ Each festival contains a title, start date, end date, picture, location, transpo
 - Angular signals for suitable reactive state
 - Typed reactive forms
 - Jasmine and Karma
-- Local storage for MVP persistence
+- Local device storage for persistence
 
 Do not add a dependency automatically. If a dependency appears useful, explain its value and ask the developer for approval before installing it.
 
@@ -98,8 +98,8 @@ Before completing a stage, confirm:
 
 ## 9. Current Build Stages
 
-- [x] Stages 0-18 - Completed as part of the v0.1.0 MVP delivery; physical-device and public-release checks remain tracked in the release checklist.
-- [x] Stage 19 - MVP Release (v0.1.0 MVP test build created; iOS intentionally deferred)
+- [x] Stages 0-18 - Completed as part of the original foundation; physical-device and public-release checks remain tracked in the release checklist.
+- [x] Stage 19 - Release preparation (Android test build created; iOS intentionally deferred)
 
 Stage checkboxes show roadmap progress, not permission to begin the next stage.
 
@@ -112,16 +112,19 @@ Do not implement these unless they are explicitly brought into scope later:
 1. **Manual device and UX regression pass** - verify the latest Help/Settings overlay behaviour, catalogue-first Add Festival flow, festival ordering, sticky browse controls, packing removal, budget summaries, and external ticket links on a physical device or browser-sized viewport.
 2. **Catalogue refresh operations** - document and automate the scheduled Timetable.lol refresh, review skipped or malformed events, validate location and ticket metadata, and define how a refreshed bundle is promoted safely.
 3. **Public-release hardening** - work through the release checklist: dependency/security findings, Android signing and store packaging, iOS readiness, image-storage resilience, privacy/support materials, and physical-device coverage.
-4. **Richer travel planning** - decide whether transport and accommodation should gain dates, addresses, booking references, and reminders beyond the current arranged/not-arranged toggles.
-5. **Maps and navigation** - decide whether reviewed venue/address data should be geocoded and linked to navigation.
-6. **Line-up extensions** - consider bulk set-time import and additional import providers once the core catalogue refresh is dependable.
-7. **Festival-style filters** - add styles such as Techno, House, and Drum & Bass only after the higher-priority catalogue and release work.
+4. **First-run setup and onboarding** - design an initial welcome flow for new installs, including a short introduction and useful preferences without making setup feel mandatory or heavy.
+5. **Appearance refinement** - review whether accent colours and surfaces need clearer, mode-specific treatment in Light and Dark appearance settings.
+6. **Music playback** - investigate a royalty-free in-app option or a safe Spotify connection, including licensing, authentication, offline behaviour, and platform rules before choosing an implementation.
+7. **Richer travel planning** - decide whether transport and accommodation should gain dates, addresses, booking references, and reminders beyond the current arranged/not-arranged toggles.
+8. **Maps and navigation** - decide whether reviewed venue/address data should be geocoded and linked to navigation.
+9. **Line-up extensions** - consider bulk set-time import and additional import providers once the core catalogue refresh is dependable.
+10. **Festival-style filters** - add styles such as Techno, House, and Drum & Bass only after the higher-priority catalogue and release work.
 
 - Accounts and cloud synchronisation: consider only after the device-only v1 release. Define the backend, authentication, data ownership, recovery, migration, and conflict-handling approach before implementation.
 - Payments
 - AI features
 - Social features
-- Music playback
+- Music playback (see the prioritised item above)
 
 ### Line-up
 
@@ -144,10 +147,10 @@ Do not implement these unless they are explicitly brought into scope later:
 
 ## Decision Notes
 
-- 2026-07-17: Established the initial MVP scope, staged roadmap, technology direction, and working rules.
+- 2026-07-17: Established the initial product scope, staged roadmap, technology direction, and working rules.
 - 2026-07-17: Adopted `technical-development-plan.md` as the canonical Stage 0-19 delivery plan. Stage 0 remains open until all of its completion criteria are met.
 - 2026-07-17: Prepared the Stage 0 planning foundation. Adopted `main` with short-lived topic branches, focused Conventional Commit-style messages, kebab-case files, PascalCase types, camelCase values, and `--rr-` design tokens. Stage 0 remains open until the planning documents are reviewed and committed.
-- 2026-07-17: Confirmed that the MVP specification owns product outcome and rationale, while the technical plan owns implementation approach. Dependency additions require explicit developer approval, and stage completion requires full implementation, testing, and understanding.
+- 2026-07-17: Confirmed that the product specification owns product outcome and rationale, while the technical plan owns implementation approach. Dependency additions require explicit developer approval, and stage completion requires full implementation, testing, and understanding.
 - 2026-07-25: Image URLs are no longer user-entered. Festival and app-background images are selected from the photo library and retained locally. Public-release planning now explicitly includes native image storage resilience, store onboarding, signing, privacy/disclosures, security scanning, and confirmation of Timetable.lol data rights.
 - 2026-07-26: The Home page automatically surfaces a festival whose date range includes today. Its Live now card refreshes every minute, displays the current and next scheduled set when available, and prioritises Must-see sets during a same-time clash. Manual active-festival selection remains out of scope for now.
 - 2026-07-26: Selected festival and app-background images are stored as private Capacitor Filesystem files. Festival/settings records retain only an internal image reference; legacy base64 images migrate on read without being discarded if migration fails.
@@ -164,11 +167,11 @@ Do not implement these unless they are explicitly brought into scope later:
 - 2026-07-20: Festival business rules live in pure utilities under `core/festivals`; `FestivalStore` owns private writable signal state and exposes read-only derived signals. UI components consume state and format display values without owning festival data.
 - 2026-07-20: Festival creation uses a typed reactive form that emits `FestivalDraft` through signal-based outputs. `FestivalStore` creates IDs/timestamps and performs immutable sorted updates.
 - 2026-07-20: Both inline and modal add-festival variants exist behind `HomePage.addFestivalExperience`. Modal is the provisional default because it isolates the mobile form's scrolling; retain the inline variant until manual keyboard and mobile layout review is complete.
-- 2026-07-20: Festival persistence uses `FestivalRepository` behind an injection token, with `LocalStorageFestivalRepository` as the MVP implementation. `FestivalStore` owns asynchronous loading, storage errors, and CRUD state updates.
+- 2026-07-20: Festival persistence uses `FestivalRepository` behind an injection token, with `LocalStorageFestivalRepository` as the current implementation. `FestivalStore` owns asynchronous loading, storage errors, and CRUD state updates.
 - 2026-07-20: Festival details, editing, and deletion use route-based pages, the shared form, and a declarative Ionic confirmation alert. Future-card expansion is local home-page signal state, with one expanded card at a time.
 - 2026-07-20: Image URLs use a shared image component with an accessible default placeholder. Accessibility includes explicit form errors, disclosure semantics, safe-area padding, loading/error states, and reduced-motion support.
 - 2026-07-20: Android packaging uses Capacitor with application ID `com.raveroute.app`. The Camera plugin provides native image selection only on a native platform; browser users retain the image-URL field. Generated temporary launcher and splash assets live in `resources/` and are transformed into Android resources with `@capacitor/assets`.
-- 2026-07-21: Stage 19 release preparation records the MVP architecture, known limitations, and a pre-public-release checklist. The v0.1.0 Android debug APK was assembled successfully; store signing and iOS packaging remain deliberate follow-up work.
+- 2026-07-21: Release preparation recorded the initial architecture, known limitations, and a pre-public-release checklist. The Android debug APK was assembled successfully; store signing and iOS packaging remain deliberate follow-up work.
 - 2026-07-23: Use the shared `AppHeaderComponent` for consistent Back, Home, and Settings navigation. Back follows in-app history and hidden controls avoid no-op actions.
 - 2026-07-23: Line-up set times are persisted inside their parent festival. Manual entry remains supported alongside explicit, user-confirmed imports.
 - 2026-07-26: Timetable.lol is the only currently exposed timetable provider. The former direct Tomorrowland presets remain out of the interface because their data is available through the Timetable.lol catalogue; additional providers require an explicit product decision.

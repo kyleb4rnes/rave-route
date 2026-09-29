@@ -34,4 +34,4 @@ Use semantic structure, visible focus, sufficient contrast, accessible labels, r
 
 ## Scope discipline
 
-Visual polish should support the current stage. Do not build a complex design system or future screens before the MVP needs them.
+Visual polish should support the current stage. Do not build a complex design system or future screens before the product needs them.

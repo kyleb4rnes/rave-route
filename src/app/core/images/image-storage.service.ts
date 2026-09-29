@@ -27,8 +27,10 @@ export class ImageStorageService {
 
         return `${imageReferencePrefix}${path}`;
       } catch {
-        // Image caching must never prevent a catalogue festival from being added.
-        return imageUrl;
+        // Image caching must never prevent a festival from being added. If the
+        // device is offline, keep the festival image-free instead of retaining
+        // a remote URL that cannot be rendered without a connection.
+        return '';
       }
     }
 
