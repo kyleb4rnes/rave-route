@@ -1,0 +1,129 @@
+ion-toolbar {
+  --background: var(--rr-primary);
+  --border-width: 0;
+  --color: var(--rr-primary-contrast);
+}
+
+ion-toolbar ion-button {
+  --color: var(--rr-primary-contrast);
+}
+
+ion-content {
+  --background: var(--rr-app-background, var(--rr-background));
+}
+
+.help-page {
+  box-sizing: border-box;
+  margin: 0 auto;
+  max-width: 42rem;
+  min-height: 100%;
+  padding: 1.5rem max(var(--rr-spacing-page), env(safe-area-inset-left))
+    calc(2rem + env(safe-area-inset-bottom)) max(var(--rr-spacing-page), env(safe-area-inset-right));
+}
+
+.help-page__hero {
+  padding: 0.5rem 0 1.25rem;
+}
+
+.help-page__eyebrow {
+  color: var(--rr-primary-dark);
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  margin: 0 0 0.5rem;
+}
+
+.help-page h1 {
+  color: var(--rr-text);
+  font-size: clamp(2rem, 8vw, 2.75rem);
+  line-height: 1.05;
+  margin: 0;
+}
+
+.help-page__hero > p:last-child {
+  color: var(--rr-text-muted);
+  line-height: 1.5;
+  margin: 0.75rem 0 0;
+}
+
+.help-page__card {
+  background: var(--rr-surface);
+  border: 1px solid var(--rr-border);
+  border-radius: var(--rr-radius-card);
+  box-shadow: var(--rr-shadow-card);
+  margin-top: 1rem;
+  padding: 1.25rem;
+}
+
+.help-page h2 {
+  color: var(--rr-text);
+  font-size: 1.2rem;
+  margin: 0;
+}
+
+.help-steps,
+.help-tips {
+  list-style: none;
+  margin: 1rem 0 0;
+  padding: 0;
+}
+
+.help-steps {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.help-steps li {
+  align-items: start;
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: 2rem 1fr;
+}
+
+.help-steps__number {
+  align-items: center;
+  background: var(--rr-primary-soft);
+  border-radius: 50%;
+  color: var(--rr-primary-dark);
+  display: flex;
+  font-weight: 800;
+  height: 2rem;
+  justify-content: center;
+  width: 2rem;
+}
+
+.help-page h3 {
+  color: var(--rr-text);
+  font-size: 1rem;
+  margin: 0;
+}
+
+.help-page p {
+  color: var(--rr-text-muted);
+  line-height: 1.5;
+}
+
+.help-steps p {
+  font-size: 0.9rem;
+  margin: 0.25rem 0 0;
+}
+
+.help-tips {
+  color: var(--rr-text-muted);
+  display: grid;
+  gap: 0.75rem;
+  line-height: 1.45;
+  padding-left: 1.2rem;
+}
+
+.help-tips li {
+  list-style: disc;
+}
+
+.help-page__actions {
+  margin-top: 1.25rem;
+}
+
+.help-page__actions ion-button {
+  margin: 0.5rem 0 0;
+}

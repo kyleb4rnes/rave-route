@@ -2,6 +2,11 @@ import { Routes } from '@angular/router';
 
 export const routes: Routes = [
   {
+    path: 'help',
+    loadComponent: () =>
+      import('./features/help/help.page').then(({ HelpPage }) => HelpPage),
+  },
+  {
     path: 'settings',
     loadComponent: () =>
       import('./features/settings/app-settings.page').then(({ AppSettingsPage }) => AppSettingsPage),

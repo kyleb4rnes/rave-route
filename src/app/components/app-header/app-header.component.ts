@@ -10,12 +10,12 @@ import {
   IonToolbar,
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { chevronBack, homeOutline, settingsOutline } from 'ionicons/icons';
+import { chevronBack, helpCircleOutline, homeOutline, settingsOutline } from 'ionicons/icons';
 import { filter, map } from 'rxjs';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { RaveRouteLogoComponent } from '../rave-route-logo/rave-route-logo.component';
 
-addIcons({ chevronBack, homeOutline, settingsOutline });
+addIcons({ chevronBack, helpCircleOutline, homeOutline, settingsOutline });
 
 @Component({
   selector: 'app-header',
@@ -42,6 +42,7 @@ export class AppHeaderComponent {
   readonly settingsRequested = output<void>();
   readonly isHome = computed(() => this.currentUrl() === '/home');
   readonly isSettings = computed(() => this.currentUrl() === '/settings');
+  readonly isHelp = computed(() => this.currentUrl() === '/help');
   readonly canGoBack = computed(() => {
     this.currentUrl();
 
@@ -66,5 +67,15 @@ export class AppHeaderComponent {
     }
 
     void this.router.navigate(['/settings']);
+  }
+
+  openHelp(): void {
+    if (this.isHelp()) {
+      this.goBack();
+
+      return;
+    }
+
+    void this.router.navigate(['/help']);
   }
 }
