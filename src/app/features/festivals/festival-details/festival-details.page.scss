@@ -9,12 +9,20 @@ ion-content {
 }
 
 .festival-details {
+  box-sizing: border-box;
   display: grid;
   gap: 1rem;
+  margin: 0 auto;
+  max-width: 42rem;
+  min-width: 0;
   padding: var(--rr-spacing-page)
     max(var(--rr-spacing-page), env(safe-area-inset-right))
     calc(var(--rr-spacing-page) + env(safe-area-inset-bottom))
     max(var(--rr-spacing-page), env(safe-area-inset-left));
+}
+
+.festival-details > * {
+  min-width: 0;
 }
 
 .festival-details__image {

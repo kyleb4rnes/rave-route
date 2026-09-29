@@ -6,10 +6,27 @@
 }
 
 .active-festival-card__heading,
-.active-festival-card > h2,
+.active-festival-card h2,
 .active-festival-card__location {
   margin-left: var(--rr-spacing-page);
   margin-right: var(--rr-spacing-page);
+}
+
+.active-festival-card__details {
+  background: transparent;
+  border: 0;
+  color: inherit;
+  cursor: pointer;
+  display: block;
+  font: inherit;
+  padding: 0;
+  text-align: left;
+  width: 100%;
+}
+
+.active-festival-card__details:focus-visible {
+  outline: 2px solid var(--rr-primary-contrast);
+  outline-offset: -2px;
 }
 
 .active-festival-card__heading {

@@ -85,30 +85,31 @@ export class FestivalStore {
       return existingFestival;
     }
 
-    const timestamp = new Date().toISOString();
-    const festival: Festival = {
-      id: crypto.randomUUID(),
-      title: preset.label,
-      startDate: preset.startDate,
-      endDate: preset.endDate,
-      location: preset.location?.displayName ?? 'Location to be announced',
-      ...(preset.location ? { locationMetadata: preset.location } : {}),
-      ...(preset.imageUrl ? { imageUrl: preset.imageUrl } : {}),
-      ...(preset.ticketLinks ? { ticketLinks: preset.ticketLinks } : {}),
-      transportArranged: false,
-      accommodationArranged: false,
-      lineupSets: importedSets.map((set) => toFestivalSet(set)),
-      isCustom: false,
-      catalogueSource: {
-        provider: 'timetable-lol',
-        eventSlug: preset.eventSlug,
-        sourceUrl: preset.sourceUrl,
-      },
-      createdAt: timestamp,
-      updatedAt: timestamp,
-    };
-
     try {
+      const timestamp = new Date().toISOString();
+      const imageUrl = await this.imageStorage.storeImage(preset.imageUrl ?? '');
+      const festival: Festival = {
+        id: crypto.randomUUID(),
+        title: preset.label,
+        startDate: preset.startDate,
+        endDate: preset.endDate,
+        location: preset.location?.displayName ?? 'Location to be announced',
+        ...(preset.location ? { locationMetadata: preset.location } : {}),
+        ...(imageUrl ? { imageUrl } : {}),
+        ...(preset.ticketLinks ? { ticketLinks: preset.ticketLinks } : {}),
+        transportArranged: false,
+        accommodationArranged: false,
+        lineupSets: importedSets.map((set) => toFestivalSet(set)),
+        isCustom: false,
+        catalogueSource: {
+          provider: 'timetable-lol',
+          eventSlug: preset.eventSlug,
+          sourceUrl: preset.sourceUrl,
+        },
+        createdAt: timestamp,
+        updatedAt: timestamp,
+      };
+
       await this.repository.create(festival);
       this.festivalsSignal.set(sortFestivalsByStartDate([...this.allFestivals(), festival]));
 

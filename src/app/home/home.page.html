@@ -9,6 +9,7 @@
         [currentSetCount]="activeFestivalSchedule()?.currentSets?.length ?? 0"
         [nextSet]="activeFestivalSchedule()?.nextSets?.[0]"
         [nextSetCount]="activeFestivalSchedule()?.nextSets?.length ?? 0"
+        (viewDetails)="viewFestival(festival.id)"
         (viewLineup)="viewLineup(festival.id)"
       ></app-active-festival-card>
     }

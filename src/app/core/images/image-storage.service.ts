@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Capacitor } from '@capacitor/core';
 import { Directory, Filesystem } from '@capacitor/filesystem';
 
 const imageReferencePrefix = 'rave-route-image://';
@@ -9,7 +10,24 @@ export class ImageStorageService {
   private readonly resolvedUrls = new Map<string, string>();
 
   async storeImage(imageUrl: string): Promise<string> {
-    if (!isDataImage(imageUrl) || isStoredImageReference(imageUrl)) {
+    if (isStoredImageReference(imageUrl)) {
+      return imageUrl;
+    }
+
+    if (isRemoteImage(imageUrl) && Capacitor.isNativePlatform()) {
+      const path = `${imageDirectory}/${crypto.randomUUID()}.${getFileExtensionFromUrl(imageUrl)}`;
+
+      await this.ensureImageDirectory();
+      await Filesystem.downloadFile({
+        url: imageUrl,
+        path,
+        directory: Directory.Data,
+      });
+
+      return `${imageReferencePrefix}${path}`;
+    }
+
+    if (!isDataImage(imageUrl)) {
       return imageUrl;
     }
 
@@ -69,6 +87,18 @@ export class ImageStorageService {
       // A failed cleanup must never prevent the user from saving their change.
     }
   }
+
+  private async ensureImageDirectory(): Promise<void> {
+    try {
+      await Filesystem.mkdir({
+        path: imageDirectory,
+        directory: Directory.Data,
+        recursive: true,
+      });
+    } catch {
+      // The directory may already exist.
+    }
+  }
 }
 
 export function isStoredImageReference(value: string | undefined): value is string {
@@ -77,6 +107,10 @@ export function isStoredImageReference(value: string | undefined): value is stri
 
 function isDataImage(value: string): boolean {
   return /^data:image\/(?:jpeg|jpg|png|gif|webp);base64,/i.test(value);
+}
+
+function isRemoteImage(value: string): boolean {
+  return /^https?:\/\//i.test(value);
 }
 
 function parseDataImage(value: string): { mimeType: string; base64Data: string } {
@@ -100,6 +134,20 @@ function getFileExtension(mimeType: string): string {
     default:
       return 'jpg';
   }
+}
+
+function getFileExtensionFromUrl(imageUrl: string): string {
+  try {
+    const extension = new URL(imageUrl).pathname.split('.').pop()?.toLowerCase();
+
+    if (extension && ['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(extension)) {
+      return extension === 'jpeg' ? 'jpg' : extension;
+    }
+  } catch {
+    // Fall back to JPEG when a provider uses an extensionless image URL.
+  }
+
+  return 'jpg';
 }
 
 function getMimeType(path: string): string {

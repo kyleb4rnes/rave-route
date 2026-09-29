@@ -3,44 +3,46 @@
 <ion-content>
   <main class="festival-lineup">
     @if (festival(); as selectedFestival) {
-      <header class="festival-lineup__intro">
-        <p>SET TIMES</p>
-        <h1>{{ selectedFestival.title }}</h1>
-      </header>
+      <div class="festival-lineup__sticky-header">
+        <header class="festival-lineup__intro">
+          <p>SET TIMES</p>
+          <h1>{{ selectedFestival.title }}</h1>
+        </header>
 
-      <ion-segment class="lineup-day-picker" [scrollable]="true" [value]="selectedDay()" (ionChange)="selectDay($event.detail.value)">
-        @for (day of festivalDays(); track day) {
-          <ion-segment-button [attr.aria-label]="formatDay(day)" [value]="day">
-            <ion-label>{{ formatCompactDay(day) }}</ion-label>
-          </ion-segment-button>
-        }
-      </ion-segment>
-
-      <section class="lineup-view-switcher" aria-label="Line-up view">
-        <span>View</span>
-        <ion-segment class="lineup-view-switcher__control" [value]="viewMode()" (ionChange)="selectViewMode($event.detail.value)">
-          <ion-segment-button aria-label="View by stage" value="stage">
-            <ion-icon aria-hidden="true" name="layers-outline"></ion-icon>
-          </ion-segment-button>
-          <ion-segment-button aria-label="View by time" value="time">
-            <ion-icon aria-hidden="true" name="time-outline"></ion-icon>
-          </ion-segment-button>
+        <ion-segment class="lineup-day-picker" [scrollable]="true" [value]="selectedDay()" (ionChange)="selectDay($event.detail.value)">
+          @for (day of festivalDays(); track day) {
+            <ion-segment-button [attr.aria-label]="formatDay(day)" [value]="day">
+              <ion-label>{{ formatCompactDay(day) }}</ion-label>
+            </ion-segment-button>
+          }
         </ion-segment>
-        <ion-button
-          [attr.aria-label]="isMustSeeFilterActive() ? 'Show all sets' : 'Show must-see sets only'"
-          [class.lineup-must-see-filter--active]="isMustSeeFilterActive()"
-          class="lineup-must-see-filter"
-          fill="clear"
-          type="button"
-          (click)="toggleMustSeeFilter()"
-        >
-          <ion-icon aria-hidden="true" [name]="isMustSeeFilterActive() ? 'heart' : 'heart-outline'"></ion-icon>
-        </ion-button>
-      </section>
+
+        <h2 class="festival-lineup__day-title" id="schedule-title">{{ selectedDayLabel() }}</h2>
+
+        <section class="lineup-view-switcher" aria-label="Line-up view">
+          <span>View</span>
+          <ion-segment class="lineup-view-switcher__control" [value]="viewMode()" (ionChange)="selectViewMode($event.detail.value)">
+            <ion-segment-button aria-label="View by stage" value="stage">
+              <ion-icon aria-hidden="true" name="layers-outline"></ion-icon>
+            </ion-segment-button>
+            <ion-segment-button aria-label="View by time" value="time">
+              <ion-icon aria-hidden="true" name="time-outline"></ion-icon>
+            </ion-segment-button>
+          </ion-segment>
+          <ion-button
+            [attr.aria-label]="isMustSeeFilterActive() ? 'Show all sets' : 'Show must-see sets only'"
+            [class.lineup-must-see-filter--active]="isMustSeeFilterActive()"
+            class="lineup-must-see-filter"
+            fill="clear"
+            type="button"
+            (click)="toggleMustSeeFilter()"
+          >
+            <ion-icon aria-hidden="true" [name]="isMustSeeFilterActive() ? 'heart' : 'heart-outline'"></ion-icon>
+          </ion-button>
+        </section>
+      </div>
 
       <section class="festival-lineup__schedule" aria-labelledby="schedule-title">
-        <h2 id="schedule-title">{{ selectedDayLabel() }}</h2>
-
         @if (timeSchedules().length === 0) {
           <p class="festival-lineup__empty">
             {{ isMustSeeFilterActive() ? 'No must-see sets for this day yet.' : 'No published set times for this day.' }}

@@ -21,6 +21,7 @@ export class ActiveFestivalCardComponent {
   readonly currentSetCount = input(0);
   readonly nextSet = input<FestivalSet | undefined>();
   readonly nextSetCount = input(0);
+  readonly viewDetails = output<void>();
   readonly viewLineup = output<void>();
 
   formatSetTime(set: FestivalSet): string {
