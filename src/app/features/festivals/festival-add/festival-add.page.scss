@@ -40,83 +40,25 @@ ion-content {
   margin-top: 0.5rem;
 }
 
-.festival-add__search,
-.festival-add__selection,
-.festival-add__custom {
+.festival-add__selection {
   background: var(--rr-surface);
   border: 1px solid var(--rr-border);
   border-radius: var(--rr-radius-card);
   padding: 0.875rem;
 }
 
-.festival-add__search h2,
-.festival-add__custom h2 {
-  font-size: 1rem;
-}
-
-.festival-add__search ion-searchbar {
-  --background: var(--rr-background);
-  --border-radius: var(--rr-radius-control);
-  --box-shadow: none;
-  --color: var(--rr-text);
-  padding: 0.5rem 0 0;
-}
-
-.festival-add__search ion-note,
 .festival-add > ion-note {
   display: block;
 }
-
-.festival-add__loading {
-  align-items: center;
-  color: var(--rr-text-muted);
-  display: flex;
-  gap: 0.75rem;
-  padding: 0.75rem 0 0;
-}
-
-.festival-add__suggestions {
-  border: 1px solid var(--rr-border);
-  border-radius: var(--rr-radius-control);
-  overflow: hidden;
-}
-
-.festival-add__suggestions button {
-  align-items: center;
-  background: var(--rr-surface);
-  border: 0;
-  color: var(--rr-text);
-  display: flex;
-  font: inherit;
-  gap: 0.75rem;
-  justify-content: space-between;
-  padding: 0.875rem;
-  text-align: left;
-  width: 100%;
-}
-
-.festival-add__suggestions button + button {
-  border-top: 1px solid var(--rr-border);
-}
-
-.festival-add__suggestions span,
-.festival-add__suggestions small {
-  display: block;
-}
-
-.festival-add__suggestions small,
 .festival-add__selection > span,
 .festival-add__selection small {
   color: var(--rr-text-muted);
   margin-top: 0.25rem;
 }
 
-.festival-add__browse {
-  --border-color: var(--rr-primary);
-  --color: var(--rr-primary-dark);
-  font-weight: 800;
-  margin: 0;
-  min-height: 3rem;
+.festival-add__selection .festival-add__ticket-estimate {
+  color: var(--rr-text);
+  font-weight: 700;
 }
 
 .festival-add__selection {
@@ -138,14 +80,4 @@ ion-content {
 
 .festival-add__selection ion-button {
   margin: 0.75rem 0 0;
-}
-
-.festival-add__custom {
-  text-align: center;
-}
-
-.festival-add__custom ion-button {
-  --color: var(--rr-primary-dark);
-  font-weight: 800;
-  margin-bottom: -0.5rem;
 }

@@ -1,4 +1,4 @@
-import { Component, DestroyRef, computed, inject, signal } from '@angular/core';
+import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
@@ -6,20 +6,16 @@ import {
   IonContent,
   IonIcon,
   IonNote,
-  IonSearchbar,
   IonSpinner,
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { calendarOutline, chevronForward, searchOutline } from 'ionicons/icons';
+import { calendarOutline } from 'ionicons/icons';
 
 import { AppHeaderComponent } from '../../../components/app-header/app-header.component';
 import { FestivalStore } from '../../../core/festivals/festival.store';
-import {
-  TimetableLolLineupService,
-  TimetableLolPreset,
-} from '../../../core/festivals/imports/timetable-lol-lineup.service';
+import { TimetableLolLineupService, TimetableLolPreset } from '../../../core/festivals/imports/timetable-lol-lineup.service';
 
-addIcons({ calendarOutline, chevronForward, searchOutline });
+addIcons({ calendarOutline });
 
 @Component({
   selector: 'app-festival-add',
@@ -32,7 +28,6 @@ addIcons({ calendarOutline, chevronForward, searchOutline });
     IonContent,
     IonIcon,
     IonNote,
-    IonSearchbar,
     IonSpinner,
   ],
 })
@@ -43,42 +38,18 @@ export class FestivalAddPage {
   private readonly festivalStore = inject(FestivalStore);
   private readonly timetableService = inject(TimetableLolLineupService);
 
-  readonly presets = signal<readonly TimetableLolPreset[]>([]);
-  readonly searchTerm = signal('');
   readonly selectedPreset = signal<TimetableLolPreset | null>(null);
-  readonly isLoading = signal(true);
   readonly isAdding = signal(false);
   readonly error = signal<string | null>(null);
   private selectedEventSlug: string | null = null;
-  readonly suggestions = computed(() => {
-    const query = this.searchTerm().trim().toLocaleLowerCase();
-
-    if (query.length < 2) {
-      return [];
-    }
-
-    return this.presets()
-      .filter((preset) => preset.label.toLocaleLowerCase().includes(query))
-      .slice(0, 6);
-  });
-
   constructor() {
     this.route.queryParamMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params) => {
       this.selectedEventSlug = params.get('event');
-      this.selectRoutePreset();
+      if (!this.selectedEventSlug) {
+        void this.router.navigate(['/festivals/browse'], { replaceUrl: true });
+      }
     });
     void this.loadCatalogue();
-  }
-
-  updateSearchTerm(value: string | null | undefined): void {
-    this.searchTerm.set(value ?? '');
-    this.selectedPreset.set(null);
-  }
-
-  selectPreset(preset: TimetableLolPreset): void {
-    this.searchTerm.set(preset.label);
-    this.selectedPreset.set(preset);
-    this.error.set(null);
   }
 
   async addFestival(): Promise<void> {
@@ -116,14 +87,6 @@ export class FestivalAddPage {
     }
   }
 
-  browseFestivals(): void {
-    void this.router.navigate(['/festivals/browse']);
-  }
-
-  createCustomFestival(): void {
-    void this.router.navigate(['/festivals/custom']);
-  }
-
   isAlreadyAdded(preset: TimetableLolPreset): boolean {
     return Boolean(this.festivalStore.getFestivalByCatalogueSlug(preset.eventSlug));
   }
@@ -142,26 +105,16 @@ export class FestivalAddPage {
   }
 
   private async loadCatalogue(): Promise<void> {
-    this.isLoading.set(true);
     this.error.set(null);
 
     try {
       const presets = await this.timetableService.loadPresets();
-      this.presets.set(presets);
-
-      this.selectRoutePreset();
+      const selectedPreset = presets.find((preset) => preset.eventSlug === this.selectedEventSlug);
+      if (selectedPreset) {
+        this.selectedPreset.set(selectedPreset);
+      }
     } catch {
       this.error.set('We could not load the festival catalogue. Please try again.');
-    } finally {
-      this.isLoading.set(false);
-    }
-  }
-
-  private selectRoutePreset(): void {
-    const selectedPreset = this.presets().find((preset) => preset.eventSlug === this.selectedEventSlug);
-
-    if (selectedPreset) {
-      this.selectPreset(selectedPreset);
     }
   }
 }

@@ -201,3 +201,32 @@ ion-content {
   color: var(--rr-primary-dark);
   font-weight: 800;
 }
+
+.festival-browse__custom {
+  background: var(--rr-surface);
+  border: 1px solid var(--rr-border);
+  border-radius: var(--rr-radius-card);
+  padding: 1rem;
+  text-align: center;
+}
+
+.festival-browse__custom h2,
+.festival-browse__custom p {
+  color: var(--rr-text);
+  margin: 0;
+}
+
+.festival-browse__custom h2 {
+  font-size: 1rem;
+}
+
+.festival-browse__custom p {
+  color: var(--rr-text-muted);
+  margin-top: 0.4rem;
+}
+
+.festival-browse__custom ion-button {
+  --color: var(--rr-primary-dark);
+  font-weight: 800;
+  margin-bottom: -0.5rem;
+}

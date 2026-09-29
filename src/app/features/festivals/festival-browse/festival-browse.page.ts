@@ -127,6 +127,10 @@ export class FestivalBrowsePage {
     });
   }
 
+  createCustomFestival(): void {
+    void this.router.navigate(['/festivals/custom']);
+  }
+
   formatDateRange(preset: TimetableLolPreset): string {
     const formatter = new Intl.DateTimeFormat('en-GB', {
       day: 'numeric',
