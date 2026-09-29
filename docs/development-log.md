@@ -4,6 +4,7 @@
 
 - Reframed current documentation around ongoing product development rather than an MVP milestone.
 - Added prioritised future work for first-run welcome/setup, Light and Dark appearance refinement, and music playback research covering royalty-free audio or a Spotify connection.
+- Expanded travel-planning future work to cover accommodation and transport provider links, optional flight suggestions, and theme-aware app icon variants.
 - Kept the product intentionally local-first while those future decisions remain open.
 
 ## 2026-09-29 — Documentation refresh

@@ -113,12 +113,13 @@ Do not implement these unless they are explicitly brought into scope later:
 2. **Catalogue refresh operations** - document and automate the scheduled Timetable.lol refresh, review skipped or malformed events, validate location and ticket metadata, and define how a refreshed bundle is promoted safely.
 3. **Public-release hardening** - work through the release checklist: dependency/security findings, Android signing and store packaging, iOS readiness, image-storage resilience, privacy/support materials, and physical-device coverage.
 4. **First-run setup and onboarding** - design an initial welcome flow for new installs, including a short introduction and useful preferences without making setup feel mandatory or heavy.
-5. **Appearance refinement** - review whether accent colours and surfaces need clearer, mode-specific treatment in Light and Dark appearance settings.
+5. **Appearance refinement** - review whether accent colours and surfaces need clearer, mode-specific treatment in Light and Dark appearance settings, and generate an app icon variant that follows the selected colour theme where the platform permits it.
 6. **Music playback** - investigate a royalty-free in-app option or a safe Spotify connection, including licensing, authentication, offline behaviour, and platform rules before choosing an implementation.
-7. **Richer travel planning** - decide whether transport and accommodation should gain dates, addresses, booking references, and reminders beyond the current arranged/not-arranged toggles.
-8. **Maps and navigation** - decide whether reviewed venue/address data should be geocoded and linked to navigation.
-9. **Line-up extensions** - consider bulk set-time import and additional import providers once the core catalogue refresh is dependable.
-10. **Festival-style filters** - add styles such as Techno, House, and Drum & Bass only after the higher-priority catalogue and release work.
+7. **Travel planning refinement** - turn the current transport/accommodation toggles into useful planning actions. Explore accommodation links to Booking.com or a similar provider, transport links to Uber and relevant local services, and flight-search links to suitable providers. Keep the first version link-based and provider-neutral rather than embedding bookings or payments.
+8. **Optional flight suggestions** - add a clear “Suggest flights” action that asks for the traveller’s departure location only when they choose it, combines that with the festival location and dates, and opens a provider search with those details. Treat suggestions as search shortcuts, not personalised booking advice, and handle missing venue/airport data gracefully.
+9. **Maps and navigation** - decide whether reviewed venue/address data should be geocoded and linked to navigation, and reuse that location data for travel-search shortcuts.
+10. **Line-up extensions** - consider bulk set-time import and additional import providers once the core catalogue refresh is dependable.
+11. **Festival-style filters** - add styles such as Techno, House, and Drum & Bass only after the higher-priority catalogue and release work.
 
 - Accounts and cloud synchronisation: consider only after the device-only v1 release. Define the backend, authentication, data ownership, recovery, migration, and conflict-handling approach before implementation.
 - Payments
