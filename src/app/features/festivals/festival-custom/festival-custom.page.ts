@@ -27,6 +27,6 @@ export class FestivalCustomPage {
   }
 
   cancelCreating(): void {
-    void this.router.navigate(['/festivals/add']);
+    void this.router.navigate(['/festivals/browse']);
   }
 }

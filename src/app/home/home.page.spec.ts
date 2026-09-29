@@ -33,12 +33,12 @@ describe('HomePage', () => {
     expect(component).toBeTruthy();
   });
 
-  it('opens the dedicated add festival page', () => {
+  it('opens the festival catalogue when adding a festival', () => {
     const router = TestBed.inject(Router);
     spyOn(router, 'navigate').and.resolveTo(true);
 
     component.openAddFestivalForm();
 
-    expect(router.navigate).toHaveBeenCalledWith(['/festivals/add']);
+    expect(router.navigate).toHaveBeenCalledWith(['/festivals/browse']);
   });
 });

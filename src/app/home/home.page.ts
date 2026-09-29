@@ -67,7 +67,7 @@ export class HomePage {
   }
 
   openAddFestivalForm(): void {
-    void this.router.navigate(['/festivals/add']);
+    void this.router.navigate(['/festivals/browse']);
   }
 
   async createLiveDemoFestival(): Promise<void> {
