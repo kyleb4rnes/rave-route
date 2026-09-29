@@ -17,6 +17,7 @@ import { FestivalImageComponent } from '../../../components/festival-image/festi
 import { calculateDaysRemaining } from '../../../core/festivals/festival-date.utils';
 import { Festival, isCustomFestival } from '../../../core/festivals/models/festival';
 import { FestivalStore } from '../../../core/festivals/festival.store';
+import { hasFestivalTicketLinks } from '../../../core/festivals/festival-ticket-links.utils';
 
 addIcons({ cameraOutline });
 
@@ -76,6 +77,10 @@ export class FestivalDetailsPage {
 
   isCustomFestival(festival: Festival): boolean {
     return isCustomFestival(festival);
+  }
+
+  hasTicketLinks(festival: Festival): boolean {
+    return hasFestivalTicketLinks(festival);
   }
 
   editFestival(): void {

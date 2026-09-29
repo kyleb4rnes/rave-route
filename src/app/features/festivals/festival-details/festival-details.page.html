@@ -66,6 +66,28 @@
         <ion-note class="festival-details__arrangement-error" color="danger" role="alert">{{ arrangementUpdateError() }}</ion-note>
       }
 
+      @if (hasTicketLinks(selectedFestival)) {
+        <section class="festival-details__tickets" aria-labelledby="festival-tickets-title">
+          <div>
+            <p class="festival-details__eyebrow">PLAN AHEAD</p>
+            <h2 id="festival-tickets-title">Tickets</h2>
+            @if (selectedFestival.ticketLinks?.price; as ticketPrice) {
+              <p class="festival-details__ticket-price">
+                From {{ ticketPrice }}{{ selectedFestival.ticketLinks?.currency ? ' ' + selectedFestival.ticketLinks?.currency : '' }}
+              </p>
+            }
+          </div>
+          <div class="festival-details__ticket-actions">
+            @if (selectedFestival.ticketLinks?.ticketUrl; as ticketUrl) {
+              <a class="festival-details__ticket-link" [href]="ticketUrl" target="_blank" rel="noopener noreferrer">Get tickets</a>
+            }
+            @if (selectedFestival.ticketLinks?.resaleTicketUrl; as resaleTicketUrl) {
+              <a class="festival-details__ticket-link festival-details__ticket-link--secondary" [href]="resaleTicketUrl" target="_blank" rel="noopener noreferrer">View resale tickets</a>
+            }
+          </div>
+        </section>
+      }
+
       @if (!selectedFestival.imageUrl) {
         <button class="festival-details__photo-option" [disabled]="isUpdatingImage()" type="button" (click)="selectFestivalPhoto()">
           <ion-icon aria-hidden="true" name="camera-outline"></ion-icon>

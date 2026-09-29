@@ -6,6 +6,11 @@
 - Added Help navigation to the shared app header plus links to add and browse festivals.
 - Added focused Help-page coverage; full verification was unavailable in the isolated worktree because dependencies were not installed and the existing Angular/Zone peer-version mismatch blocked installation.
 
+## 2026-09-29 — Festival ticket links
+
+- Added ticket and resale actions to Festival Details when catalogue metadata provides external ticket destinations.
+- Kept links optional for custom festivals and festivals without ticket information, with safe external-link behavior and catalogue price context when available.
+
 ## 2026-07-26 â€” Angular dependency safety
 
 - Configured Dependabot to group Angular core, Angular devkit, and Angular ESLint updates into one PR, preventing isolated framework-tooling upgrades.

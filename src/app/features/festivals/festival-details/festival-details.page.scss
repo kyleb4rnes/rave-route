@@ -119,6 +119,66 @@ ion-content {
   gap: 0.75rem;
 }
 
+.festival-details__tickets {
+  align-items: end;
+  background: var(--rr-surface);
+  border: 1px solid var(--rr-border);
+  border-radius: var(--rr-radius-control);
+  display: grid;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.festival-details__tickets h2 {
+  color: var(--rr-text);
+  font-size: 1.25rem;
+  margin: 0;
+}
+
+.festival-details__tickets .festival-details__eyebrow {
+  margin-bottom: 0.25rem;
+}
+
+.festival-details__ticket-price {
+  color: var(--rr-text-muted);
+  margin: 0.35rem 0 0;
+}
+
+.festival-details__ticket-actions {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.festival-details__ticket-link {
+  align-items: center;
+  background: var(--rr-primary);
+  border-radius: var(--rr-radius-control);
+  color: var(--rr-primary-contrast);
+  display: flex;
+  font-weight: 800;
+  justify-content: center;
+  min-height: 2.75rem;
+  padding: 0.5rem 1rem;
+  text-align: center;
+  text-decoration: none;
+}
+
+.festival-details__ticket-link--secondary {
+  background: transparent;
+  border: 1px solid var(--rr-primary);
+  color: var(--rr-primary-dark);
+}
+
+@media (min-width: 32rem) {
+  .festival-details__tickets {
+    grid-template-columns: 1fr auto;
+  }
+
+  .festival-details__ticket-actions {
+    min-width: 11rem;
+  }
+}
+
 .festival-details__arrangement-field dd {
   margin: 0.25rem 0 0;
 }
