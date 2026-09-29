@@ -107,25 +107,27 @@ Stage checkboxes show roadmap progress, not permission to begin the next stage.
 
 Do not implement these unless they are explicitly brought into scope later:
 
+### Recommended next work, in priority order
+
+1. **Manual device and UX regression pass** - verify the latest Help/Settings overlay behaviour, catalogue-first Add Festival flow, festival ordering, sticky browse controls, packing removal, budget summaries, and external ticket links on a physical device or browser-sized viewport.
+2. **Catalogue refresh operations** - document and automate the scheduled Timetable.lol refresh, review skipped or malformed events, validate location and ticket metadata, and define how a refreshed bundle is promoted safely.
+3. **Public-release hardening** - work through the release checklist: dependency/security findings, Android signing and store packaging, iOS readiness, image-storage resilience, privacy/support materials, and physical-device coverage.
+4. **Richer travel planning** - decide whether transport and accommodation should gain dates, addresses, booking references, and reminders beyond the current arranged/not-arranged toggles.
+5. **Maps and navigation** - decide whether reviewed venue/address data should be geocoded and linked to navigation.
+6. **Line-up extensions** - consider bulk set-time import and additional import providers once the core catalogue refresh is dependable.
+7. **Festival-style filters** - add styles such as Techno, House, and Drum & Bass only after the higher-priority catalogue and release work.
+
 - Accounts and cloud synchronisation: consider only after the device-only v1 release. Define the backend, authentication, data ownership, recovery, migration, and conflict-handling approach before implementation.
 - Payments
 - AI features
 - Social features
 - Music playback
-- Brand refinement: revisit the RR-road logo before public release, starting with a lighter or white letter treatment so it remains clear against the red launch surface and future brand backgrounds.
-- Help and onboarding: show a Help button in the Home header in place of the Home button, only while already on Home. It should expand using the Settings-page transition into a "How it works" page that explains the expected end-to-end user flow.
-- Packing lists
-- Budgets
-- Maps: decide whether to add geocoding for coordinates and navigation, since the Timetable.lol API provides venue/address metadata but not coordinates.
-- Transport and accommodation planning: define and prioritise richer details beyond the current arranged/not-arranged toggles, such as bookings, timings, addresses, references, and reminders.
 
 ### Line-up
 
 - Bulk paste/import of set times.
 - Additional automatic import providers beyond the current Timetable.lol community catalogue.
 - Coming-soon or untimed catalogue events: decide whether users should be able to add these before their set times are published. They are excluded from the current import flow.
-- Ticket and resale links: decide how and where to expose the Timetable.lol API metadata that is already stored for imported festivals.
-- Festival-style browsing filters: add catalogue metadata and filters for styles such as Techno, House, and Drum & Bass. This is non-priority work.
 - Timetable.lol refresh strategy: establish a refresh cadence and review process for the API-backed bundled catalogue, including skipped-event review, release timing, and failure handling.
 
 ## 11. Work to Complete Before First Public Release

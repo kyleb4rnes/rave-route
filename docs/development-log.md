@@ -1,5 +1,13 @@
 # Development log
 
+## 2026-09-29 — Navigation, Help, and catalogue polish
+
+- Made the festival catalogue the direct destination from Home's Add Festival action, removing the legacy intermediate-page flash.
+- Treated Help and Settings as overlay-style routes: closing either returns to Home, and their back buttons are hidden.
+- Refined Help into a collapsed accordion with budget, festival details, packing, data, and custom-festival guidance, matching Settings transitions and rounded surfaces.
+- Updated the roadmap to remove completed MVP polish items and prioritise device regression checks, catalogue refresh operations, and public-release hardening.
+- Verified lint, 50 tests, production build, and diff checks before pushing `main` to GitHub.
+
 ## 2026-09-29 — Help and onboarding
 
 - Added a local Help route with concise onboarding steps for adding festivals, building a line-up, and using Home.
