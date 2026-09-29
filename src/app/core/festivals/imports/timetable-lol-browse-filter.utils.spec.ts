@@ -6,16 +6,20 @@ import {
   formatCountry,
   getCities,
   getCountries,
+  getCurrentAndFuturePresets,
+  getPastPresets,
 } from './timetable-lol-browse-filter.utils';
 
 const presets: TimetableLolPreset[] = [
+  createPreset('older-past-nl', 'Older Past NL', '2026-06-12', '2026-06-14', 'NL', 'Amsterdam'),
+  createPreset('past-uk', 'Past UK', '2026-08-20', '2026-08-22', 'UK', 'London'),
   createPreset('one-day-nl', 'One Day NL', '2026-10-10', '2026-10-10', 'NL', 'Amsterdam'),
   createPreset('weekend-nl', 'Weekend NL', '2027-01-15', '2027-01-17', 'NL', 'Rotterdam'),
   createPreset('weekend-uk', 'Weekend UK', '2027-08-20', '2027-08-22', 'UK', 'London'),
 ];
 
 describe('Timetable.lol browse filters', () => {
-  it('returns every preset when no filters or search are applied', () => {
+  it('returns every matching preset before visibility is split by date', () => {
     expect(filterTimetableLolPresets(presets, '', defaultTimetableLolBrowseFilters, new Date(2026, 8, 27))).toEqual(
       presets,
     );
@@ -41,6 +45,20 @@ describe('Timetable.lol browse filters', () => {
     );
 
     expect(result.map((preset) => preset.eventSlug)).toEqual(['one-day-nl', 'weekend-nl']);
+  });
+
+  it('separates current and future festivals from past festivals', () => {
+    const today = new Date(2026, 8, 27);
+
+    expect(getCurrentAndFuturePresets(presets, today).map((preset) => preset.eventSlug)).toEqual([
+      'one-day-nl',
+      'weekend-nl',
+      'weekend-uk',
+    ]);
+    expect(getPastPresets(presets, today).map((preset) => preset.eventSlug)).toEqual([
+      'older-past-nl',
+      'past-uk',
+    ]);
   });
 
   it('derives sorted location options and counts active selections', () => {

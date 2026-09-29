@@ -26,8 +26,8 @@
                 "output": "assets"
               },
               {
-                "glob": "rave-route-logo.svg",
-                "input": "resources",
+                "glob": "rave-route-logo-*.svg",
+                "input": "resources/logos",
                 "output": "assets/brand"
               },
               {
@@ -111,8 +111,8 @@
                 "output": "assets"
               },
               {
-                "glob": "rave-route-logo.svg",
-                "input": "resources",
+                "glob": "rave-route-logo-*.svg",
+                "input": "resources/logos",
                 "output": "assets/brand"
               },
               {

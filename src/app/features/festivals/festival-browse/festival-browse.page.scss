@@ -33,6 +33,17 @@ ion-content {
   margin-top: 0.5rem;
 }
 
+.festival-browse__controls {
+  align-self: start;
+  background: var(--rr-background);
+  display: grid;
+  gap: 0.75rem;
+  padding: 0.25rem 0 0.5rem;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
 .festival-browse__search-row {
   align-items: center;
   display: grid;
@@ -115,6 +126,12 @@ ion-content {
   display: flex;
   justify-content: space-between;
   padding-top: 0.75rem;
+}
+
+.festival-browse__past-toggle {
+  --border-color: var(--rr-border);
+  --color: var(--rr-primary-dark);
+  margin: 0;
 }
 
 .festival-browse__list {

@@ -29,6 +29,8 @@ import {
   formatCountry,
   getCities,
   getCountries,
+  getCurrentAndFuturePresets,
+  getPastPresets,
   TimetableLolBrowseFilters,
 } from '../../../core/festivals/imports/timetable-lol-browse-filter.utils';
 
@@ -61,13 +63,21 @@ export class FestivalBrowsePage {
   readonly searchTerm = signal('');
   readonly filters = signal<TimetableLolBrowseFilters>(defaultTimetableLolBrowseFilters);
   readonly showFilters = signal(false);
+  readonly showPastFestivals = signal(false);
   readonly isLoading = signal(true);
   readonly error = signal<string | null>(null);
   readonly countries = computed(() => getCountries(this.presets()));
   readonly cities = computed(() => getCities(this.presets(), this.filters().country));
   readonly activeFilterCount = computed(() => countActiveBrowseFilters(this.filters()));
-  readonly filteredPresets = computed(() =>
+  readonly matchingPresets = computed(() =>
     filterTimetableLolPresets(this.presets(), this.searchTerm(), this.filters()),
+  );
+  readonly currentAndFuturePresets = computed(() => getCurrentAndFuturePresets(this.matchingPresets()));
+  readonly pastPresets = computed(() => getPastPresets(this.matchingPresets()));
+  readonly visiblePresets = computed(() =>
+    this.showPastFestivals()
+      ? [...this.pastPresets(), ...this.currentAndFuturePresets()]
+      : this.currentAndFuturePresets(),
   );
 
   constructor() {
@@ -88,6 +98,10 @@ export class FestivalBrowsePage {
 
   clearFilters(): void {
     this.filters.set(defaultTimetableLolBrowseFilters);
+  }
+
+  togglePastFestivals(): void {
+    this.showPastFestivals.update((showPastFestivals) => !showPastFestivals);
   }
 
   updateCountry(value: unknown): void {

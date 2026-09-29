@@ -52,6 +52,25 @@ export function getCountries(presets: readonly TimetableLolPreset[]): string[] {
   return uniqueSorted(presets.map((preset) => preset.location?.country));
 }
 
+export function getCurrentAndFuturePresets(
+  presets: readonly TimetableLolPreset[],
+  today = new Date(),
+): TimetableLolPreset[] {
+  const todayDate = toLocalIsoDate(today);
+  return presets.filter((preset) => preset.endDate >= todayDate);
+}
+
+export function getPastPresets(
+  presets: readonly TimetableLolPreset[],
+  today = new Date(),
+): TimetableLolPreset[] {
+  const todayDate = toLocalIsoDate(today);
+
+  return presets
+    .filter((preset) => preset.endDate < todayDate)
+    .sort((first, second) => first.startDate.localeCompare(second.startDate));
+}
+
 /** Keeps ISO country codes as filter values while presenting a friendly label in the UI. */
 export function formatCountry(country: string): string {
   if (!/^[a-z]{2}$/i.test(country) || typeof Intl.DisplayNames !== 'function') {

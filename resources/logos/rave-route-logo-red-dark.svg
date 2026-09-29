@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="760" viewBox="0 0 760 760" fill="none" role="img" aria-labelledby="logo-title logo-description">
+  <title id="logo-title">Rave Route — red / dark</title>
+  <desc id="logo-description">Two overlapping italic R letters with a curved road extending from the front letter. Transparent background.</desc>
+  <path id="rear-r" fill="#ffffff" d="M134 135H389C456 135 495 174 495 231C495 247 489 262 483 272H428L399 323C381 341 358 354 334 362L377 420L326 526L229 361L166 526H50L181 218H279L248 305H287C345 305 379 283 379 240C379 218 365 208 339 208H203Z"/>
+  <path id="front-r" fill="#ffffff" d="M432 278H567C619 278 650 301 650 342C650 390 612 420 543 430C595 498 636 569 720 600C634 589 578 577 547 559C519 542 509 497 488 460C479 445 470 438 461 435L419 536H328L432 333H504L481 390H514C549 390 569 379 569 350C569 336 560 329 544 329H403Z"/>
+  <path id="road" fill="#2a2d32" d="M463 429C513 427 536 447 557 474C610 542 650 578 710 596C635 586 581 574 551 555C526 539 516 502 496 469C483 447 474 439 461 435Z"/>
+  <path id="road-markings" fill="#ffffff" d="M503 446H513C521 455 528 465 535 476H526C518 465 511 455 503 446ZM541 499H552C563 515 574 529 586 540H573C561 527 550 513 541 499Z"/>
+</svg>

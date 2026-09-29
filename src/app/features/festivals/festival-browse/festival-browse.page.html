@@ -8,31 +8,32 @@
       <span>Browse festivals with published timetable data.</span>
     </header>
 
-    <div class="festival-browse__search-row">
-      <ion-searchbar
-        aria-label="Search festival catalogue"
-        debounce="150"
-        placeholder="Search festivals or a year"
-        (ionInput)="updateSearchTerm($event.detail.value)"
-      ></ion-searchbar>
-      <ion-button
-        class="festival-browse__filter-toggle"
-        fill="clear"
-        type="button"
-        aria-label="Show festival filters"
-        aria-controls="festival-filters"
-        [attr.aria-expanded]="showFilters()"
-        (click)="toggleFilters()"
-      >
-        <ion-icon aria-hidden="true" name="filter-outline"></ion-icon>
-        @if (activeFilterCount() > 0) {
-          <span class="festival-browse__filter-count" aria-label="Active filters">{{ activeFilterCount() }}</span>
-        }
-      </ion-button>
-    </div>
+    <div class="festival-browse__controls">
+      <div class="festival-browse__search-row">
+        <ion-searchbar
+          aria-label="Search festival catalogue"
+          debounce="150"
+          placeholder="Search festivals or a year"
+          (ionInput)="updateSearchTerm($event.detail.value)"
+        ></ion-searchbar>
+        <ion-button
+          class="festival-browse__filter-toggle"
+          fill="clear"
+          type="button"
+          aria-label="Show festival filters"
+          aria-controls="festival-filters"
+          [attr.aria-expanded]="showFilters()"
+          (click)="toggleFilters()"
+        >
+          <ion-icon aria-hidden="true" name="filter-outline"></ion-icon>
+          @if (activeFilterCount() > 0) {
+            <span class="festival-browse__filter-count" aria-label="Active filters">{{ activeFilterCount() }}</span>
+          }
+        </ion-button>
+      </div>
 
-    @if (showFilters()) {
-      <section class="festival-browse__filters" id="festival-filters" aria-label="Festival filters">
+      @if (showFilters()) {
+        <section class="festival-browse__filters" id="festival-filters" aria-label="Festival filters">
         <ion-item>
           <ion-label>Country</ion-label>
           <ion-select
@@ -94,14 +95,29 @@
           </ion-select>
         </ion-item>
 
-        <div class="festival-browse__filter-actions">
-          <ion-button fill="clear" type="button" [disabled]="activeFilterCount() === 0" (click)="clearFilters()">
-            Clear all
-          </ion-button>
-          <ion-button type="button" (click)="closeFilters()">Done</ion-button>
-        </div>
-      </section>
-    }
+          <div class="festival-browse__filter-actions">
+            <ion-button fill="clear" type="button" [disabled]="activeFilterCount() === 0" (click)="clearFilters()">
+              Clear all
+            </ion-button>
+            <ion-button type="button" (click)="closeFilters()">Done</ion-button>
+          </div>
+        </section>
+      }
+
+      @if (!isLoading() && !error() && pastPresets().length > 0) {
+        <ion-button
+          class="festival-browse__past-toggle"
+          expand="block"
+          fill="outline"
+          type="button"
+          [attr.aria-expanded]="showPastFestivals()"
+          aria-controls="festival-results"
+          (click)="togglePastFestivals()"
+        >
+          {{ showPastFestivals() ? 'Hide' : 'View' }} past festivals ({{ pastPresets().length }})
+        </ion-button>
+      }
+    </div>
 
     @if (isLoading()) {
       <div class="festival-browse__status" role="status">
@@ -111,8 +127,8 @@
     } @else if (error()) {
       <ion-note color="danger" role="alert">{{ error() }}</ion-note>
     } @else {
-      <section class="festival-browse__list" aria-label="Available festivals">
-        @for (preset of filteredPresets(); track preset.id) {
+      <section class="festival-browse__list" id="festival-results" aria-label="Available festivals">
+        @for (preset of visiblePresets(); track preset.id) {
           <ion-button
             class="festival-browse__festival"
             expand="block"
@@ -131,7 +147,7 @@
             <ion-icon aria-hidden="true" name="chevron-forward" slot="end"></ion-icon>
           </ion-button>
         } @empty {
-          <p class="festival-browse__empty">No festivals match your search and filters.</p>
+          <p class="festival-browse__empty">No current or upcoming festivals match your search and filters.</p>
         }
       </section>
     }
