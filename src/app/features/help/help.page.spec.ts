@@ -15,13 +15,16 @@ describe('HelpPage', () => {
     fixture.detectChanges();
   });
 
-  it('shows the onboarding steps and navigation actions', () => {
+  it('shows catalogue-first onboarding and festival data guidance', () => {
     const text = fixture.nativeElement.textContent as string;
 
     expect(text).toContain('Getting started');
-    expect(text).toContain('Add a festival');
-    expect(text).toContain('Build your route');
-    expect(text).toContain('Keep plans close');
-    expect(text).toContain('Browse festivals');
+    expect(text).toContain('Choose a festival');
+    expect(text).toContain('Plan your sets');
+    expect(text).toContain('Keep your route close');
+    expect(text).toContain('Festival data');
+    expect(text).toContain('Custom festivals');
+    expect(text).not.toContain('Festival and line-up information is stored locally');
+    expect(fixture.nativeElement.querySelector('.help-page__actions')).toBeNull();
   });
 });

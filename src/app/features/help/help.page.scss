@@ -13,20 +13,33 @@ ion-content {
 }
 
 .help-page {
+  background: transparent;
   box-sizing: border-box;
   margin: 0 auto;
   max-width: 42rem;
   min-height: 100%;
-  padding: 1.5rem max(var(--rr-spacing-page), env(safe-area-inset-left))
+  position: relative;
+  padding: 0 max(var(--rr-spacing-page), env(safe-area-inset-left))
     calc(2rem + env(safe-area-inset-bottom)) max(var(--rr-spacing-page), env(safe-area-inset-right));
 }
 
+.help-page__backdrop {
+  background: var(--rr-primary);
+  height: 14rem;
+  inset: 0 0 auto;
+  position: absolute;
+  z-index: 0;
+}
+
 .help-page__hero {
-  padding: 0.5rem 0 1.25rem;
+  color: var(--rr-primary-contrast);
+  padding: 2.5rem 0 3rem;
+  position: relative;
+  z-index: 1;
 }
 
 .help-page__eyebrow {
-  color: var(--rr-primary-dark);
+  color: inherit;
   font-size: 0.75rem;
   font-weight: 800;
   letter-spacing: 0.1em;
@@ -34,14 +47,15 @@ ion-content {
 }
 
 .help-page h1 {
-  color: var(--rr-text);
+  color: inherit;
   font-size: clamp(2rem, 8vw, 2.75rem);
   line-height: 1.05;
   margin: 0;
 }
 
 .help-page__hero > p:last-child {
-  color: var(--rr-text-muted);
+  color: inherit;
+  opacity: 0.86;
   line-height: 1.5;
   margin: 0.75rem 0 0;
 }
@@ -53,6 +67,8 @@ ion-content {
   box-shadow: var(--rr-shadow-card);
   margin-top: 1rem;
   padding: 1.25rem;
+  position: relative;
+  z-index: 1;
 }
 
 .help-page h2 {
@@ -120,10 +136,11 @@ ion-content {
   list-style: disc;
 }
 
-.help-page__actions {
-  margin-top: 1.25rem;
+.help-page__card-copy {
+  margin-bottom: 0;
 }
 
-.help-page__actions ion-button {
-  margin: 0.5rem 0 0;
+.help-page a {
+  color: var(--rr-primary-dark);
+  font-weight: 700;
 }

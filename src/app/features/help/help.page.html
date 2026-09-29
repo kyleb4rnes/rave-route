@@ -2,10 +2,11 @@
 
 <ion-content>
   <main class="help-page">
+    <div class="help-page__backdrop" aria-hidden="true"></div>
     <header class="help-page__hero">
       <p class="help-page__eyebrow">YOUR FESTIVAL COMPANION</p>
       <h1>Make every festival day count.</h1>
-      <p>Rave Route keeps your plans, line-up, and practical details together on your device.</p>
+      <p>Find a festival, choose the sets you want to see, and keep the practical details together.</p>
     </header>
 
     <section class="help-page__card" aria-labelledby="getting-started-title">
@@ -15,39 +16,39 @@
         <li>
           <span class="help-steps__number" aria-hidden="true">1</span>
           <div>
-            <h3>Add a festival</h3>
-            <p>Create your own festival or choose one from the catalogue. Add dates, location, travel, and accommodation details.</p>
+            <h3>Choose a festival</h3>
+            <p>Browse the festival catalogue, search by name or year, and use filters to find an event with published timetable data.</p>
           </div>
         </li>
         <li>
           <span class="help-steps__number" aria-hidden="true">2</span>
           <div>
-            <h3>Build your route</h3>
-            <p>Add sets to your line-up, mark the ones you must see, and use the timetable to spot clashes.</p>
+            <h3>Plan your sets</h3>
+            <p>Open a festival to explore its line-up, add the artists you want to see, mark must-see sets, and spot timetable clashes.</p>
           </div>
         </li>
         <li>
           <span class="help-steps__number" aria-hidden="true">3</span>
           <div>
-            <h3>Keep plans close</h3>
-            <p>Return to Home for your next festival, live-set reminders, and the details you need while you are there.</p>
+            <h3>Keep your route close</h3>
+            <p>Return to Home for your next festival, live-set reminders, packing list, budget, and the details you need while you are there.</p>
           </div>
         </li>
       </ol>
     </section>
 
-    <section class="help-page__card" aria-labelledby="quick-tips-title">
-      <h2 id="quick-tips-title">Quick tips</h2>
+    <section class="help-page__card" aria-labelledby="data-title">
+      <h2 id="data-title">Festival data</h2>
       <ul class="help-tips">
-        <li>Festival and line-up information is stored locally on this device.</li>
+        <li>Catalogue festivals and timed line-ups come from <a href="https://timetable.lol" target="_blank" rel="noopener noreferrer">Timetable.lol</a>, with attribution shown wherever its data is used.</li>
+        <li>The catalogue is currently refreshed through a scheduled sync, checked, and bundled into the app so browsing remains available offline.</li>
         <li>Use App settings to change the colour theme, appearance, or background image.</li>
-        <li>Browse catalogue festivals using search and the filter button, then import the ones you want to plan.</li>
       </ul>
     </section>
 
-    <div class="help-page__actions">
-      <ion-button class="rr-button" expand="block" routerLink="/festivals/add">Add a festival</ion-button>
-      <ion-button fill="clear" expand="block" routerLink="/festivals/browse">Browse festivals</ion-button>
-    </div>
+    <section class="help-page__card" aria-labelledby="custom-title">
+      <h2 id="custom-title">Custom festivals</h2>
+      <p class="help-page__card-copy">Planning something that is not in the catalogue? You can add a custom festival manually from the festival planner.</p>
+    </section>
   </main>
 </ion-content>

@@ -10,12 +10,12 @@ import {
   IonToolbar,
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { chevronBack, helpCircleOutline, homeOutline, settingsOutline } from 'ionicons/icons';
+import { chevronBack, close, helpCircleOutline, homeOutline, settingsOutline } from 'ionicons/icons';
 import { filter, map } from 'rxjs';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { RaveRouteLogoComponent } from '../rave-route-logo/rave-route-logo.component';
 
-addIcons({ chevronBack, helpCircleOutline, homeOutline, settingsOutline });
+addIcons({ chevronBack, close, helpCircleOutline, homeOutline, settingsOutline });
 
 @Component({
   selector: 'app-header',

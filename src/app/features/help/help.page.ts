@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
-import { IonButton, IonContent } from '@ionic/angular/standalone';
+import { IonContent } from '@ionic/angular/standalone';
 import { AppHeaderComponent } from '../../components/app-header/app-header.component';
 
 @Component({
@@ -8,6 +7,6 @@ import { AppHeaderComponent } from '../../components/app-header/app-header.compo
   templateUrl: './help.page.html',
   styleUrls: ['./help.page.scss'],
   standalone: true,
-  imports: [AppHeaderComponent, IonButton, IonContent, RouterLink],
+  imports: [AppHeaderComponent, IonContent],
 })
 export class HelpPage {}

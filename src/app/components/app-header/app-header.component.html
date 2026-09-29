@@ -17,16 +17,16 @@
     </ion-title>
 
     <ion-buttons slot="end">
-      <ion-button [attr.aria-label]="isHelp() ? 'Close help' : 'Open help'" (click)="openHelp()">
-        <ion-icon aria-hidden="true" name="help-circle-outline"></ion-icon>
-      </ion-button>
       @if (!isHome()) {
         <ion-button aria-label="Go home" routerLink="/home">
           <ion-icon aria-hidden="true" name="home-outline"></ion-icon>
         </ion-button>
       }
+      <ion-button [attr.aria-label]="isHelp() ? 'Close help' : 'Open help'" (click)="openHelp()">
+        <ion-icon aria-hidden="true" [name]="isHelp() ? 'close' : 'help-circle-outline'"></ion-icon>
+      </ion-button>
       <ion-button [attr.aria-label]="isSettings() ? 'Close app settings' : 'Open app settings'" (click)="openSettings()">
-        <ion-icon aria-hidden="true" name="settings-outline"></ion-icon>
+        <ion-icon aria-hidden="true" [name]="isSettings() ? 'close' : 'settings-outline'"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
