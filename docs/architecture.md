@@ -5,7 +5,7 @@ Rave Route is a mobile-first Ionic Angular application packaged for Android with
 ## Layers
 
 - `src/app/components/` contains reusable presentation components such as the shared app header, festival cards, the logo, and image fallback.
-- `src/app/features/` contains routed user journeys: festival details, editing, line-ups, settings, and the shared typed reactive form.
+- `src/app/features/` contains routed user journeys: catalogue browsing/import, custom festival creation, festival details/editing, line-ups, budgets, Help, Settings, and the shared typed reactive form.
 - `src/app/core/festivals/` owns the Festival model, date utilities, repository contract, local-storage repository, and signal-based store.
 - `src/app/core/settings/` owns persisted appearance preferences and theme-colour presets.
 - `src/app/home/` composes the home-screen experience from store state and presentation components.
@@ -19,6 +19,8 @@ The Home page derives an active festival from today's local date and refreshes i
 
 The store calls the repository before updating its local signal, keeping the displayed state aligned with persisted data. Date grouping, countdown calculations, and line-up day selection are pure utilities. Reusable card components receive data through signal inputs and notify their parents through signal outputs.
 
+Festival Details owns packing-list and budget interactions through the store. Catalogue Browse presents current/future festivals by default, supports search and filters, and places past festivals behind an explicit control. Help and Settings use full-page routes as overlay-style surfaces: closing either waits for its transition and navigates to Home rather than returning through browser history.
+
 The Timetable.lol catalogue is generated at development time from its public events and planner-data API endpoints. The generated asset contains only live events with importable timed sets, plus venue/address metadata, provider artwork, ticket metadata, and stable performance IDs. The app reads that bundled asset rather than calling the API on a user's device. Existing legacy imports retain their reviewed location backfill map; coordinates for future maps remain deferred.
 
 `AppSettingsStore` persists the optional background image and selected theme colour. `AppComponent` applies those settings as app-level CSS custom properties, so routed pages share the same background and theme tokens without reloading.
@@ -26,6 +28,8 @@ The Timetable.lol catalogue is generated at development time from its public eve
 ## Native boundary
 
 `capacitor.config.ts` identifies the app as `com.raveroute.app`. `npx cap sync android` copies the built Angular application into the Android project and refreshes native plugins. The Camera plugin selects images from the device photo library for festival artwork and the optional app background; image URLs are no longer entered by users.
+
+The Android project currently targets API 36, uses min SDK 24, and still needs a protected upload keystore and signed release bundle before Play distribution.
 
 ## Deferred platform, security, and identity work
 

@@ -6,23 +6,27 @@ The project is part of **Project Freedom**, a personal mission focused on greate
 
 ## Project status
 
-Post-MVP iteration on the v0.1.0 foundation
+Post-MVP iteration on the v0.1.0 foundation, with Android beta preparation underway.
 
-The app persists festivals locally and supports festival CRUD, manual line-ups and set times, an automatic Live now view for active festivals, expandable cards, details, photo-library artwork/default images, accessible navigation, personal backgrounds, and selectable colour themes. The Android project uses the `com.raveroute.app` application ID and includes temporary generated icon and splash assets.
+The app persists festival plans locally and supports catalogue-first festival browsing, Timetable.lol imports, festival CRUD, line-ups and set times, an automatic Live now view for active festivals, expandable cards, ticket and resale links, packing lists, budgets, photo-library artwork, accessible navigation, personal backgrounds, selectable colour themes, Help, and Settings. The Android project uses the `com.raveroute.app` application ID and currently has an unsigned/debug-oriented release setup.
 
 ## MVP capabilities
 
-The MVP will let a user:
+The current MVP foundation lets a user:
 
 - See their next festival emphasised on the home screen.
 - See later festivals as collapsed cards.
 - Add, view, edit, and delete festivals.
 - Record dates, an image, a location, transport status, and accommodation status.
 - Add and browse manual set times by time or stage, including clash indicators and selectable official/community timetable imports.
+- Browse current and past catalogue festivals with search and filters, then import a selected festival and its published line-up.
+- View available ticket, resale, and estimated ticket-price metadata for catalogue festivals.
+- Maintain a packing list and a per-festival budget.
+- Open concise Help guidance and configure appearance in Settings.
 - Personalise the app with a background image, Light or Dark appearance, and one of five theme-colour presets.
 - Keep festival data locally between app restarts.
 
-See [MVP specification](docs/mvp-specification.md) for the full scope.
+See [MVP specification](docs/mvp-specification.md) for the current scope and known deferred work.
 
 ## Refreshing the Timetable.lol catalogue
 
@@ -64,6 +68,8 @@ npm run build
 npm test -- --watch=false --browsers=ChromeHeadless
 ```
 
+The combined CI-style command is `npm run verify`; it also runs the production dependency audit.
+
 ## Android development
 
 Install Android Studio and its Android SDK, then use:
@@ -79,7 +85,7 @@ Run the project from Android Studio on an emulator or a physical Android device.
 
 - Festival data stays on the current device/browser only; there is no account, sync, backup, or cloud storage in this MVP.
 - Device-selected images are stored alongside local festival data, so many large images can exhaust browser/device storage.
-- The current Android build is a debug test build, not a store-signed release artifact.
+- The Android project still needs release signing, an Android App Bundle, Play Console setup, and beta testing before public distribution.
 - iOS has not been packaged or tested because that requires macOS and Xcode.
 
-Work on one documented stage at a time. Review, run, test, and understand each stage before moving to the next one.
+The original staged build plan is complete through Stage 19. Current priorities and release tasks are tracked in [the developer guide](developer.agent.md), [the release checklist](docs/release-checklist.md), and [the pre-release runbook](docs/pre-release-runbook.md).

@@ -14,7 +14,7 @@ npm run android:sync
 
 The GitHub **Quality checks** workflow runs the same lint, unit-test, and production-build gate on every pull request and push to `main`.
 
-`npm audit --omit=dev` currently reports no production dependency vulnerabilities. The full audit includes development-toolchain findings; review Dependabot pull requests rather than applying force upgrades without compatibility testing.
+Run and review `npm audit --omit=dev` before each release candidate. The full audit can include development-toolchain findings; review Dependabot alerts and pull requests rather than applying force upgrades without compatibility testing.
 
 ## Android device acceptance
 
@@ -40,6 +40,12 @@ Before the first Play submission, the owner must:
 3. Set the release version name/code.
 4. Build a signed Android App Bundle and install it through internal testing.
 5. Keep the keystore, passwords, and any Play credentials out of Git.
+
+## Google Play beta path
+
+For a new personal Play Console account, Google currently requires a Closed test with at least 12 testers continuously opted in for 14 days before production access can be requested. Open testing becomes available after production access is granted. An invite-only beta can remain on the Closed testing track.
+
+Before uploading, complete the Play Console app setup, identity verification, store listing, content declarations, Data Safety form, privacy policy URL, and Play App Signing configuration. Upload a signed Android App Bundle rather than a debug APK. Keep the feature graphic separate from the app icon: it is a 1024×500 JPEG or 24-bit PNG promotional banner.
 
 ## GitHub security configuration
 

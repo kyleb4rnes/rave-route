@@ -1,5 +1,11 @@
 # Development log
 
+## 2026-09-29 — Documentation refresh
+
+- Updated the README, MVP specification, architecture notes, privacy-policy draft, release checklist, and pre-release runbook to reflect catalogue browsing, Timetable.lol imports, ticket metadata, packing lists, budgets, Help, Settings, and overlay navigation.
+- Marked the original Stage 0–19 plan as historical and moved current priorities to the developer guide and release documents.
+- Added the Google Play beta path, including signed App Bundle, Play App Signing, listing assets, and the current Closed testing requirements.
+
 ## 2026-09-29 — Navigation, Help, and catalogue polish
 
 - Made the festival catalogue the direct destination from Home's Add Festival action, removing the legacy intermediate-page flash.

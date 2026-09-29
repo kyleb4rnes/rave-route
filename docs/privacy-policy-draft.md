@@ -8,13 +8,14 @@ Contact: [SUPPORT EMAIL OR CONTACT PAGE]
 
 ## Summary
 
-Rave Route currently stores festival plans, optional photos, app appearance preferences, and Line-up choices on the user's device. The current app does not provide accounts, cloud synchronisation, analytics, advertising, or a project-operated backend.
+Rave Route currently stores festival plans, optional photos, app appearance preferences, line-up choices, packing lists, and budget information on the user's device. The current app does not provide accounts, cloud synchronisation, analytics, advertising, or a project-operated backend.
 
 ## Information stored on the device
 
 The app may store:
 
 - festival titles, dates, locations, transport/accommodation flags, and Line-up selections;
+- packing-list items and budget limits, currencies, and expense entries;
 - optional photos selected by the user for festival cards or the app background; and
 - theme and appearance preferences.
 
@@ -24,7 +25,7 @@ Photos are stored in the app's private device storage. The app uses the device p
 
 Rave Route does not currently transmit this information to a project-operated server or share it with advertisers or analytics providers. Data remains until the user changes/deletes it or removes the app. Removing the app may remove its private data, including stored photos.
 
-Festival timetable information may be imported from third-party sources selected by the user. Those sources have their own terms and privacy practices.
+The app includes a catalogue generated from Timetable.lol's public events and planner-data endpoints during a scheduled development/release refresh. The app reads that bundled catalogue; it does not call those APIs directly from the user's device. Festival pages may link to third-party ticket or resale websites, which have their own terms and privacy practices.
 
 ## Your choices
 

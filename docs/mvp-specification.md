@@ -1,5 +1,7 @@
 # Rave Route MVP Specification
 
+This document describes the v0.1 MVP foundation and the current local-first feature set. The staged implementation plan is complete through Stage 19; remaining work is release preparation and explicitly deferred features.
+
 ## Product goal
 
 Give a user one cheerful, dependable place to track upcoming festivals on a mobile device.
@@ -17,10 +19,12 @@ The MVP must allow a user to:
 3. See the next upcoming festival emphasised in a large card.
 4. See later festivals as collapsed cards and expand them.
 5. View full festival details.
-6. Add a festival.
-7. Edit a festival.
-8. Delete a festival after confirmation.
-9. Retain festival data after closing or refreshing the application.
+6. Browse current and past catalogue festivals and search/filter them.
+7. Add a catalogue or custom festival.
+8. Edit a festival.
+9. Delete a festival after confirmation.
+10. Retain festival data after closing or refreshing the application.
+11. Open Help and configure app appearance in Settings.
 
 ## Festival information
 
@@ -33,6 +37,9 @@ Each festival records:
 - Location
 - Whether transport is arranged
 - Whether accommodation is arranged
+- Optional ticket and resale links, estimated ticket price, and currency
+- A packing list with packed state
+- A budget with currency, expenses, and remaining total
 
 The application will also maintain identifiers and creation/update timestamps needed to manage records reliably.
 
@@ -46,12 +53,12 @@ The application will also maintain identifiers and creation/update timestamps ne
 ## Data and platform constraints
 
 - Festival data is stored locally on the device.
-- No account or network connection is required for core MVP use.
+- No account or network connection is required for core festival-planning use. The catalogue is bundled during development/release refreshes; the app does not call Timetable.lol directly on the user's device.
 - The interface is designed mobile-first and packaged with Capacitor.
 
 ## Out of scope
 
-The MVP does not include:
+The current product still does not include:
 
 - Backend services or cloud synchronisation
 - Authentication
@@ -59,14 +66,12 @@ The MVP does not include:
 - AI features
 - Social features
 - Music playback
-- Packing lists
-- Budgets
 - Maps
 - Complex image upload or cloud image storage
 
 ## Delivered post-MVP enhancements
 
-The current application also includes manual festival line-ups with set times and stage grouping, configurable app backgrounds, and persistent theme-colour presets. These remain local-device features and do not change the MVP's no-account, no-network core constraint.
+The current application also includes catalogue browsing/import, ticket metadata, packing lists, budgets, configurable app backgrounds, persistent theme-colour presets, Help, Settings, and full line-up views. These remain local-device features and do not change the MVP's no-account, no-network core constraint.
 
 ## MVP acceptance outcome
 

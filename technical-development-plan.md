@@ -1,5 +1,7 @@
 # Rave Route — Technical Development Plan
 
+> Status: Stages 0–19 are complete. This document is retained as the historical learning and implementation record for the v0.1 foundation. Current product priorities and Play beta preparation are tracked in `developer.agent.md`, `docs/release-checklist.md`, and `docs/pre-release-runbook.md`.
+
 ## Purpose
 
 This plan breaks Rave Route into small, understandable development stages.
