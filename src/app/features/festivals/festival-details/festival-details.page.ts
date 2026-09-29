@@ -54,7 +54,7 @@ export class FestivalDetailsPage {
   readonly isUpdatingPackingList = signal(false);
   readonly packingListError = signal<string | null>(null);
   readonly newPackingItem = signal('');
-  readonly packingItems = computed(() => this.festival()?.packingList ?? defaultPackingList);
+  readonly packingItems = computed(() => this.festival()?.packingList ?? []);
   readonly packedItemCount = computed(() => this.packingItems().filter((item) => item.packed).length);
   readonly deleteAlertButtons = [
     { text: 'Cancel', role: 'cancel' },
@@ -237,12 +237,3 @@ export class FestivalDetailsPage {
     this.isUpdatingArrangements.set(false);
   }
 }
-
-const defaultPackingList: readonly PackingListItem[] = [
-  { id: 'tent', label: 'Tent and sleeping gear', packed: false },
-  { id: 'clothes', label: 'Festival clothes', packed: false },
-  { id: 'shoes', label: 'Comfortable shoes', packed: false },
-  { id: 'toiletries', label: 'Toiletries and sunscreen', packed: false },
-  { id: 'phone', label: 'Phone and charger', packed: false },
-  { id: 'id', label: 'ID and tickets', packed: false },
-];

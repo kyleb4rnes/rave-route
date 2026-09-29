@@ -5,10 +5,14 @@ ion-content { --background: var(--rr-app-background, var(--rr-background)); }
 .festival-budget h2 { color: var(--rr-text); font-size: 1.1rem; margin-bottom: .5rem; }
 .festival-budget__eyebrow { color: var(--rr-primary-dark); font-size: .75rem; font-weight: 800; letter-spacing: .1em; margin-bottom: .5rem !important; }
 .festival-budget header > p:last-child, .festival-budget__empty { color: var(--rr-text-muted); }
-.festival-budget__summary { background: var(--rr-primary); border-radius: var(--rr-radius-card); color: var(--rr-primary-contrast); display: grid; gap: .75rem; grid-template-columns: repeat(3, 1fr); padding: 1rem; }
+.festival-budget__summary { background: var(--rr-primary); border-radius: var(--rr-radius-card); color: var(--rr-primary-contrast); display: grid; gap: .75rem 1rem; grid-template-columns: repeat(2, 1fr); padding: 1rem; }
 .festival-budget__summary div { display: grid; gap: .2rem; }
 .festival-budget__summary span { font-size: .7rem; opacity: .85; }
 .festival-budget__summary strong { font-size: 1rem; }
+.festival-budget__summary-secondary { opacity: .9; }
+.festival-budget__summary-remaining { border-top: 1px solid color-mix(in srgb, currentColor 30%, transparent); grid-column: 1 / -1; margin-top: .25rem; padding-top: .75rem; }
+.festival-budget__summary-remaining span { font-size: .8rem; font-weight: 700; }
+.festival-budget__summary-remaining strong { display: block; font-size: clamp(1.75rem, 9vw, 2.5rem); line-height: 1.1; }
 .festival-budget__summary .is-over strong { color: #ffd1d1; }
 .festival-budget__card { background: var(--rr-surface); border: 1px solid var(--rr-border); border-radius: var(--rr-radius-control); padding: .75rem; }
 .festival-budget ion-item { --background: transparent; --padding-start: 0; --inner-padding-end: 0; }

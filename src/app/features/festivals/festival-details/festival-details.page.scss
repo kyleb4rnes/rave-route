@@ -212,6 +212,13 @@ ion-content {
   margin-top: 0.875rem;
 }
 
+.festival-details__packing-empty {
+  color: var(--rr-text-muted);
+  font-size: 0.9rem;
+  margin: 0;
+  padding: 0.875rem 0;
+}
+
 .festival-details__packing-item {
   align-items: center;
   border-bottom: 1px solid var(--rr-border);
@@ -244,6 +251,10 @@ ion-content {
   font-size: 1.4rem;
   line-height: 1;
   padding: 0.25rem;
+}
+
+.festival-details__packing-remove:disabled {
+  opacity: 0.5;
 }
 
 .festival-details__packing-add {

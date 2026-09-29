@@ -10,9 +10,9 @@
       </header>
 
       <section class="festival-budget__summary" aria-label="Budget summary">
-        <div><span>Budget</span><strong>{{ formatAmount(budget().limit) }}</strong></div>
-        <div><span>Spent</span><strong>{{ formatAmount(totalSpent()) }}</strong></div>
-        <div [class.is-over]="remaining() < 0"><span>{{ remaining() < 0 ? 'Over by' : 'Remaining' }}</span><strong>{{ formatAmount(Math.abs(remaining())) }}</strong></div>
+        <div class="festival-budget__summary-secondary"><span>Budget</span><strong>{{ formatAmount(budget().limit) }}</strong></div>
+        <div class="festival-budget__summary-secondary"><span>Spent</span><strong>{{ formatAmount(totalSpent()) }}</strong></div>
+        <div class="festival-budget__summary-remaining" [class.is-over]="remaining() < 0"><span>{{ remaining() < 0 ? 'Over by' : 'Remaining budget' }}</span><strong>{{ formatAmount(Math.abs(remaining())) }}</strong></div>
       </section>
 
       <section class="festival-budget__card" aria-labelledby="budget-settings-title">

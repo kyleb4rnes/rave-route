@@ -110,6 +110,9 @@
           <small>{{ packedItemCount() }}/{{ packingItems().length }} packed</small>
         </div>
         <div class="festival-details__packing-list">
+          @if (packingItems().length === 0) {
+            <p class="festival-details__packing-empty">Add items here to build your packing list.</p>
+          }
           @for (item of packingItems(); track item.id) {
             <label class="festival-details__packing-item">
               <input
@@ -119,16 +122,15 @@
                 (change)="togglePackingItem(item.id)"
               />
               <span [class.is-packed]="item.packed">{{ item.label }}</span>
-              @if (item.custom) {
-                <button
-                  aria-label="Remove {{ item.label }}"
-                  class="festival-details__packing-remove"
-                  type="button"
-                  (click)="$event.preventDefault(); removePackingItem(item.id)"
-                >
-                  ×
-                </button>
-              }
+              <button
+                aria-label="Remove {{ item.label }}"
+                class="festival-details__packing-remove"
+                type="button"
+                [disabled]="isUpdatingPackingList()"
+                (click)="$event.preventDefault(); removePackingItem(item.id)"
+              >
+                ×
+              </button>
             </label>
           }
         </div>
