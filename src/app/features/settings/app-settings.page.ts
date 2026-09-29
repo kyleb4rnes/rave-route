@@ -1,5 +1,5 @@
-import { Location } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
+import { Router } from '@angular/router';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import {
   IonButton,
@@ -27,7 +27,7 @@ import { ThemeColour, themeColourOptions } from '../../core/settings/theme-colou
   ],
 })
 export class AppSettingsPage {
-  private readonly location = inject(Location);
+  private readonly router = inject(Router);
   private readonly appSettingsStore = inject(AppSettingsStore);
   private readonly imageStorage = inject(ImageStorageService);
 
@@ -137,7 +137,7 @@ export class AppSettingsPage {
     }
 
     this.isClosing.set(true);
-    setTimeout(() => this.location.back(), 650);
+    setTimeout(() => void this.router.navigate(['/home']), 650);
   }
 
   private resolveImagePreview(imageUrl: string): void {

@@ -1,5 +1,5 @@
-import { Location } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
+import { Router } from '@angular/router';
 import { IonContent } from '@ionic/angular/standalone';
 import { AppHeaderComponent } from '../../components/app-header/app-header.component';
 
@@ -11,7 +11,7 @@ import { AppHeaderComponent } from '../../components/app-header/app-header.compo
   imports: [AppHeaderComponent, IonContent],
 })
 export class HelpPage {
-  private readonly location = inject(Location);
+  private readonly router = inject(Router);
 
   readonly isClosing = signal(false);
   readonly expandedSection = signal<string | null>(null);
@@ -26,6 +26,6 @@ export class HelpPage {
     }
 
     this.isClosing.set(true);
-    setTimeout(() => this.location.back(), 650);
+    setTimeout(() => void this.router.navigate(['/home']), 650);
   }
 }
