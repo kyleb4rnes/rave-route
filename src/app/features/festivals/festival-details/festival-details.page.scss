@@ -179,6 +179,104 @@ ion-content {
   }
 }
 
+.festival-details__packing {
+  background: var(--rr-surface);
+  border: 1px solid var(--rr-border);
+  border-radius: var(--rr-radius-control);
+  padding: 1rem;
+}
+
+.festival-details__section-heading {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+}
+
+.festival-details__section-heading h2 {
+  color: var(--rr-text);
+  font-size: 1.15rem;
+  margin: 0;
+}
+
+.festival-details__section-heading small {
+  color: var(--rr-text-muted);
+  font-size: 0.75rem;
+}
+
+.festival-details__section-heading .festival-details__eyebrow {
+  margin-bottom: 0.25rem;
+}
+
+.festival-details__packing-list {
+  border-top: 1px solid var(--rr-border);
+  margin-top: 0.875rem;
+}
+
+.festival-details__packing-item {
+  align-items: center;
+  border-bottom: 1px solid var(--rr-border);
+  color: var(--rr-text);
+  display: flex;
+  gap: 0.75rem;
+  min-height: 2.75rem;
+}
+
+.festival-details__packing-item input {
+  accent-color: var(--rr-primary);
+  flex: 0 0 auto;
+  height: 1.1rem;
+  width: 1.1rem;
+}
+
+.festival-details__packing-item span {
+  flex: 1;
+}
+
+.festival-details__packing-item span.is-packed {
+  color: var(--rr-text-muted);
+  text-decoration: line-through;
+}
+
+.festival-details__packing-remove {
+  background: transparent;
+  border: 0;
+  color: var(--rr-text-muted);
+  font-size: 1.4rem;
+  line-height: 1;
+  padding: 0.25rem;
+}
+
+.festival-details__packing-add {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.875rem;
+}
+
+.festival-details__packing-add input {
+  background: var(--rr-background);
+  border: 1px solid var(--rr-border);
+  border-radius: var(--rr-radius-control);
+  color: var(--rr-text);
+  flex: 1;
+  font: inherit;
+  min-width: 0;
+  padding: 0.625rem 0.75rem;
+}
+
+.festival-details__packing-add button {
+  background: var(--rr-primary);
+  border: 0;
+  border-radius: var(--rr-radius-control);
+  color: var(--rr-primary-contrast);
+  font: inherit;
+  font-weight: 700;
+  padding: 0 0.875rem;
+}
+
+.festival-details__packing-add button:disabled {
+  opacity: 0.5;
+}
+
 .festival-details__arrangement-field dd {
   margin: 0.25rem 0 0;
 }

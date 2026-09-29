@@ -7,7 +7,7 @@ import {
   sortFestivalsByStartDate,
 } from './festival-date.utils';
 import { FestivalDraft } from './models/festival-draft';
-import { Festival, isCustomFestival } from './models/festival';
+import { Festival, isCustomFestival, PackingListItem } from './models/festival';
 import { FestivalSet, FestivalSetDraft, FestivalSetImport, LineupImportSummary } from './models/festival-set';
 import { FESTIVAL_REPOSITORY } from './data/festival-repository.token';
 import { ImageStorageService } from '../images/image-storage.service';
@@ -240,6 +240,35 @@ export class FestivalStore {
       ...existingFestival,
       transportArranged,
       accommodationArranged,
+      updatedAt: new Date().toISOString(),
+    };
+
+    try {
+      await this.repository.update(updatedFestival);
+      this.festivalsSignal.set(
+        this.allFestivals().map((festival) =>
+          festival.id === updatedFestival.id ? updatedFestival : festival,
+        ),
+      );
+
+      return true;
+    } catch {
+      this.setStorageError();
+
+      return false;
+    }
+  }
+
+  async updatePackingList(id: string, packingList: readonly PackingListItem[]): Promise<boolean> {
+    const existingFestival = this.getFestivalById(id);
+
+    if (!existingFestival) {
+      return false;
+    }
+
+    const updatedFestival: Festival = {
+      ...existingFestival,
+      packingList: packingList.map((item) => ({ ...item })),
       updatedAt: new Date().toISOString(),
     };
 

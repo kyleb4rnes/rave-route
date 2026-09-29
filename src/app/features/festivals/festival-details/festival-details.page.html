@@ -101,6 +101,52 @@
         <ion-note class="festival-details__image-error" color="danger" role="alert">{{ imageUpdateError() }}</ion-note>
       }
 
+      <section class="festival-details__packing" aria-labelledby="packing-title">
+        <div class="festival-details__section-heading">
+          <div>
+            <p class="festival-details__eyebrow">GET READY</p>
+            <h2 id="packing-title">Packing list</h2>
+          </div>
+          <small>{{ packedItemCount() }}/{{ packingItems().length }} packed</small>
+        </div>
+        <div class="festival-details__packing-list">
+          @for (item of packingItems(); track item.id) {
+            <label class="festival-details__packing-item">
+              <input
+                type="checkbox"
+                [checked]="item.packed"
+                [disabled]="isUpdatingPackingList()"
+                (change)="togglePackingItem(item.id)"
+              />
+              <span [class.is-packed]="item.packed">{{ item.label }}</span>
+              @if (item.custom) {
+                <button
+                  aria-label="Remove {{ item.label }}"
+                  class="festival-details__packing-remove"
+                  type="button"
+                  (click)="$event.preventDefault(); removePackingItem(item.id)"
+                >
+                  ×
+                </button>
+              }
+            </label>
+          }
+        </div>
+        <form class="festival-details__packing-add" (submit)="$event.preventDefault(); addPackingItem()">
+          <input
+            aria-label="Add packing item"
+            maxlength="80"
+            placeholder="Add your own item"
+            [value]="newPackingItem()"
+            (input)="newPackingItem.set($any($event.target).value)"
+          />
+          <button type="submit" [disabled]="isUpdatingPackingList() || !newPackingItem().trim()">Add</button>
+        </form>
+        @if (packingListError()) {
+          <ion-note color="danger" role="alert">{{ packingListError() }}</ion-note>
+        }
+      </section>
+
       <div class="festival-details__actions">
         <ion-button class="rr-button" expand="block" [routerLink]="['/festivals', selectedFestival.id, 'lineup']">LINE UP</ion-button>
         @if (isCustomFestival(selectedFestival)) {

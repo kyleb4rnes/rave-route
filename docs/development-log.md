@@ -129,3 +129,4 @@
 - 2026-09-27: Country filter labels now use built-in ISO region names (for example, `NL` displays as Netherlands) while retaining the compact source code as the stored filter value.
 - 2026-09-29: Festival Browse now initially shows only current and future catalogue events. A count-labelled control reveals matching past festivals on demand, ordered from earliest to latest like the main catalogue, without disturbing search or filter selections.
 - 2026-09-29: Grouped Browse search, filters, and the past-festival toggle into a sticky control area. The introduction scrolls away normally, then these controls remain available while the festival results continue scrolling.
+- 2026-09-29: Added a device-local packing list to Festival Details with practical starter items, packed-state toggles, and custom items. Packing changes persist with the festival record and remain available offline.

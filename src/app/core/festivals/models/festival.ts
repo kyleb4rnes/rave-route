@@ -21,6 +21,13 @@ export interface FestivalTicketLinks {
   currency?: string;
 }
 
+export interface PackingListItem {
+  id: string;
+  label: string;
+  packed: boolean;
+  custom?: boolean;
+}
+
 export interface FestivalCatalogueSource {
   provider: 'timetable-lol';
   eventSlug: string;
@@ -39,6 +46,7 @@ export interface Festival {
   transportArranged: boolean;
   accommodationArranged?: boolean;
   lineupSets?: readonly FestivalSet[];
+  packingList?: readonly PackingListItem[];
   /** Undefined legacy records are treated as custom unless they have a catalogue source. */
   isCustom?: boolean;
   catalogueSource?: FestivalCatalogueSource;

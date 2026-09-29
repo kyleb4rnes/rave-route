@@ -258,6 +258,21 @@ describe('FestivalStore', () => {
     );
   });
 
+  it('persists a packing list for any festival', async () => {
+    const repository = new InMemoryFestivalRepository([nextFestival]);
+    const store = createStore(repository);
+    await store.loadFestivals();
+
+    const packingList = [
+      { id: 'tent', label: 'Tent', packed: true },
+      { id: 'custom', label: 'Earplugs', packed: false, custom: true },
+    ];
+
+    expect(await store.updatePackingList('next', packingList)).toBeTrue();
+    expect(store.getFestivalById('next')?.packingList).toEqual(packingList);
+    expect((await repository.getAll())[0].packingList).toEqual(packingList);
+  });
+
   it('updates and deletes a persisted festival', async () => {
     const repository = new InMemoryFestivalRepository([nextFestival]);
     const store = createStore(repository);

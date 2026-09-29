@@ -15,7 +15,7 @@ import { cameraOutline } from 'ionicons/icons';
 import { AppHeaderComponent } from '../../../components/app-header/app-header.component';
 import { FestivalImageComponent } from '../../../components/festival-image/festival-image.component';
 import { calculateDaysRemaining } from '../../../core/festivals/festival-date.utils';
-import { Festival, isCustomFestival } from '../../../core/festivals/models/festival';
+import { Festival, isCustomFestival, PackingListItem } from '../../../core/festivals/models/festival';
 import { FestivalStore } from '../../../core/festivals/festival.store';
 import { hasFestivalTicketLinks } from '../../../core/festivals/festival-ticket-links.utils';
 
@@ -51,6 +51,11 @@ export class FestivalDetailsPage {
   readonly imageUpdateError = signal<string | null>(null);
   readonly isUpdatingArrangements = signal(false);
   readonly arrangementUpdateError = signal<string | null>(null);
+  readonly isUpdatingPackingList = signal(false);
+  readonly packingListError = signal<string | null>(null);
+  readonly newPackingItem = signal('');
+  readonly packingItems = computed(() => this.festival()?.packingList ?? defaultPackingList);
+  readonly packedItemCount = computed(() => this.packingItems().filter((item) => item.packed).length);
   readonly deleteAlertButtons = [
     { text: 'Cancel', role: 'cancel' },
     { text: 'Delete', role: 'destructive', handler: () => void this.deleteFestival() },
@@ -153,6 +158,47 @@ export class FestivalDetailsPage {
     await this.updateArrangements(festival.transportArranged, event.detail.checked);
   }
 
+  async togglePackingItem(itemId: string): Promise<void> {
+    const items = this.packingItems();
+    const updatedItems = items.map((item) =>
+      item.id === itemId ? { ...item, packed: !item.packed } : item,
+    );
+    await this.savePackingList(updatedItems);
+  }
+
+  async addPackingItem(): Promise<void> {
+    const label = this.newPackingItem().trim();
+
+    if (!label) {
+      return;
+    }
+
+    await this.savePackingList([
+      ...this.packingItems(),
+      { id: crypto.randomUUID(), label, packed: false, custom: true },
+    ]);
+    this.newPackingItem.set('');
+  }
+
+  async removePackingItem(itemId: string): Promise<void> {
+    await this.savePackingList(this.packingItems().filter((item) => item.id !== itemId));
+  }
+
+  private async savePackingList(packingList: readonly PackingListItem[]): Promise<void> {
+    if (this.isUpdatingPackingList()) {
+      return;
+    }
+
+    this.packingListError.set(null);
+    this.isUpdatingPackingList.set(true);
+
+    if (!(await this.festivalStore.updatePackingList(this.festivalId, packingList))) {
+      this.packingListError.set('We could not save your packing list. Please try again.');
+    }
+
+    this.isUpdatingPackingList.set(false);
+  }
+
   openDeleteConfirmation(): void {
     this.isDeleteAlertOpen.set(true);
   }
@@ -191,3 +237,12 @@ export class FestivalDetailsPage {
     this.isUpdatingArrangements.set(false);
   }
 }
+
+const defaultPackingList: readonly PackingListItem[] = [
+  { id: 'tent', label: 'Tent and sleeping gear', packed: false },
+  { id: 'clothes', label: 'Festival clothes', packed: false },
+  { id: 'shoes', label: 'Comfortable shoes', packed: false },
+  { id: 'toiletries', label: 'Toiletries and sunscreen', packed: false },
+  { id: 'phone', label: 'Phone and charger', packed: false },
+  { id: 'id', label: 'ID and tickets', packed: false },
+];
