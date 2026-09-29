@@ -1,7 +1,7 @@
-<app-header title="Help"></app-header>
+<app-header title="Help" [interceptBack]="true" (backRequested)="closeHelp()"></app-header>
 
 <ion-content>
-  <main class="help-page">
+  <main class="help-page" [class.help-page--closing]="isClosing()">
     <div class="help-page__backdrop" aria-hidden="true"></div>
     <header class="help-page__hero">
       <p class="help-page__eyebrow">YOUR FESTIVAL COMPANION</p>
@@ -9,46 +9,108 @@
       <p>Find a festival, choose the sets you want to see, and keep the practical details together.</p>
     </header>
 
-    <section class="help-page__card" aria-labelledby="getting-started-title">
-      <h2 id="getting-started-title">Getting started</h2>
+    <div class="help-page__sections">
+      <section class="help-page__card" aria-labelledby="getting-started-title">
+        <button class="help-page__section-toggle" type="button" aria-controls="getting-started-content" [attr.aria-expanded]="expandedSection() === 'getting-started'" (click)="toggleSection('getting-started')">
+          <span id="getting-started-title">Getting started</span>
+          <span aria-hidden="true">{{ expandedSection() === 'getting-started' ? '−' : '+' }}</span>
+        </button>
 
-      <ol class="help-steps">
+        @if (expandedSection() === 'getting-started') {
+        <div class="help-page__section-content" id="getting-started-content">
+          <ol class="help-steps">
         <li>
           <span class="help-steps__number" aria-hidden="true">1</span>
           <div>
             <h3>Choose a festival</h3>
-            <p>Browse the festival catalogue, search by name or year, and use filters to find an event with published timetable data.</p>
+            <p>Browse the catalogue, search by name or year, and use filters to find an event with published timetable data.</p>
           </div>
         </li>
         <li>
           <span class="help-steps__number" aria-hidden="true">2</span>
           <div>
             <h3>Plan your sets</h3>
-            <p>Open a festival to explore its line-up, add the artists you want to see, mark must-see sets, and spot timetable clashes.</p>
+            <p>Open the line-up, switch between stage and time views, save must-see sets, and spot timetable clashes.</p>
           </div>
         </li>
         <li>
           <span class="help-steps__number" aria-hidden="true">3</span>
           <div>
             <h3>Keep your route close</h3>
-            <p>Return to Home for your next festival, live-set reminders, packing list, budget, and the details you need while you are there.</p>
+            <p>Return home for your next festival, live-set reminders, and the practical details you need while you are there.</p>
           </div>
         </li>
-      </ol>
-    </section>
+          </ol>
+        </div>
+        }
+      </section>
 
-    <section class="help-page__card" aria-labelledby="data-title">
-      <h2 id="data-title">Festival data</h2>
-      <ul class="help-tips">
-        <li>Catalogue festivals and timed line-ups come from <a href="https://timetable.lol" target="_blank" rel="noopener noreferrer">Timetable.lol</a>, with attribution shown wherever its data is used.</li>
-        <li>The catalogue is currently refreshed through a scheduled sync, checked, and bundled into the app so browsing remains available offline.</li>
-        <li>Use App settings to change the colour theme, appearance, or background image.</li>
-      </ul>
-    </section>
+      <section class="help-page__card" aria-labelledby="festival-details-title">
+        <button class="help-page__section-toggle" type="button" aria-controls="festival-details-content" [attr.aria-expanded]="expandedSection() === 'festival-details'" (click)="toggleSection('festival-details')">
+          <span id="festival-details-title">Festival details</span>
+          <span aria-hidden="true">{{ expandedSection() === 'festival-details' ? '−' : '+' }}</span>
+        </button>
+        @if (expandedSection() === 'festival-details') {
+        <div class="help-page__section-content" id="festival-details-content">
+          <ul class="help-tips">
+            <li>Use the festival page to check dates, location, ticket links, travel, and accommodation arrangements.</li>
+            <li>Ticket prices are estimates when the catalogue provides them; use the ticket link for the latest price and availability.</li>
+          </ul>
+        </div>
+        }
+      </section>
 
-    <section class="help-page__card" aria-labelledby="custom-title">
-      <h2 id="custom-title">Custom festivals</h2>
-      <p class="help-page__card-copy">Planning something that is not in the catalogue? You can add a custom festival manually from the festival planner.</p>
-    </section>
+      <section class="help-page__card" aria-labelledby="packing-title">
+        <button class="help-page__section-toggle" type="button" aria-controls="packing-content" [attr.aria-expanded]="expandedSection() === 'packing'" (click)="toggleSection('packing')">
+          <span id="packing-title">Packing list</span>
+          <span aria-hidden="true">{{ expandedSection() === 'packing' ? '−' : '+' }}</span>
+        </button>
+        @if (expandedSection() === 'packing') {
+        <div class="help-page__section-content" id="packing-content">
+          <p class="help-page__card-copy">Add the things you want to remember, tick them off as you pack, and remove anything you no longer need.</p>
+        </div>
+        }
+      </section>
+
+      <section class="help-page__card" aria-labelledby="budget-title">
+        <button class="help-page__section-toggle" type="button" aria-controls="budget-content" [attr.aria-expanded]="expandedSection() === 'budget'" (click)="toggleSection('budget')">
+          <span id="budget-title">Budget</span>
+          <span aria-hidden="true">{{ expandedSection() === 'budget' ? '−' : '+' }}</span>
+        </button>
+        @if (expandedSection() === 'budget') {
+        <div class="help-page__section-content" id="budget-content">
+          <p class="help-page__card-copy">Set a total budget, choose a currency, and record expenses such as tickets, travel, stay, food, and drinks. The remaining budget updates as you go.</p>
+        </div>
+        }
+      </section>
+
+      <section class="help-page__card" aria-labelledby="data-title">
+        <button class="help-page__section-toggle" type="button" aria-controls="data-content" [attr.aria-expanded]="expandedSection() === 'data'" (click)="toggleSection('data')">
+          <span id="data-title">Festival data</span>
+          <span aria-hidden="true">{{ expandedSection() === 'data' ? '−' : '+' }}</span>
+        </button>
+        @if (expandedSection() === 'data') {
+        <div class="help-page__section-content" id="data-content">
+          <ul class="help-tips">
+            <li>Catalogue festivals and timed line-ups come from <a href="https://timetable.lol" target="_blank" rel="noopener noreferrer">Timetable.lol</a>, with attribution shown wherever its data is used.</li>
+            <li>The catalogue is refreshed through a scheduled sync and checked regularly so the latest published information can be added to the app.</li>
+            <li>Use App settings to change the colour theme, appearance, or background image.</li>
+          </ul>
+        </div>
+        }
+      </section>
+
+      <section class="help-page__card" aria-labelledby="custom-title">
+        <button class="help-page__section-toggle" type="button" aria-controls="custom-content" [attr.aria-expanded]="expandedSection() === 'custom'" (click)="toggleSection('custom')">
+          <span id="custom-title">Custom festivals</span>
+          <span aria-hidden="true">{{ expandedSection() === 'custom' ? '−' : '+' }}</span>
+        </button>
+        @if (expandedSection() === 'custom') {
+        <div class="help-page__section-content" id="custom-content">
+          <p class="help-page__card-copy">Planning something that is not in the catalogue? Add a custom festival manually from the festival planner.</p>
+        </div>
+        }
+      </section>
+    </div>
   </main>
 </ion-content>

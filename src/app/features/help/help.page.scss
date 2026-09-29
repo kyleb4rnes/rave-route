@@ -19,11 +19,11 @@ ion-content {
   max-width: 42rem;
   min-height: 100%;
   position: relative;
-  padding: 0 max(var(--rr-spacing-page), env(safe-area-inset-left))
-    calc(2rem + env(safe-area-inset-bottom)) max(var(--rr-spacing-page), env(safe-area-inset-right));
+  padding: 0;
 }
 
 .help-page__backdrop {
+  animation: help-backdrop-expand 650ms cubic-bezier(0.4, 0, 0.2, 1) both;
   background: var(--rr-primary);
   height: 14rem;
   inset: 0 0 auto;
@@ -31,9 +31,23 @@ ion-content {
   z-index: 0;
 }
 
+.help-page__sections {
+  animation: help-content-enter 400ms 250ms ease-out both;
+  background: var(--rr-background);
+  border-radius: var(--rr-radius-card) var(--rr-radius-card) 0 0;
+  margin-top: -1.25rem;
+  min-height: calc(100vh - 5rem);
+  padding: calc(var(--rr-spacing-page) + 0.5rem) max(var(--rr-spacing-page), env(safe-area-inset-left))
+    calc(2rem + env(safe-area-inset-bottom)) max(var(--rr-spacing-page), env(safe-area-inset-right));
+  position: relative;
+  z-index: 1;
+}
+
 .help-page__hero {
+  animation: help-content-enter 350ms 200ms ease-out both;
   color: var(--rr-primary-contrast);
-  padding: 2.5rem 0 3rem;
+  padding: 2.5rem max(var(--rr-spacing-page), env(safe-area-inset-left)) 3rem
+    max(var(--rr-spacing-page), env(safe-area-inset-right));
   position: relative;
   z-index: 1;
 }
@@ -65,10 +79,48 @@ ion-content {
   border: 1px solid var(--rr-border);
   border-radius: var(--rr-radius-card);
   box-shadow: var(--rr-shadow-card);
-  margin-top: 1rem;
-  padding: 1.25rem;
+  border-radius: var(--rr-radius-card);
+  margin-top: 0.75rem;
+  overflow: hidden;
   position: relative;
   z-index: 1;
+}
+
+.help-page__card:first-child {
+  margin-top: 0;
+}
+
+.help-page__section-toggle {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  color: var(--rr-text);
+  display: flex;
+  font: inherit;
+  font-size: 1.05rem;
+  font-weight: 800;
+  justify-content: space-between;
+  min-height: 3.5rem;
+  padding: 0.875rem 1.1rem;
+  text-align: left;
+  width: 100%;
+}
+
+.help-page__section-toggle:focus-visible {
+  outline: 2px solid var(--rr-primary);
+  outline-offset: -2px;
+}
+
+.help-page__section-toggle > span:last-child {
+  color: var(--rr-primary-dark);
+  font-size: 1.4rem;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.help-page__section-content {
+  border-top: 1px solid var(--rr-border);
+  padding: 0.25rem 1.1rem 1.1rem;
 }
 
 .help-page h2 {
@@ -137,10 +189,47 @@ ion-content {
 }
 
 .help-page__card-copy {
-  margin-bottom: 0;
+  margin: 0.75rem 0 0;
 }
 
 .help-page a {
   color: var(--rr-primary-dark);
   font-weight: 700;
+}
+
+.help-page--closing .help-page__backdrop {
+  animation: help-backdrop-collapse 650ms cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+.help-page--closing .help-page__hero {
+  animation: help-content-exit 240ms ease-in both;
+  pointer-events: none;
+}
+
+.help-page--closing .help-page__sections {
+  animation: help-sections-collapse 650ms cubic-bezier(0.4, 0, 0.2, 1) both;
+  pointer-events: none;
+}
+
+@keyframes help-backdrop-expand {
+  from { transform: scaleY(0); }
+  to { transform: scaleY(1); }
+}
+
+@keyframes help-backdrop-collapse {
+  from { transform: scaleY(1); }
+  to { transform: scaleY(0); }
+}
+
+@keyframes help-content-enter {
+  from { opacity: 0; transform: translateY(1.5rem); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes help-content-exit {
+  to { opacity: 0; transform: translateY(1.5rem); }
+}
+
+@keyframes help-sections-collapse {
+  to { clip-path: inset(0 0 100% 0); }
 }
