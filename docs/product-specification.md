@@ -19,8 +19,8 @@ The product must allow a user to:
 3. See the next upcoming festival emphasised in a large card.
 4. See later festivals as collapsed cards and expand them.
 5. View full festival details.
-6. Browse current and past catalogue festivals and search/filter them.
-7. Add a catalogue or custom festival.
+6. Browse current and past catalogue festivals, including events whose set times are not yet released, and search/filter them by location, date, duration, and reviewed genre group.
+7. Add a catalogue or custom festival and check a saved catalogue festival for newly published set times.
 8. Edit a festival.
 9. Delete a festival after confirmation.
 10. Retain festival data after closing or refreshing the application.

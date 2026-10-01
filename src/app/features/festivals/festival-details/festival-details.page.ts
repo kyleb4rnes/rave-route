@@ -15,6 +15,10 @@ import { cameraOutline } from 'ionicons/icons';
 import { AppHeaderComponent } from '../../../components/app-header/app-header.component';
 import { FestivalImageComponent } from '../../../components/festival-image/festival-image.component';
 import { calculateDaysRemaining } from '../../../core/festivals/festival-date.utils';
+import {
+  getAccommodationSearchUrl,
+  getTransportSearchUrl,
+} from '../../../core/festivals/festival-plan-links.utils';
 import { Festival, isCustomFestival, PackingListItem } from '../../../core/festivals/models/festival';
 import { FestivalStore } from '../../../core/festivals/festival.store';
 import { hasFestivalTicketLinks } from '../../../core/festivals/festival-ticket-links.utils';
@@ -88,6 +92,22 @@ export class FestivalDetailsPage {
     return hasFestivalTicketLinks(festival);
   }
 
+  getTransportSearchUrl(festival: Festival): string {
+    return getTransportSearchUrl(festival);
+  }
+
+  getAccommodationSearchUrl(festival: Festival): string {
+    return getAccommodationSearchUrl(festival);
+  }
+
+  getStayLengthLabel(festival: Festival): string {
+    const start = new Date(`${festival.startDate}T00:00:00.000Z`);
+    const end = new Date(`${festival.endDate}T00:00:00.000Z`);
+    const nights = Math.max(1, Math.round((end.getTime() - start.getTime()) / 86_400_000) + 1);
+
+    return `${nights} ${nights === 1 ? 'night' : 'nights'}`;
+  }
+
   editFestival(): void {
     void this.router.navigate(['/festivals', this.festivalId, 'edit']);
   }
@@ -145,7 +165,11 @@ export class FestivalDetailsPage {
       return;
     }
 
-    await this.updateArrangements(event.detail.checked, festival.accommodationArranged ?? false);
+    await this.updateArrangements(
+      festival.ticketArranged ?? false,
+      event.detail.checked,
+      festival.accommodationArranged ?? false,
+    );
   }
 
   async updateAccommodationArrangement(event: CustomEvent<{ checked: boolean }>): Promise<void> {
@@ -155,7 +179,25 @@ export class FestivalDetailsPage {
       return;
     }
 
-    await this.updateArrangements(festival.transportArranged, event.detail.checked);
+    await this.updateArrangements(
+      festival.ticketArranged ?? false,
+      festival.transportArranged,
+      event.detail.checked,
+    );
+  }
+
+  async updateTicketArrangement(event: CustomEvent<{ checked: boolean }>): Promise<void> {
+    const festival = this.festival();
+
+    if (!festival) {
+      return;
+    }
+
+    await this.updateArrangements(
+      event.detail.checked,
+      festival.transportArranged,
+      festival.accommodationArranged ?? false,
+    );
   }
 
   async togglePackingItem(itemId: string): Promise<void> {
@@ -216,6 +258,7 @@ export class FestivalDetailsPage {
   }
 
   private async updateArrangements(
+    ticketArranged: boolean,
     transportArranged: boolean,
     accommodationArranged: boolean,
   ): Promise<void> {
@@ -228,6 +271,7 @@ export class FestivalDetailsPage {
 
     if (!(await this.festivalStore.updateFestivalArrangements(
       this.festivalId,
+      ticketArranged,
       transportArranged,
       accommodationArranged,
     ))) {

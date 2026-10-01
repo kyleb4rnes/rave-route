@@ -7,7 +7,13 @@ import {
   sortFestivalsByStartDate,
 } from './festival-date.utils';
 import { FestivalDraft } from './models/festival-draft';
-import { Festival, isCustomFestival, PackingListItem } from './models/festival';
+import {
+  Festival,
+  FestivalGenre,
+  FestivalLineupStatus,
+  isCustomFestival,
+  PackingListItem,
+} from './models/festival';
 import { FestivalSet, FestivalSetDraft, FestivalSetImport, LineupImportSummary } from './models/festival-set';
 import { FESTIVAL_REPOSITORY } from './data/festival-repository.token';
 import { ImageStorageService } from '../images/image-storage.service';
@@ -76,6 +82,9 @@ export class FestivalStore {
       location?: Festival['locationMetadata'];
       imageUrl?: string;
       ticketLinks?: Festival['ticketLinks'];
+      lineupStatus?: FestivalLineupStatus;
+      sourceGenres?: readonly string[];
+      genres?: readonly FestivalGenre[];
     },
     importedSets: readonly FestivalSetImport[],
   ): Promise<Festival | undefined> {
@@ -97,6 +106,7 @@ export class FestivalStore {
         ...(preset.location ? { locationMetadata: preset.location } : {}),
         ...(imageUrl ? { imageUrl } : {}),
         ...(preset.ticketLinks ? { ticketLinks: preset.ticketLinks } : {}),
+        ticketArranged: false,
         transportArranged: false,
         accommodationArranged: false,
         lineupSets: importedSets.map((set) => toFestivalSet(set)),
@@ -105,6 +115,9 @@ export class FestivalStore {
           provider: 'timetable-lol',
           eventSlug: preset.eventSlug,
           sourceUrl: preset.sourceUrl,
+          ...(preset.lineupStatus ? { lineupStatus: preset.lineupStatus } : {}),
+          ...(preset.sourceGenres ? { sourceGenres: preset.sourceGenres } : {}),
+          ...(preset.genres ? { genres: preset.genres } : {}),
         },
         createdAt: timestamp,
         updatedAt: timestamp,
@@ -133,6 +146,7 @@ export class FestivalStore {
         endDate: draft.endDate,
         ...(imageUrl ? { imageUrl } : {}),
         location: draft.location,
+        ticketArranged: false,
         transportArranged: draft.transportArranged,
         accommodationArranged: draft.accommodationArranged,
         lineupSets: [],
@@ -228,6 +242,7 @@ export class FestivalStore {
 
   async updateFestivalArrangements(
     id: string,
+    ticketArranged: boolean,
     transportArranged: boolean,
     accommodationArranged: boolean,
   ): Promise<boolean> {
@@ -239,6 +254,7 @@ export class FestivalStore {
 
     const updatedFestival: Festival = {
       ...existingFestival,
+      ticketArranged,
       transportArranged,
       accommodationArranged,
       updatedAt: new Date().toISOString(),
@@ -500,6 +516,9 @@ export class FestivalStore {
   async importLineupSets(
     festivalId: string,
     importedSets: readonly FestivalSetImport[],
+    lineupStatus?: FestivalLineupStatus,
+    sourceGenres?: readonly string[],
+    genres?: readonly FestivalGenre[],
   ): Promise<LineupImportSummary | undefined> {
     const festival = this.getFestivalById(festivalId);
 
@@ -540,7 +559,10 @@ export class FestivalStore {
 
       updated += 1;
 
-      return toFestivalSet(importedSet, set.id);
+      return {
+        ...toFestivalSet(importedSet, set.id),
+        ...(set.isMustSee ? { isMustSee: true } : {}),
+      };
     });
 
     for (const importedSet of importedSets) {
@@ -563,6 +585,16 @@ export class FestivalStore {
     const updatedFestival: Festival = {
       ...festival,
       lineupSets: refreshedSets,
+      ...(festival.catalogueSource && (lineupStatus || sourceGenres || genres)
+        ? {
+            catalogueSource: {
+              ...festival.catalogueSource,
+              ...(lineupStatus ? { lineupStatus } : {}),
+              ...(sourceGenres ? { sourceGenres } : {}),
+              ...(genres ? { genres } : {}),
+            },
+          }
+        : {}),
       updatedAt: new Date().toISOString(),
     };
 

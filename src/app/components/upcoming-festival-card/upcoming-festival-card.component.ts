@@ -31,6 +31,7 @@ export class UpcomingFestivalCardComponent {
   readonly location = input.required<string>();
   readonly dateLabel = input.required<string>();
   readonly countdownLabel = input.required<string>();
+  readonly ticketLabel = input.required<string>();
   readonly transportLabel = input.required<string>();
   readonly accommodationLabel = input.required<string>();
   readonly imageUrl = input<string | undefined>();

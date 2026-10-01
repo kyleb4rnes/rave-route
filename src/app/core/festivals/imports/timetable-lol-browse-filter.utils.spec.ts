@@ -3,10 +3,12 @@ import {
   countActiveBrowseFilters,
   defaultTimetableLolBrowseFilters,
   filterTimetableLolPresets,
+  formatBrowseLocation,
   formatCountry,
   getCities,
   getCountries,
   getCurrentAndFuturePresets,
+  getGenres,
   getPastPresets,
 } from './timetable-lol-browse-filter.utils';
 
@@ -29,7 +31,7 @@ describe('Timetable.lol browse filters', () => {
     const result = filterTimetableLolPresets(
       presets,
       'weekend',
-      { country: 'NL', city: 'Rotterdam', dateRange: 'all', duration: 'multi-day' },
+      { country: 'NL', city: 'Rotterdam', genre: '', dateRange: 'all', duration: 'multi-day' },
       new Date(2026, 8, 27),
     );
 
@@ -65,14 +67,44 @@ describe('Timetable.lol browse filters', () => {
     expect(getCountries(presets)).toEqual(['NL', 'UK']);
     expect(getCities(presets, 'NL')).toEqual(['Amsterdam', 'Rotterdam']);
     expect(
-      countActiveBrowseFilters({ country: 'NL', city: '', dateRange: 'upcoming', duration: 'all' }),
+      countActiveBrowseFilters({ country: 'NL', city: '', genre: '', dateRange: 'upcoming', duration: 'all' }),
     ).toBe(2);
+  });
+
+  it('filters by a mapped genre and exposes only available genre options', () => {
+    const genrePresets = presets.map((preset, index) => ({
+      ...preset,
+      genres: index === 2 ? ['Hardstyle' as const] : index === 3 ? ['Hardstyle' as const, 'Hardcore' as const] : [],
+    }));
+
+    const result = filterTimetableLolPresets(
+      genrePresets,
+      '',
+      { ...defaultTimetableLolBrowseFilters, genre: 'Hardcore' },
+      new Date(2026, 8, 27),
+    );
+
+    expect(result.map((preset) => preset.eventSlug)).toEqual(['weekend-nl']);
+    expect(getGenres(genrePresets)).toEqual(['Hardstyle', 'Hardcore']);
   });
 
   it('formats ISO country codes for display while preserving unknown values', () => {
     expect(formatCountry('NL')).toBe('Netherlands');
     expect(formatCountry('GB')).toBe('United Kingdom');
     expect(formatCountry('Unknown country')).toBe('Unknown country');
+  });
+
+  it('formats browse locations as city and full country while retaining safe fallbacks', () => {
+    expect(formatBrowseLocation(presets[0].location)).toBe('Amsterdam, Netherlands');
+    expect(
+      formatBrowseLocation({
+        displayName: 'Mystery venue',
+        precision: 'venue',
+        source: 'Test',
+        verifiedAt: '2026-10-01T00:00:00.000Z',
+      }),
+    ).toBe('Mystery venue');
+    expect(formatBrowseLocation()).toBe('Location to be announced');
   });
 });
 
@@ -95,6 +127,9 @@ function createPreset(
     sourceLabel: 'Timetable.lol community timetable',
     sourceUrl: `https://example.com/${eventSlug}`,
     setCount: 1,
+    lineupStatus: 'published',
+    sourceGenres: [],
+    genres: [],
     location: {
       displayName: `${city}, ${country}`,
       city,

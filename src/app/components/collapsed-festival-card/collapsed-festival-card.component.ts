@@ -17,6 +17,7 @@ export class CollapsedFestivalCardComponent {
   readonly dateLabel = input.required<string>();
   readonly location = input.required<string>();
   readonly countdownLabel = input.required<string>();
+  readonly ticketLabel = input.required<string>();
   readonly transportLabel = input.required<string>();
   readonly accommodationLabel = input.required<string>();
   readonly expanded = input.required<boolean>();

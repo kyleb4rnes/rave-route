@@ -177,6 +177,10 @@ export class HomePage {
     return festival.transportArranged ? 'Transport arranged' : 'Transport to arrange';
   }
 
+  getTicketLabel(festival: Festival): string {
+    return festival.ticketArranged ? 'Tickets arranged' : 'Tickets to arrange';
+  }
+
   getAccommodationLabel(festival: Festival): string {
     return festival.accommodationArranged ? 'Accommodation arranged' : 'Accommodation to arrange';
   }

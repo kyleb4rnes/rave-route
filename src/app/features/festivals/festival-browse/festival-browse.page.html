@@ -5,7 +5,7 @@
     <header>
       <p>FESTIVAL CATALOGUE</p>
       <h1>Find your next route</h1>
-      <span>Browse festivals with published timetable data.</span>
+      <span>Browse festivals now and add set times when they are published.</span>
     </header>
 
     <div class="festival-browse__controls">
@@ -61,6 +61,21 @@
             <ion-select-option value="">Any city</ion-select-option>
             @for (city of cities(); track city) {
               <ion-select-option [value]="city">{{ city }}</ion-select-option>
+            }
+          </ion-select>
+        </ion-item>
+
+        <ion-item>
+          <ion-label>Genre</ion-label>
+          <ion-select
+            aria-label="Filter by genre"
+            interface="alert"
+            [value]="filters().genre"
+            (ionChange)="updateGenre($event.detail.value)"
+          >
+            <ion-select-option value="">Any genre</ion-select-option>
+            @for (genre of genres(); track genre) {
+              <ion-select-option [value]="genre">{{ genre }}</ion-select-option>
             }
           </ion-select>
         </ion-item>
@@ -142,7 +157,11 @@
                 <ion-icon aria-hidden="true" name="calendar-outline"></ion-icon>
                 {{ formatDateRange(preset) }}
               </small>
-              <small>{{ preset.setCount }} published sets</small>
+              <small>
+                <ion-icon aria-hidden="true" name="location-outline"></ion-icon>
+                {{ formatLocation(preset) }}
+              </small>
+              <small>{{ preset.detail }}</small>
             </span>
             <ion-icon aria-hidden="true" name="chevron-forward" slot="end"></ion-icon>
           </ion-button>

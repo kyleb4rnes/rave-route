@@ -7,6 +7,18 @@
         <header class="festival-lineup__intro">
           <p>SET TIMES</p>
           <h1>{{ selectedFestival.title }}</h1>
+          @if (isCatalogueFestival(selectedFestival)) {
+            <ion-button
+              class="festival-lineup__refresh"
+              fill="outline"
+              size="small"
+              type="button"
+              [disabled]="isRefreshing()"
+              (click)="refreshLineup()"
+            >
+              {{ isRefreshing() ? 'Checking…' : (hasPublishedSets() ? 'Update line-up' : 'Check for set times') }}
+            </ion-button>
+          }
         </header>
 
         <ion-segment class="lineup-day-picker" [scrollable]="true" [value]="selectedDay()" (ionChange)="selectDay($event.detail.value)">
@@ -45,7 +57,9 @@
       <section class="festival-lineup__schedule" aria-labelledby="schedule-title">
         @if (timeSchedules().length === 0) {
           <p class="festival-lineup__empty">
-            {{ isMustSeeFilterActive() ? 'No must-see sets for this day yet.' : 'No published set times for this day.' }}
+            {{ isMustSeeFilterActive()
+              ? 'No must-see sets for this day yet.'
+              : (hasPublishedSets() ? 'No published set times for this day.' : getEmptyLineupMessage(selectedFestival)) }}
           </p>
         } @else if (viewMode() === 'time') {
           @for (schedule of timeSchedules(); track schedule.key) {
@@ -99,6 +113,9 @@
 
       @if (actionError()) {
         <ion-note class="festival-lineup__action-error" color="danger" role="alert">{{ actionError() }}</ion-note>
+      }
+      @if (refreshMessage()) {
+        <ion-note class="festival-lineup__refresh-message" role="status">{{ refreshMessage() }}</ion-note>
       }
 
       @if (selectedFestival.catalogueSource?.provider === 'timetable-lol') {

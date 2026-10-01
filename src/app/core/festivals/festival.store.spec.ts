@@ -145,6 +145,9 @@ describe('FestivalStore', () => {
         price: '55.00',
         currency: 'EUR',
       },
+      lineupStatus: 'published' as const,
+      sourceGenres: ['Rawstyle', 'Uptempo'],
+      genres: ['Hardstyle'] as const,
     };
     const importedSets = [
       {
@@ -169,6 +172,9 @@ describe('FestivalStore', () => {
       provider: 'timetable-lol',
       eventSlug: preset.eventSlug,
       sourceUrl: preset.sourceUrl,
+      lineupStatus: 'published',
+      sourceGenres: ['Rawstyle', 'Uptempo'],
+      genres: ['Hardstyle'],
     });
     expect(createdFestival?.location).toBe('Example City, Netherlands');
     expect(createdFestival?.locationMetadata).toEqual(preset.location);
@@ -252,9 +258,13 @@ describe('FestivalStore', () => {
     );
     await store.loadFestivals();
 
-    expect(await store.updateFestivalArrangements('next', false, false)).toBeTrue();
+    expect(await store.updateFestivalArrangements('next', true, false, false)).toBeTrue();
     expect(store.getFestivalById('next')).toEqual(
-      jasmine.objectContaining({ transportArranged: false, accommodationArranged: false }),
+      jasmine.objectContaining({
+        ticketArranged: true,
+        transportArranged: false,
+        accommodationArranged: false,
+      }),
     );
   });
 
@@ -371,6 +381,12 @@ describe('FestivalStore', () => {
   it('imports official sets without replacing matching manual entries and refreshes existing imports', async () => {
     const festivalWithSets: Festival = {
       ...nextFestival,
+      catalogueSource: {
+        provider: 'timetable-lol',
+        eventSlug: 'next-festival',
+        sourceUrl: 'https://api.timetable.lol/api/events/next-festival/planner-data',
+        lineupStatus: 'not-released',
+      },
       lineupSets: [
         {
           id: 'manual-set',
@@ -387,6 +403,7 @@ describe('FestivalStore', () => {
           startTime: '19:00',
           endTime: '20:00',
           stage: 'Main stage',
+          isMustSee: true,
           source: {
             provider: 'tomorrowland',
             performanceId: 'official-1',
@@ -439,7 +456,7 @@ describe('FestivalStore', () => {
           importedAt: '2026-02-01T00:00:00.000Z',
         },
       },
-    ]);
+    ], 'published', ['Rawstyle'], ['Hardstyle']);
 
     expect(summary).toEqual({ added: 1, updated: 1, skipped: 1 });
     expect(store.getFestivalById('next')?.lineupSets).toEqual([
@@ -458,6 +475,7 @@ describe('FestivalStore', () => {
         startTime: '19:30',
         endTime: '20:30',
         stage: 'Second stage',
+        isMustSee: true,
         source: {
           provider: 'tomorrowland',
           performanceId: 'official-1',
@@ -470,6 +488,9 @@ describe('FestivalStore', () => {
         source: jasmine.objectContaining({ performanceId: 'official-2' }),
       }),
     ]);
+    expect(store.getFestivalById('next')?.catalogueSource?.lineupStatus).toBe('published');
+    expect(store.getFestivalById('next')?.catalogueSource?.sourceGenres).toEqual(['Rawstyle']);
+    expect(store.getFestivalById('next')?.catalogueSource?.genres).toEqual(['Hardstyle']);
   });
 
   it('reports a repository load failure without leaving the store loading', async () => {

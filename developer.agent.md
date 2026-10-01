@@ -27,7 +27,7 @@ Rave Route lets a user:
 - Store data locally so it remains after the app is closed.
 - Add manual line-up set times and personalise the app appearance.
 
-Each festival contains a title, start date, end date, picture, location, transport-arranged status, accommodation-arranged status, and optional line-up sets.
+Each festival contains a title, start date, end date, picture, location, ticket/transport/accommodation arranged statuses, and optional line-up sets.
 
 ## 4. Technology Choices
 
@@ -115,11 +115,10 @@ Do not implement these unless they are explicitly brought into scope later:
 4. **First-run setup and onboarding** - design an initial welcome flow for new installs, including a short introduction and useful preferences without making setup feel mandatory or heavy.
 5. **Appearance refinement** - review whether accent colours and surfaces need clearer, mode-specific treatment in Light and Dark appearance settings, and generate an app icon variant that follows the selected colour theme where the platform permits it.
 6. **Music playback** - investigate a royalty-free in-app option or a safe Spotify connection, including licensing, authentication, offline behaviour, and platform rules before choosing an implementation.
-7. **Travel planning refinement** - turn the current transport/accommodation toggles into useful planning actions. Explore accommodation links to Booking.com or a similar provider, transport links to Uber and relevant local services, and flight-search links to suitable providers. Keep the first version link-based and provider-neutral rather than embedding bookings or payments.
+7. **Travel planning refinement** - build on the current destination-aware Google Maps and Booking.com search shortcuts. Explore traveller-origin capture, relevant local services, and flight-search links to suitable providers without embedding bookings or payments.
 8. **Optional flight suggestions** - add a clear “Suggest flights” action that asks for the traveller’s departure location only when they choose it, combines that with the festival location and dates, and opens a provider search with those details. Treat suggestions as search shortcuts, not personalised booking advice, and handle missing venue/airport data gracefully.
 9. **Maps and navigation** - decide whether reviewed venue/address data should be geocoded and linked to navigation, and reuse that location data for travel-search shortcuts.
 10. **Line-up extensions** - consider bulk set-time import and additional import providers once the core catalogue refresh is dependable.
-11. **Festival-style filters** - add styles such as Techno, House, and Drum & Bass only after the higher-priority catalogue and release work.
 
 - Accounts and cloud synchronisation: consider only after the device-only v1 release. Define the backend, authentication, data ownership, recovery, migration, and conflict-handling approach before implementation.
 - Payments
@@ -131,7 +130,7 @@ Do not implement these unless they are explicitly brought into scope later:
 
 - Bulk paste/import of set times.
 - Additional automatic import providers beyond the current Timetable.lol community catalogue.
-- Coming-soon or untimed catalogue events: decide whether users should be able to add these before their set times are published. They are excluded from the current import flow.
+- Automatic background notifications when a saved catalogue festival publishes or changes its set times; the current device-only version provides an explicit check/update action instead.
 - Timetable.lol refresh strategy: establish a refresh cadence and review process for the API-backed bundled catalogue, including skipped-event review, release timing, and failure handling.
 
 ## 11. Work to Complete Before First Public Release
@@ -181,3 +180,6 @@ Do not implement these unless they are explicitly brought into scope later:
 - 2026-07-23: Appearance is an explicit persisted Light or Dark setting, independent of the chosen accent colour. The optional custom background image remains the same source image; a mode-appropriate overlay keeps its content legible.
 - 2026-07-23: Appearance preferences are local-device settings. Theme presets update app-level CSS tokens and optional background images apply across routed content.
 - 2026-07-26: Feature-specific layout, modal, and interaction styles belong to the owning feature stylesheet; global styles are reserved for design tokens, Ionic defaults, and genuinely shared behaviour. Component stylesheet budgets are sized to permit the Line-up page's intentional local ownership while retaining a build guard.
+- 2026-10-01: Festival Details groups tickets, transport, and accommodation under Plan ahead. Each item has a device-local arranged status; transport and accommodation provide destination/date-aware external search shortcuts, while ticket links continue to use catalogue metadata. Home summaries include ticket status alongside transport and accommodation.
+- 2026-10-01: The bundled catalogue includes provider-published festivals even when no timed sets are available. Catalogue cards label whether set times are published, the line-up is announced, or set times are not yet released; users can save any of these festivals and explicitly check its Line-up page for bundled updates later. Refreshes retain manual sets and Must-see choices.
+- 2026-10-01: Catalogue refreshes preserve Timetable.lol's original festival genre labels and map them through the reviewed `scripts/timetable-lol-genre-map.json` taxonomy for Browse filtering. Raw variants and Uptempo map to Hardstyle, Hard Classics maps to Hardcore, agreed ambiguous labels map to Other, and unknown future labels are reported and safely mapped to Other.

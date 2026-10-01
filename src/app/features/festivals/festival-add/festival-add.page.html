@@ -5,7 +5,7 @@
     <header>
       <p>FIND YOUR FESTIVAL</p>
       <h1>Where are you heading?</h1>
-      <span>Choose a festival and its published line-up will be added automatically.</span>
+      <span>Choose a festival now. Published set times will be added when available.</span>
     </header>
 
     @if (selectedPreset(); as preset) {
@@ -16,8 +16,11 @@
           <ion-icon aria-hidden="true" name="calendar-outline"></ion-icon>
           <span>{{ formatDateRange(preset) }}</span>
         </div>
-        <span>{{ preset.setCount }} published sets</span>
+        <span>{{ preset.detail }}</span>
         <span>{{ preset.location?.displayName ?? 'Location to be announced' }}</span>
+        @if (preset.genres.length > 0) {
+          <span>Genres: {{ preset.genres.join(' · ') }}</span>
+        }
         @if (preset.ticketLinks?.price; as ticketPrice) {
           <span class="festival-add__ticket-estimate">
             Estimated ticket price: {{ ticketPrice }}{{ preset.ticketLinks?.currency ? ' ' + preset.ticketLinks?.currency : '' }}
@@ -33,7 +36,7 @@
           } @else if (isAlreadyAdded(preset)) {
             Open festival
           } @else {
-            Add festival & line-up
+            {{ (preset.setCount ?? 0) > 0 ? 'Add festival & line-up' : 'Add festival' }}
           }
         </ion-button>
       </section>

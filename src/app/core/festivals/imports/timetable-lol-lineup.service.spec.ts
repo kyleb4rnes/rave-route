@@ -24,6 +24,9 @@ const catalogueFixture = {
         price: '55.00',
         currency: 'EUR',
       },
+      lineupStatus: 'published',
+      sourceGenres: ['Rawstyle', 'Uptempo'],
+      genres: ['Hardstyle'],
       sets: [
         {
           performanceId: 'api-festival-2026:2026-08-14:Main:101:1',
@@ -42,6 +45,17 @@ const catalogueFixture = {
           stage: 'Main',
         },
       ],
+    },
+    {
+      eventSlug: 'waiting-festival-2027',
+      title: 'Waiting Festival 2027',
+      startDate: '2027-06-24',
+      endDate: '2027-06-27',
+      sourceUrl: 'https://api.timetable.lol/api/events/waiting-festival-2027/planner-data',
+      lineupStatus: 'not-released',
+      sourceGenres: [],
+      genres: [],
+      sets: [],
     },
   ],
 };
@@ -72,9 +86,19 @@ describe('TimetableLolLineupService', () => {
       jasmine.objectContaining({
         eventSlug: 'api-festival-2026',
         setCount: 2,
+        lineupStatus: 'published',
+        sourceGenres: ['Rawstyle', 'Uptempo'],
+        genres: ['Hardstyle'],
+        detail: '2 published sets',
         imageUrl: catalogueFixture.events[0].imageUrl,
         ticketLinks: catalogueFixture.events[0].tickets,
         location: jasmine.objectContaining({ venue: 'Example Venue' }),
+      }),
+      jasmine.objectContaining({
+        eventSlug: 'waiting-festival-2027',
+        setCount: 0,
+        lineupStatus: 'not-released',
+        detail: 'Set times not released yet',
       }),
     ]);
   });

@@ -28,10 +28,32 @@ export interface PackingListItem {
   custom?: boolean;
 }
 
+export type FestivalLineupStatus = 'not-released' | 'lineup-announced' | 'published';
+
+export const festivalGenres = [
+  'Hardstyle',
+  'Hardcore',
+  'Hard Dance',
+  'Techno',
+  'Drum & Bass',
+  'Bass',
+  'House',
+  'Trance',
+  'Electronic / EDM',
+  'Rock & Alternative',
+  'Pop',
+  'Other',
+] as const;
+
+export type FestivalGenre = (typeof festivalGenres)[number];
+
 export interface FestivalCatalogueSource {
   provider: 'timetable-lol';
   eventSlug: string;
   sourceUrl: string;
+  lineupStatus?: FestivalLineupStatus;
+  sourceGenres?: readonly string[];
+  genres?: readonly FestivalGenre[];
 }
 
 export interface Festival {
@@ -43,6 +65,7 @@ export interface Festival {
   location: string;
   locationMetadata?: FestivalLocation;
   ticketLinks?: FestivalTicketLinks;
+  ticketArranged?: boolean;
   transportArranged: boolean;
   accommodationArranged?: boolean;
   lineupSets?: readonly FestivalSet[];

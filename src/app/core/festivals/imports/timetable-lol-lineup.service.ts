@@ -1,6 +1,12 @@
 import { Injectable } from '@angular/core';
 
-import { Festival, FestivalLocation, FestivalTicketLinks } from '../models/festival';
+import {
+  Festival,
+  FestivalGenre,
+  FestivalLineupStatus,
+  FestivalLocation,
+  FestivalTicketLinks,
+} from '../models/festival';
 import { FestivalSetImport } from '../models/festival-set';
 import { LineupImportPreset } from './lineup-import-preset';
 
@@ -12,6 +18,9 @@ export interface TimetableLolPreset extends LineupImportPreset {
   location?: FestivalLocation;
   imageUrl?: string;
   ticketLinks?: FestivalTicketLinks;
+  lineupStatus: FestivalLineupStatus;
+  sourceGenres: readonly string[];
+  genres: readonly FestivalGenre[];
 }
 
 interface TimetableLolCatalogue {
@@ -27,6 +36,9 @@ interface TimetableLolCatalogueEvent {
   location?: FestivalLocation;
   imageUrl?: string;
   tickets?: FestivalTicketLinks;
+  lineupStatus?: FestivalLineupStatus;
+  sourceGenres?: string[];
+  genres?: FestivalGenre[];
   sets: TimetableLolCatalogueSet[];
 }
 
@@ -52,11 +64,14 @@ export class TimetableLolLineupService {
         provider: 'timetable-lol' as const,
         sourceLabel: 'Timetable.lol community timetable',
         label: event.title,
-        detail: `${event.sets.length} published sets`,
+        detail: getLineupAvailabilityLabel(getLineupStatus(event), event.sets.length),
         startDate: event.startDate,
         endDate: event.endDate,
         sourceUrl: event.sourceUrl,
         setCount: event.sets.length,
+        lineupStatus: getLineupStatus(event),
+        sourceGenres: event.sourceGenres ?? [],
+        genres: event.genres ?? [],
         eventSlug: event.eventSlug,
         ...(event.location ? { location: event.location } : {}),
         ...(event.imageUrl ? { imageUrl: event.imageUrl } : {}),
@@ -126,6 +141,29 @@ export class TimetableLolLineupService {
 
     return this.catalogue;
   }
+}
+
+export function getLineupAvailabilityLabel(
+  status: FestivalLineupStatus,
+  setCount: number,
+): string {
+  if (status === 'lineup-announced') {
+    return 'Line-up announced · set times coming soon';
+  }
+
+  if (status === 'not-released' || setCount === 0) {
+    return 'Set times not released yet';
+  }
+
+  return `${setCount} published ${setCount === 1 ? 'set' : 'sets'}`;
+}
+
+function getLineupStatus(event: TimetableLolCatalogueEvent): FestivalLineupStatus {
+  if (event.lineupStatus === 'lineup-announced' || event.lineupStatus === 'not-released') {
+    return event.lineupStatus;
+  }
+
+  return event.sets.length > 0 ? 'published' : 'not-released';
 }
 
 function isTimetableLolCatalogueEvent(value: unknown): value is TimetableLolCatalogueEvent {

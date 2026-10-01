@@ -40,6 +40,15 @@ ion-content {
   margin: 0;
 }
 
+.festival-lineup__refresh {
+  --border-color: var(--rr-primary);
+  --border-radius: var(--rr-radius-control);
+  --color: var(--rr-primary-dark);
+  font-size: 0.75rem;
+  font-weight: 800;
+  margin: 0.75rem 0 0;
+}
+
 .lineup-day-picker ion-segment-button {
   --padding-bottom: 0.5rem;
   --padding-end: 0.75rem;
@@ -248,8 +257,14 @@ ion-content {
   --color: var(--rr-primary);
 }
 
-.festival-lineup__action-error {
+.festival-lineup__action-error,
+.festival-lineup__refresh-message {
   display: block;
+}
+
+.festival-lineup__refresh-message {
+  color: var(--rr-text-muted);
+  text-align: center;
 }
 
 .festival-lineup__attribution {

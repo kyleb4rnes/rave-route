@@ -19,7 +19,9 @@ import {
   getFestivalDayTimeSortValue,
 } from '../../../core/festivals/festival-date.utils';
 import { FestivalStore } from '../../../core/festivals/festival.store';
+import { Festival } from '../../../core/festivals/models/festival';
 import { FestivalSet } from '../../../core/festivals/models/festival-set';
+import { TimetableLolLineupService } from '../../../core/festivals/imports/timetable-lol-lineup.service';
 
 addIcons({ heart, heartOutline, layersOutline, timeOutline });
 
@@ -53,6 +55,7 @@ type TimeSchedule = {
 export class FestivalLineupPage {
   private readonly route = inject(ActivatedRoute);
   private readonly festivalStore = inject(FestivalStore);
+  private readonly timetableService = inject(TimetableLolLineupService);
   private readonly festivalId = this.route.snapshot.paramMap.get('festivalId') ?? '';
 
   readonly festival = computed(() => this.festivalStore.getFestivalById(this.festivalId));
@@ -60,6 +63,9 @@ export class FestivalLineupPage {
   readonly viewMode = signal<'time' | 'stage'>('stage');
   readonly isMustSeeFilterActive = signal(false);
   readonly actionError = signal<string | null>(null);
+  readonly refreshMessage = signal<string | null>(null);
+  readonly isRefreshing = signal(false);
+  readonly hasPublishedSets = computed(() => (this.festival()?.lineupSets?.length ?? 0) > 0);
   readonly festivalDays = computed(() => {
     const festival = this.festival();
 
@@ -157,6 +163,64 @@ export class FestivalLineupPage {
 
     if (!(await this.festivalStore.setLineupSetMustSee(this.festivalId, set.id, !set.isMustSee))) {
       this.actionError.set('We could not update that set. Please try again.');
+    }
+  }
+
+  isCatalogueFestival(festival: Festival): boolean {
+    return festival.catalogueSource?.provider === 'timetable-lol';
+  }
+
+  getEmptyLineupMessage(festival: Festival): string {
+    return festival.catalogueSource?.lineupStatus === 'lineup-announced'
+      ? 'The line-up is announced, but set times have not been released yet.'
+      : 'Set times have not been released yet. Check again closer to the festival.';
+  }
+
+  async refreshLineup(): Promise<void> {
+    const festival = this.festival();
+    const eventSlug = festival?.catalogueSource?.eventSlug;
+
+    if (!festival || !eventSlug || this.isRefreshing()) {
+      return;
+    }
+
+    this.actionError.set(null);
+    this.refreshMessage.set(null);
+    this.isRefreshing.set(true);
+
+    try {
+      const presets = await this.timetableService.loadPresets();
+      const preset = presets.find((candidate) => candidate.eventSlug === eventSlug);
+
+      if (!preset) {
+        this.actionError.set('This festival is not in the latest catalogue.');
+        return;
+      }
+
+      const sets = await this.timetableService.loadAllSets(preset);
+      const summary = await this.festivalStore.importLineupSets(
+        this.festivalId,
+        sets,
+        preset.lineupStatus,
+        preset.sourceGenres,
+        preset.genres,
+      );
+
+      if (!summary) {
+        this.actionError.set('We could not update the line-up. Please try again.');
+      } else if (sets.length === 0) {
+        this.refreshMessage.set(this.getEmptyLineupMessage(this.festival() ?? festival));
+      } else if (summary.added === 0 && summary.updated === 0) {
+        this.refreshMessage.set('Your line-up is up to date.');
+      } else {
+        this.refreshMessage.set(
+          `Line-up updated: ${summary.added} added and ${summary.updated} refreshed.`,
+        );
+      }
+    } catch {
+      this.actionError.set('We could not check for set times. Please try again.');
+    } finally {
+      this.isRefreshing.set(false);
     }
   }
 

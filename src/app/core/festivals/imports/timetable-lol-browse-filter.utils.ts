@@ -1,4 +1,5 @@
 import { TimetableLolPreset } from './timetable-lol-lineup.service';
+import { FestivalGenre, festivalGenres, FestivalLocation } from '../models/festival';
 
 export type BrowseDateRange = 'all' | 'upcoming' | 'next-3-months' | 'next-6-months' | 'this-year';
 export type BrowseDuration = 'all' | 'one-day' | 'multi-day';
@@ -8,6 +9,7 @@ export interface TimetableLolBrowseFilters {
   city: string;
   dateRange: BrowseDateRange;
   duration: BrowseDuration;
+  genre: FestivalGenre | '';
 }
 
 export const defaultTimetableLolBrowseFilters: TimetableLolBrowseFilters = {
@@ -15,6 +17,7 @@ export const defaultTimetableLolBrowseFilters: TimetableLolBrowseFilters = {
   city: '',
   dateRange: 'all',
   duration: 'all',
+  genre: '',
 };
 
 export function filterTimetableLolPresets(
@@ -32,6 +35,7 @@ export function filterTimetableLolPresets(
       !query || preset.label.toLocaleLowerCase().includes(query) || preset.startDate.includes(query);
     const matchesCountry = !filters.country || preset.location?.country === filters.country;
     const matchesCity = !filters.city || preset.location?.city === filters.city;
+    const matchesGenre = !filters.genre || preset.genres.includes(filters.genre);
     const matchesDuration =
       filters.duration === 'all' ||
       (filters.duration === 'one-day' && preset.startDate === preset.endDate) ||
@@ -44,7 +48,7 @@ export function filterTimetableLolPresets(
         preset.startDate.slice(0, 4) === todayDate.slice(0, 4)) ||
       (dateLimit !== null && preset.endDate >= todayDate && preset.startDate <= dateLimit);
 
-    return matchesSearch && matchesCountry && matchesCity && matchesDuration && matchesDate;
+    return matchesSearch && matchesCountry && matchesCity && matchesGenre && matchesDuration && matchesDate;
   });
 }
 
@@ -80,6 +84,19 @@ export function formatCountry(country: string): string {
   return new Intl.DisplayNames(['en-GB'], { type: 'region' }).of(country.toUpperCase()) ?? country;
 }
 
+export function formatBrowseLocation(location?: FestivalLocation): string {
+  if (!location) {
+    return 'Location to be announced';
+  }
+
+  const cityAndCountry = [
+    location.city,
+    location.country ? formatCountry(location.country) : undefined,
+  ].filter((part): part is string => Boolean(part));
+
+  return cityAndCountry.join(', ') || location.displayName || 'Location to be announced';
+}
+
 export function getCities(presets: readonly TimetableLolPreset[], country: string): string[] {
   return uniqueSorted(
     presets
@@ -88,8 +105,14 @@ export function getCities(presets: readonly TimetableLolPreset[], country: strin
   );
 }
 
+export function getGenres(presets: readonly TimetableLolPreset[]): FestivalGenre[] {
+  return festivalGenres.filter((genre) => presets.some((preset) => preset.genres.includes(genre)));
+}
+
 export function countActiveBrowseFilters(filters: TimetableLolBrowseFilters): number {
-  return [filters.country, filters.city, filters.dateRange !== 'all', filters.duration !== 'all'].filter(Boolean).length;
+  return [filters.country, filters.city, filters.genre, filters.dateRange !== 'all', filters.duration !== 'all'].filter(
+    Boolean,
+  ).length;
 }
 
 function getDateLimit(dateRange: BrowseDateRange, today: Date): string | null {

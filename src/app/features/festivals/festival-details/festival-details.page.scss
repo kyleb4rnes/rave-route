@@ -92,21 +92,18 @@ ion-content {
   margin: 0;
 }
 
-.festival-details__info-card,
-.festival-details__plan-card {
+.festival-details__info-card {
   background: var(--rr-surface);
   border: 1px solid var(--rr-border);
   border-radius: var(--rr-radius-control);
   overflow: hidden;
 }
 
-.festival-details__info-card > div,
-.festival-details__plan-card > div {
+.festival-details__info-card > div {
   padding: 0.75rem 1rem;
 }
 
-.festival-details__info-card > div + div,
-.festival-details__plan-card > div + div {
+.festival-details__info-card > div + div {
   border-top: 1px solid var(--rr-border);
 }
 
@@ -127,39 +124,90 @@ ion-content {
   gap: 0.75rem;
 }
 
-.festival-details__tickets {
-  align-items: end;
+.festival-details__plan {
   background: var(--rr-surface);
   border: 1px solid var(--rr-border);
   border-radius: var(--rr-radius-control);
-  display: grid;
-  gap: 1rem;
   padding: 1rem;
 }
 
-.festival-details__tickets h2 {
+.festival-details__plan h2 {
   color: var(--rr-text);
-  font-size: 1.25rem;
+  font-size: 1.15rem;
   margin: 0;
 }
 
-.festival-details__tickets .festival-details__eyebrow {
+.festival-details__plan .festival-details__eyebrow {
   margin-bottom: 0.25rem;
 }
 
-.festival-details__ticket-price {
+.festival-details__plan-item {
+  border-top: 1px solid var(--rr-border);
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 0.875rem;
+  padding-top: 0.875rem;
+}
+
+.festival-details__plan-copy {
+  min-width: 0;
+}
+
+.festival-details__plan-title-row {
+  align-items: center;
+  display: flex;
+  gap: 0.75rem;
+  justify-content: space-between;
+}
+
+.festival-details__plan-title-row h3 {
+  color: var(--rr-text);
+  font-size: 1rem;
+  margin: 0;
+}
+
+.festival-details__plan-pill {
+  background: var(--rr-background);
+  border: 1px solid var(--rr-border);
+  border-radius: 999px;
   color: var(--rr-text-muted);
+  flex: 0 0 auto;
+  font-size: 0.75rem;
+  font-weight: 800;
+  padding: 0.25rem 0.55rem;
+}
+
+.festival-details__plan-pill.is-arranged {
+  background: var(--rr-primary-soft);
+  border-color: color-mix(in srgb, var(--rr-primary) 35%, var(--rr-border));
+  color: var(--rr-primary-dark);
+}
+
+.festival-details__plan-estimate,
+.festival-details__plan-unavailable {
+  color: var(--rr-text-muted);
+  font-size: 0.875rem;
   margin: 0.35rem 0 0;
 }
 
-.festival-details__ticket-actions {
+.festival-details__plan-estimate span {
+  color: var(--rr-text);
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  margin-bottom: 0.1rem;
+  text-transform: uppercase;
+}
+
+.festival-details__plan-actions {
   display: grid;
   gap: 0.5rem;
 }
 
-.festival-details__ticket-link {
+.festival-details__plan-link {
   align-items: center;
   background: var(--rr-primary);
+  border: 1px solid var(--rr-primary);
   border-radius: var(--rr-radius-control);
   color: var(--rr-primary-contrast);
   display: flex;
@@ -171,18 +219,28 @@ ion-content {
   text-decoration: none;
 }
 
-.festival-details__ticket-link--secondary {
+.festival-details__plan-link--secondary {
   background: transparent;
-  border: 1px solid var(--rr-primary);
   color: var(--rr-primary-dark);
 }
 
+.festival-details__plan-item ion-toggle {
+  --color: var(--rr-text);
+  --padding-end: 0;
+  --padding-start: 0;
+  border-top: 1px solid var(--rr-border);
+  display: block;
+  font-weight: 700;
+  padding-top: 0.75rem;
+}
+
 @media (min-width: 32rem) {
-  .festival-details__tickets {
-    grid-template-columns: 1fr auto;
+  .festival-details__plan-actions {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .festival-details__ticket-actions {
+  .festival-details__plan-item > .festival-details__plan-link {
+    justify-self: start;
     min-width: 11rem;
   }
 }
@@ -294,18 +352,6 @@ ion-content {
 
 .festival-details__packing-add button:disabled {
   opacity: 0.5;
-}
-
-.festival-details__arrangement-field dd {
-  margin: 0.25rem 0 0;
-}
-
-.festival-details__arrangement-field ion-toggle {
-  --color: var(--rr-text);
-  --padding-end: 0;
-  --padding-start: 0;
-  display: block;
-  font-weight: 700;
 }
 
 .festival-details__arrangement-error {

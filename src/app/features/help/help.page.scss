@@ -53,8 +53,8 @@ ion-content {
   z-index: 1;
 }
 
-.help-page__eyebrow {
-  color: inherit;
+.help-page__hero .help-page__eyebrow {
+  color: var(--rr-primary-contrast);
   font-size: 0.75rem;
   font-weight: 800;
   letter-spacing: 0.1em;
@@ -69,8 +69,7 @@ ion-content {
 }
 
 .help-page__hero > p:last-child {
-  color: inherit;
-  opacity: 0.86;
+  color: var(--rr-primary-contrast);
   line-height: 1.5;
   margin: 0.75rem 0 0;
 }

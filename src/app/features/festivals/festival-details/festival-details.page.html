@@ -34,59 +34,99 @@
             <dd>{{ formatDateRange(selectedFestival) }}</dd>
           </div>
         </div>
-        <div class="festival-details__plan-card">
-          <div class="festival-details__arrangement-field">
-            <dt>Travel</dt>
-            <dd>
-              <ion-toggle
-                [checked]="selectedFestival.transportArranged"
-                [disabled]="isUpdatingArrangements()"
-                (ionChange)="updateTransportArrangement($event)"
-              >
-                Transport arranged
-              </ion-toggle>
-            </dd>
-          </div>
-          <div class="festival-details__arrangement-field">
-            <dt>Stay</dt>
-            <dd>
-              <ion-toggle
-                [checked]="selectedFestival.accommodationArranged ?? false"
-                [disabled]="isUpdatingArrangements()"
-                (ionChange)="updateAccommodationArrangement($event)"
-              >
-                Accommodation arranged
-              </ion-toggle>
-            </dd>
-          </div>
-        </div>
       </dl>
 
-      @if (arrangementUpdateError()) {
-        <ion-note class="festival-details__arrangement-error" color="danger" role="alert">{{ arrangementUpdateError() }}</ion-note>
-      }
-
-      @if (hasTicketLinks(selectedFestival)) {
-        <section class="festival-details__tickets" aria-labelledby="festival-tickets-title">
+      <section class="festival-details__plan" aria-labelledby="festival-plan-title">
+        <div class="festival-details__section-heading">
           <div>
-            <p class="festival-details__eyebrow">PLAN AHEAD</p>
-            <h2 id="festival-tickets-title">Tickets</h2>
-            @if (selectedFestival.ticketLinks?.price; as ticketPrice) {
-              <p class="festival-details__ticket-price">
+            <p class="festival-details__eyebrow">GET ORGANISED</p>
+            <h2 id="festival-plan-title">Plan ahead</h2>
+          </div>
+          <small>Saved on this device</small>
+        </div>
+
+        <article class="festival-details__plan-item">
+          <div class="festival-details__plan-copy">
+            <div class="festival-details__plan-title-row">
+              <h3>Tickets</h3>
+              <span class="festival-details__plan-pill" [class.is-arranged]="selectedFestival.ticketArranged">
+                {{ selectedFestival.ticketArranged ? 'Arranged' : 'To arrange' }}
+              </span>
+            </div>
+            <p class="festival-details__plan-estimate">
+              <span>Price estimate</span>
+              @if (selectedFestival.ticketLinks?.price; as ticketPrice) {
                 From {{ ticketPrice }}{{ selectedFestival.ticketLinks?.currency ? ' ' + selectedFestival.ticketLinks?.currency : '' }}
-              </p>
-            }
+              } @else {
+                Check the provider for current prices
+              }
+            </p>
           </div>
-          <div class="festival-details__ticket-actions">
-            @if (selectedFestival.ticketLinks?.ticketUrl; as ticketUrl) {
-              <a class="festival-details__ticket-link" [href]="ticketUrl" target="_blank" rel="noopener noreferrer">Get tickets</a>
-            }
-            @if (selectedFestival.ticketLinks?.resaleTicketUrl; as resaleTicketUrl) {
-              <a class="festival-details__ticket-link festival-details__ticket-link--secondary" [href]="resaleTicketUrl" target="_blank" rel="noopener noreferrer">View resale tickets</a>
-            }
+          @if (hasTicketLinks(selectedFestival)) {
+            <div class="festival-details__plan-actions">
+              @if (selectedFestival.ticketLinks?.ticketUrl; as ticketUrl) {
+                <a class="festival-details__plan-link" [href]="ticketUrl" target="_blank" rel="noopener noreferrer">Get tickets</a>
+              }
+              @if (selectedFestival.ticketLinks?.resaleTicketUrl; as resaleTicketUrl) {
+                <a class="festival-details__plan-link festival-details__plan-link--secondary" [href]="resaleTicketUrl" target="_blank" rel="noopener noreferrer">View resale</a>
+              }
+            </div>
+          } @else {
+            <p class="festival-details__plan-unavailable">No ticket provider has been added for this festival.</p>
+          }
+          <ion-toggle
+            [checked]="selectedFestival.ticketArranged ?? false"
+            [disabled]="isUpdatingArrangements()"
+            (ionChange)="updateTicketArrangement($event)"
+          >
+            I have my ticket
+          </ion-toggle>
+        </article>
+
+        <article class="festival-details__plan-item">
+          <div class="festival-details__plan-copy">
+            <div class="festival-details__plan-title-row">
+              <h3>Transport</h3>
+              <span class="festival-details__plan-pill" [class.is-arranged]="selectedFestival.transportArranged">
+                {{ selectedFestival.transportArranged ? 'Arranged' : 'To arrange' }}
+              </span>
+            </div>
+            <p class="festival-details__plan-estimate"><span>Price estimate</span>Compare live fares for your route</p>
           </div>
-        </section>
-      }
+          <a class="festival-details__plan-link" [href]="getTransportSearchUrl(selectedFestival)" target="_blank" rel="noopener noreferrer">Explore transport</a>
+          <ion-toggle
+            [checked]="selectedFestival.transportArranged"
+            [disabled]="isUpdatingArrangements()"
+            (ionChange)="updateTransportArrangement($event)"
+          >
+            Transport arranged
+          </ion-toggle>
+        </article>
+
+        <article class="festival-details__plan-item">
+          <div class="festival-details__plan-copy">
+            <div class="festival-details__plan-title-row">
+              <h3>Accommodation</h3>
+              <span class="festival-details__plan-pill" [class.is-arranged]="selectedFestival.accommodationArranged">
+                {{ selectedFestival.accommodationArranged ? 'Arranged' : 'To arrange' }}
+              </span>
+            </div>
+            <p class="festival-details__plan-estimate"><span>Stay estimate</span>Compare live prices for {{ getStayLengthLabel(selectedFestival) }}</p>
+          </div>
+          <a class="festival-details__plan-link" [href]="getAccommodationSearchUrl(selectedFestival)" target="_blank" rel="noopener noreferrer">Search Booking.com</a>
+          <ion-toggle
+            [checked]="selectedFestival.accommodationArranged ?? false"
+            [disabled]="isUpdatingArrangements()"
+            (ionChange)="updateAccommodationArrangement($event)"
+          >
+            Accommodation arranged
+          </ion-toggle>
+        </article>
+
+        @if (arrangementUpdateError()) {
+          <ion-note class="festival-details__arrangement-error" color="danger" role="alert">{{ arrangementUpdateError() }}</ion-note>
+        }
+      </section>
 
       @if (!selectedFestival.imageUrl) {
         <button class="festival-details__photo-option" [disabled]="isUpdatingImage()" type="button" (click)="selectFestivalPhoto()">

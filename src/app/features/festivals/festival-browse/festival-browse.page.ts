@@ -13,7 +13,7 @@ import {
   IonSpinner,
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { calendarOutline, chevronForward, filterOutline } from 'ionicons/icons';
+import { calendarOutline, chevronForward, filterOutline, locationOutline } from 'ionicons/icons';
 
 import { AppHeaderComponent } from '../../../components/app-header/app-header.component';
 import {
@@ -26,15 +26,18 @@ import {
   countActiveBrowseFilters,
   defaultTimetableLolBrowseFilters,
   filterTimetableLolPresets,
+  formatBrowseLocation,
   formatCountry,
   getCities,
   getCountries,
   getCurrentAndFuturePresets,
+  getGenres,
   getPastPresets,
   TimetableLolBrowseFilters,
 } from '../../../core/festivals/imports/timetable-lol-browse-filter.utils';
+import { FestivalGenre, festivalGenres } from '../../../core/festivals/models/festival';
 
-addIcons({ calendarOutline, chevronForward, filterOutline });
+addIcons({ calendarOutline, chevronForward, filterOutline, locationOutline });
 
 @Component({
   selector: 'app-festival-browse',
@@ -68,6 +71,7 @@ export class FestivalBrowsePage {
   readonly error = signal<string | null>(null);
   readonly countries = computed(() => getCountries(this.presets()));
   readonly cities = computed(() => getCities(this.presets(), this.filters().country));
+  readonly genres = computed(() => getGenres(this.presets()));
   readonly activeFilterCount = computed(() => countActiveBrowseFilters(this.filters()));
   readonly matchingPresets = computed(() =>
     filterTimetableLolPresets(this.presets(), this.searchTerm(), this.filters()),
@@ -121,6 +125,10 @@ export class FestivalBrowsePage {
     this.updateFilters({ duration: isDuration(value) ? value : 'all' });
   }
 
+  updateGenre(value: unknown): void {
+    this.updateFilters({ genre: isGenre(value) ? value : '' });
+  }
+
   selectFestival(preset: TimetableLolPreset): void {
     void this.router.navigate(['/festivals/add'], {
       queryParams: { event: preset.eventSlug },
@@ -148,6 +156,10 @@ export class FestivalBrowsePage {
     return formatCountry(country);
   }
 
+  formatLocation(preset: TimetableLolPreset): string {
+    return formatBrowseLocation(preset.location);
+  }
+
   private updateFilters(changes: Partial<TimetableLolBrowseFilters>): void {
     this.filters.update((filters) => ({ ...filters, ...changes }));
   }
@@ -169,4 +181,8 @@ function isDateRange(value: unknown): value is BrowseDateRange {
 
 function isDuration(value: unknown): value is BrowseDuration {
   return ['all', 'one-day', 'multi-day'].includes(value as string);
+}
+
+function isGenre(value: unknown): value is FestivalGenre {
+  return typeof value === 'string' && festivalGenres.includes(value as FestivalGenre);
 }
