@@ -37,8 +37,9 @@ Before the first Play submission, the owner must:
 
 1. Create and securely back up an upload keystore outside the repository.
 2. Record the alias and signing process in a private password manager or equivalent secure location.
-3. Set the release version name/code.
-4. Build a signed Android App Bundle and install it through internal testing.
+3. Set the release version name/code in `android/app/build.gradle`.
+4. Set the four signing environment variables described in [Android release packaging](android-release.md).
+5. Build a signed Android App Bundle and install it through internal testing.
 5. Keep the keystore, passwords, and any Play credentials out of Git.
 
 ## Google Play beta path

@@ -8,7 +8,7 @@ The project is part of **Project Freedom**, a personal mission focused on greate
 
 Active product development is underway, with Android beta preparation underway.
 
-The app persists festival plans locally and supports catalogue-first festival browsing, Timetable.lol imports, festival CRUD, line-ups and set times, an automatic Live now view for active festivals, expandable cards, ticket and resale links, packing lists, budgets, photo-library artwork, accessible navigation, personal backgrounds, selectable colour themes, Help, and Settings. The Android project uses the `com.raveroute.app` application ID and currently has an unsigned/debug-oriented release setup.
+The app persists festival plans locally and supports catalogue-first festival browsing, Timetable.lol imports, festival CRUD, line-ups and set times, an automatic Live now view for active festivals, expandable cards, ticket and resale links, packing lists, budgets, photo-library artwork, accessible navigation, personal backgrounds, selectable colour themes, Help, and Settings. The Android project uses the `com.raveroute.app` application ID, version `0.1.0` / code `1`, and supports environment-based release signing.
 
 ## Current capabilities
 

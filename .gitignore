@@ -16,6 +16,8 @@ log.txt
 /.sourcemaps
 /.versions
 /coverage
+/playwright-report/
+/test-results/
 
 # Ionic
 /.ionic
@@ -28,6 +30,10 @@ log.txt
 /tmp
 /out-tsc
 /bazel-out
+
+# Android signing material
+*.jks
+*.keystore
 
 # Node
 /node_modules

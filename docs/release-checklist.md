@@ -10,23 +10,25 @@
 - [x] Android debug APK is produced from the Capacitor Android project.
 - [x] Android application identifier is `com.raveroute.app`.
 - [x] Core journey has been reviewed: catalogue browse/import, add, view, edit, delete, persistence, line-up, packing, budget, and image selection.
-- [x] Temporary Android icon and splash assets are present.
+- [x] Current Android icon is approved for Play testing and is kept as the final icon source (`resources/icon.png`).
+- [x] Android splash assets are present for testing.
 - [x] Android target and compile SDK are set to API 36, with min SDK 24.
 
 ## Before a public/store release
 
-- [ ] Run the complete journey on at least one physical Android device.
-- [ ] Replace the temporary icon and splash assets with final brand assets.
+- [x] Run the complete journey on at least one physical Android device.
+- [ ] Decide whether the current splash artwork is final before public release.
 - [ ] Define release signing and generate a signed release bundle.
 - [x] Version 1 storage decision: device-only, with no backup, export, accounts, or cloud synchronisation.
 - [ ] Package and test the iOS application on macOS with Xcode if iOS distribution is planned.
 - [x] Enabled GitHub Dependabot alerts/security updates, private vulnerability reporting, and CodeQL default setup.
-- [ ] Run and review a dependency vulnerability audit before a public release.
+- [x] Run and review the production dependency vulnerability audit (`npm run audit:production` reported 0 vulnerabilities on 2026-10-04).
 - [x] Store selected images as private Capacitor Filesystem files rather than base64 data in browser local storage.
 - [ ] Test image retention through app upgrades, reinstalls, and storage-pressure scenarios.
-- [ ] Establish release signing, versioning, and signed Android App Bundle delivery.
+- [x] Establish Android versioning: version name `0.1.0`, version code `1`, and environment-based release signing configuration.
+- [ ] Create the protected upload keystore and generate the signed Android App Bundle.
 - [ ] Create and verify a Google Play Console developer account and complete the app identity/profile requirements.
-- [ ] Prepare the Play listing: 512px icon, 1024×500 feature graphic, screenshots, descriptions, category, content rating, target audience, Data Safety form, and support contact.
+- [ ] Prepare the Play listing: use `resources/play-store-icon.png` for the 512px icon, then provide a 1024×500 feature graphic, screenshots, descriptions, category, content rating, target audience, Data Safety form, and support contact.
 - [ ] Run Internal testing with a signed bundle, then complete the required Closed testing track before requesting production access.
 - [ ] For a new personal Play Console account, keep at least 12 testers continuously opted in for 14 days before applying for production access.
 - [ ] Decide whether the first public beta is invite-only Closed testing or Open testing after production access is granted.

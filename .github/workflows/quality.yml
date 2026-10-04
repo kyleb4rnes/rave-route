@@ -27,3 +27,21 @@ jobs:
         env:
           CHROME_BIN: /usr/bin/google-chrome
         run: npm run verify
+
+  e2e:
+    name: Browser user flows
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Run browser user-flow tests
+        run: npm run e2e
