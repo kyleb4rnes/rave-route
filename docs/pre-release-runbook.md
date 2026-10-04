@@ -16,6 +16,17 @@ The GitHub **Quality checks** workflow runs the same lint, unit-test, and produc
 
 Run and review `npm audit --omit=dev` before each release candidate. The full audit can include development-toolchain findings; review Dependabot alerts and pull requests rather than applying force upgrades without compatibility testing.
 
+## Remote catalogue release path
+
+The Timetable.lol catalogue loader can try a configured hosted JSON file before using the bundled fallback. Before relying on no-release catalogue updates:
+
+1. Choose the public catalogue host. Preferred current candidate: Cloudflare Pages serving static JSON.
+2. Publish `timetable-lol-catalogue.json` to a stable HTTPS URL.
+3. Set `environment.timetableLolCatalogue.remoteUrl` for production builds.
+4. Confirm a native build loads the hosted catalogue when online.
+5. Temporarily break or block the hosted URL and confirm the app falls back to the bundled catalogue.
+6. Keep the bundled catalogue refreshed for every store release so offline installs and hosting failures still have a current-enough fallback.
+
 ## Android device acceptance
 
 On at least one physical Android device, test the following before release:
@@ -66,5 +77,6 @@ iOS packaging needs a Mac with Xcode and an Apple Developer account. On that Mac
 - Google Play and Apple Developer/App Store Connect accounts and beta-testing setup.
 - The project owner/contact details and jurisdiction-specific review for the privacy policy draft.
 - Future accounts/cloud-sync direction after the device-only version 1 release, including data ownership, recovery, migration, and conflict handling.
+- Future shared set-time calendar direction, including account provider, calendar ownership, membership, invites, permission rules, deletion, abuse handling, and whether realtime updates are required.
 - Whether Terms of Use are required for the intended launch market.
-- Timetable.lol has granted permission to use its data and requested the visible “Data provided by Timetable.lol” attribution, which is implemented in the import flow. Before public release, provide the production app URL for API-origin allowlisting, validate the live integration, and retain its contact/takedown details.
+- Timetable.lol has granted permission to use its data and requested the visible “Data provided by Timetable.lol” attribution, which is implemented in the import flow. Before public release, provide the production app and hosted-catalogue URLs for any required allowlisting, validate the live integration, and retain its contact/takedown details.

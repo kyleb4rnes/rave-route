@@ -109,18 +109,19 @@ Do not implement these unless they are explicitly brought into scope later:
 
 ### Recommended next work, in priority order
 
-1. **Manual device and UX regression pass** - verify the latest Help/Settings overlay behaviour, catalogue-first Add Festival flow, festival ordering, sticky browse controls, packing removal, budget summaries, and external ticket links on a physical device or browser-sized viewport.
-2. **Catalogue refresh operations** - document and automate the scheduled Timetable.lol refresh, review skipped or malformed events, validate location and ticket metadata, and define how a refreshed bundle is promoted safely.
-3. **Public-release hardening** - work through the release checklist: dependency/security findings, Android signing and store packaging, iOS readiness, image-storage resilience, privacy/support materials, and physical-device coverage.
-4. **First-run setup and onboarding** - design an initial welcome flow for new installs, including a short introduction and useful preferences without making setup feel mandatory or heavy.
-5. **Appearance refinement** - review whether accent colours and surfaces need clearer, mode-specific treatment in Light and Dark appearance settings, and generate an app icon variant that follows the selected colour theme where the platform permits it.
-6. **Music playback** - investigate a royalty-free in-app option or a safe Spotify connection, including licensing, authentication, offline behaviour, and platform rules before choosing an implementation.
-7. **Travel planning refinement** - build on the current destination-aware Google Maps and Booking.com search shortcuts. Explore traveller-origin capture, relevant local services, and flight-search links to suitable providers without embedding bookings or payments.
-8. **Optional flight suggestions** - add a clear “Suggest flights” action that asks for the traveller’s departure location only when they choose it, combines that with the festival location and dates, and opens a provider search with those details. Treat suggestions as search shortcuts, not personalised booking advice, and handle missing venue/airport data gracefully.
-9. **Maps and navigation** - decide whether reviewed venue/address data should be geocoded and linked to navigation, and reuse that location data for travel-search shortcuts.
-10. **Line-up extensions** - consider bulk set-time import and additional import providers once the core catalogue refresh is dependable.
+1. **Remote catalogue hosting** - choose and configure the hosted catalogue location so festival data can be updated without a new app-store release. Preferred current direction: host the public generated JSON as a static file, with Cloudflare Pages as the simplest free candidate; keep the bundled catalogue as the offline/failure fallback.
+2. **Catalogue refresh operations** - document and automate the scheduled Timetable.lol refresh, review skipped or malformed events, validate location and ticket metadata, publish the hosted JSON, and define how a refreshed bundle is promoted safely.
+3. **Manual device and UX regression pass** - verify the latest Help/Settings overlay behaviour, catalogue-first Add Festival flow, festival ordering, sticky browse controls, packing removal, budget summaries, external ticket links, and hosted-catalogue fallback on a physical device or browser-sized viewport.
+4. **Public-release hardening** - work through the release checklist: dependency/security findings, Android signing and store packaging, iOS readiness, image-storage resilience, privacy/support materials, and physical-device coverage.
+5. **First-run setup and onboarding** - design an initial welcome flow for new installs, including a short introduction and useful preferences without making setup feel mandatory or heavy.
+6. **Appearance refinement** - review whether accent colours and surfaces need clearer, mode-specific treatment in Light and Dark appearance settings, and generate an app icon variant that follows the selected colour theme where the platform permits it.
+7. **Music playback** - investigate a royalty-free in-app option or a safe Spotify connection, including licensing, authentication, offline behaviour, and platform rules before choosing an implementation.
+8. **Travel planning refinement** - build on the current destination-aware Google Maps and Booking.com search shortcuts. Explore traveller-origin capture, relevant local services, and flight-search links to suitable providers without embedding bookings or payments.
+9. **Optional flight suggestions** - add a clear “Suggest flights” action that asks for the traveller's departure location only when they choose it, combines that with the festival location and dates, and opens a provider search with those details. Treat suggestions as search shortcuts, not personalised booking advice, and handle missing venue/airport data gracefully.
+10. **Maps and navigation** - decide whether reviewed venue/address data should be geocoded and linked to navigation, and reuse that location data for travel-search shortcuts.
+11. **Line-up extensions** - consider bulk set-time import and additional import providers once the core catalogue refresh is dependable.
 
-- Accounts and cloud synchronisation: consider only after the device-only v1 release. Define the backend, authentication, data ownership, recovery, migration, and conflict-handling approach before implementation.
+- Accounts, cloud synchronisation, and shared set-time calendars: design as a deliberate backend phase after the remote public catalogue is stable. Preferred current direction: evaluate Supabase for auth, relational membership/permissions, shared calendar ownership, invites, and future realtime updates. Define data ownership, recovery, migration, privacy, deletion, and conflict-handling before implementation.
 - Payments
 - AI features
 - Social features
@@ -131,7 +132,7 @@ Do not implement these unless they are explicitly brought into scope later:
 - Bulk paste/import of set times.
 - Additional automatic import providers beyond the current Timetable.lol community catalogue.
 - Automatic background notifications when a saved catalogue festival publishes or changes its set times; the current device-only version provides an explicit check/update action instead.
-- Timetable.lol refresh strategy: establish a refresh cadence and review process for the API-backed bundled catalogue, including skipped-event review, release timing, and failure handling.
+- Timetable.lol refresh strategy: establish a refresh cadence and review process for the API-backed catalogue, including skipped-event review, hosted JSON publishing, bundled fallback updates, release timing, and failure handling.
 
 ## 11. Work to Complete Before First Public Release
 
@@ -142,8 +143,8 @@ Do not implement these unless they are explicitly brought into scope later:
 - Store onboarding and test distribution: set up and verify Google Play and Apple Developer/App Store Connect accounts, complete any required closed or beta testing, and maintain a physical-device test matrix.
 - Store presence and support: prepare final icon/splash assets, screenshots, listing copy, categories, content/age ratings, support contact details, reviewer notes, and a support/bug-report process.
 - Privacy and operational policy: publish an accurate privacy policy and store disclosures, decide whether Terms of Use are needed, keep permissions minimal, review the impact of any analytics/crash-reporting SDK before adding it, and define a release checklist, changelog, and rollback approach.
-- Timetable.lol production readiness: permission to use the data has been confirmed. Before public launch, establish the production Rave Route URL and provide it to Timetable.lol for API-origin allowlisting; validate live imports from the deployed web app and native builds, preserve clear attribution, and document the agreed contact/takedown process.
-- Catalogue validation: confirm the bundled festival catalogue and its reviewed location metadata are current before each release and verify that catalogue selection creates the festival and its complete read-only line-up atomically.
+- Timetable.lol production readiness: permission to use the data has been confirmed. Before public launch, establish the production Rave Route URL and provide it to Timetable.lol for API-origin allowlisting; validate hosted-catalogue imports from the deployed web app and native builds, preserve clear attribution, and document the agreed contact/takedown process.
+- Catalogue validation: confirm the hosted festival catalogue, bundled fallback, and reviewed location metadata are current before each release and verify that catalogue selection creates the festival and its complete read-only line-up atomically.
 
 ## Decision Notes
 
@@ -183,3 +184,4 @@ Do not implement these unless they are explicitly brought into scope later:
 - 2026-10-01: Festival Details groups tickets, transport, and accommodation under Plan ahead. Each item has a device-local arranged status; transport and accommodation provide destination/date-aware external search shortcuts, while ticket links continue to use catalogue metadata. Home summaries include ticket status alongside transport and accommodation.
 - 2026-10-01: The bundled catalogue includes provider-published festivals even when no timed sets are available. Catalogue cards label whether set times are published, the line-up is announced, or set times are not yet released; users can save any of these festivals and explicitly check its Line-up page for bundled updates later. Refreshes retain manual sets and Must-see choices.
 - 2026-10-01: Catalogue refreshes preserve Timetable.lol's original festival genre labels and map them through the reviewed `scripts/timetable-lol-genre-map.json` taxonomy for Browse filtering. Raw variants and Uptempo map to Hardstyle, Hard Classics maps to Hardcore, agreed ambiguous labels map to Other, and unknown future labels are reported and safely mapped to Other.
+- 2026-10-04: Timetable.lol catalogue loading is remote-ready: builds can configure a hosted JSON URL that is tried before the bundled asset, while the bundled catalogue remains the offline/failure fallback. The immediate product direction is no-release data updates via hosted catalogue publishing, with accounts/shared set-time calendars deferred to a planned backend phase.

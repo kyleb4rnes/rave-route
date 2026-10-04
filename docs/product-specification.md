@@ -1,6 +1,6 @@
 # Rave Route Product Specification
 
-This document describes the current local-first product and its intended user experience. The original staged implementation plan is complete through Stage 19; remaining work is ongoing product development, release preparation, and explicitly deferred features.
+This document describes the current local-first product and its intended user experience. The original staged implementation plan is complete through Stage 19; remaining work is ongoing product development, release preparation, remote catalogue operations, and explicitly deferred features.
 
 ## Product goal
 
@@ -53,15 +53,17 @@ The application will also maintain identifiers and creation/update timestamps ne
 ## Data and platform constraints
 
 - Festival data is stored locally on the device.
-- No account or network connection is required for core festival-planning use. The catalogue is bundled during development/release refreshes; the app does not call Timetable.lol directly on the user's device.
+- No account is required for core festival-planning use.
+- The app can load a hosted public catalogue so festival listings and set-time data can be updated without a new app-store release. If the hosted catalogue is unavailable or malformed, the app falls back to the bundled catalogue included with the app.
+- The app does not call Timetable.lol directly on the user's device.
 - The interface is designed mobile-first and packaged with Capacitor.
 
 ## Deferred decisions
 
 The current product still does not include:
 
-- Backend services or cloud synchronisation
-- Authentication
+- User accounts, authentication, and cloud synchronisation
+- Shared set-time calendars, calendar membership, and invite flows
 - Payments
 - AI features
 - Social features
@@ -69,9 +71,15 @@ The current product still does not include:
 - Maps
 - Complex image upload or cloud image storage
 
+## Backend direction
+
+The near-term backend work is limited to hosting the generated public catalogue as a static JSON file, with Cloudflare Pages as the preferred free candidate. This keeps weekly catalogue updates independent of app-store releases while preserving the bundled catalogue as a fallback.
+
+Future accounts and shared set-time calendars should be designed as a separate backend phase. Supabase is the preferred candidate to evaluate because it provides authentication, a relational Postgres database, row-level permissions, storage, and realtime capabilities that fit shared calendar ownership and membership rules.
+
 ## Current product surface
 
-The current application also includes catalogue browsing/import, ticket metadata, packing lists, budgets, configurable app backgrounds, persistent theme-colour presets, Help, Settings, and full line-up views. These remain local-device features and do not currently require an account or cloud service.
+The current application also includes catalogue browsing/import, ticket metadata, packing lists, budgets, configurable app backgrounds, persistent theme-colour presets, Help, Settings, and full line-up views. User-created festival data remains local-device data and does not currently require an account or cloud service.
 
 ## Product outcome
 

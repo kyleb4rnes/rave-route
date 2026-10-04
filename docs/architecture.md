@@ -21,7 +21,7 @@ The store calls the repository before updating its local signal, keeping the dis
 
 Festival Details owns packing-list and budget interactions through the store. Catalogue Browse presents current/future festivals by default, supports search and filters, and places past festivals behind an explicit control. Help and Settings use full-page routes as overlay-style surfaces: closing either waits for its transition and navigates to Home rather than returning through browser history.
 
-The Timetable.lol catalogue is generated at development time from its public events and planner-data API endpoints. The generated asset contains only live events with importable timed sets, plus venue/address metadata, provider artwork, ticket metadata, and stable performance IDs. The app reads that bundled asset rather than calling the API on a user's device. Existing legacy imports retain their reviewed location backfill map; coordinates for future maps remain deferred.
+The Timetable.lol catalogue is generated from its public events and planner-data API endpoints. The generated asset contains only live events with importable timed sets, plus venue/address metadata, provider artwork, ticket metadata, and stable performance IDs. The app can try a configured hosted catalogue first, then fall back to the bundled asset if the hosted copy is unavailable or malformed. Existing legacy imports retain their reviewed location backfill map; coordinates for future maps remain deferred.
 
 `AppSettingsStore` persists the optional background image and selected theme colour. `AppComponent` applies those settings as app-level CSS custom properties, so routed pages share the same background and theme tokens without reloading.
 

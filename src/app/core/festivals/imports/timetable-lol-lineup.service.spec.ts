@@ -1,3 +1,4 @@
+import { environment } from '../../../../environments/environment';
 import { Festival } from '../models/festival';
 import { TimetableLolLineupService } from './timetable-lol-lineup.service';
 
@@ -75,6 +76,9 @@ const festival: Festival = {
 
 describe('TimetableLolLineupService', () => {
   beforeEach(() => {
+    environment.timetableLolCatalogue.remoteUrl = null;
+    environment.timetableLolCatalogue.bundledUrl = 'assets/timetables/timetable-lol-catalogue.json';
+
     spyOn(window, 'fetch').and.resolveTo(
       new Response(JSON.stringify(catalogueFixture), { status: 200 }),
     );
@@ -127,5 +131,27 @@ describe('TimetableLolLineupService', () => {
         performanceId: 'api-festival-2026:2026-08-14:Main:101:1',
       }),
     );
+  });
+
+  it('tries the configured remote catalogue before the bundled fallback', async () => {
+    environment.timetableLolCatalogue.remoteUrl = 'https://catalogue.raveroute.app/timetables/timetable-lol-catalogue.json';
+
+    await new TimetableLolLineupService().loadPresets();
+
+    expect(window.fetch).toHaveBeenCalledOnceWith(environment.timetableLolCatalogue.remoteUrl);
+  });
+
+  it('falls back to the bundled catalogue when the configured remote catalogue cannot be loaded', async () => {
+    environment.timetableLolCatalogue.remoteUrl = 'https://catalogue.raveroute.app/timetables/timetable-lol-catalogue.json';
+    (window.fetch as jasmine.Spy).and.returnValues(
+      Promise.resolve(new Response('', { status: 503 })),
+      Promise.resolve(new Response(JSON.stringify(catalogueFixture), { status: 200 })),
+    );
+
+    const presets = await new TimetableLolLineupService().loadPresets();
+
+    expect(window.fetch).toHaveBeenCalledWith(environment.timetableLolCatalogue.remoteUrl);
+    expect(window.fetch).toHaveBeenCalledWith(environment.timetableLolCatalogue.bundledUrl);
+    expect(presets[0].eventSlug).toBe('api-festival-2026');
   });
 });

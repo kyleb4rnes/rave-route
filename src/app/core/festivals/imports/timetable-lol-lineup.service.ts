@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 
+import { environment } from '../../../../environments/environment';
 import {
   Festival,
   FestivalGenre,
@@ -9,8 +10,6 @@ import {
 } from '../models/festival';
 import { FestivalSetImport } from '../models/festival-set';
 import { LineupImportPreset } from './lineup-import-preset';
-
-const timetableLolAssetUrl = 'assets/timetables/timetable-lol-catalogue.json';
 
 export interface TimetableLolPreset extends LineupImportPreset {
   provider: 'timetable-lol';
@@ -25,7 +24,11 @@ export interface TimetableLolPreset extends LineupImportPreset {
 
 interface TimetableLolCatalogue {
   generatedAt?: unknown;
-  events?: unknown;
+  events?: readonly TimetableLolCatalogueEvent[];
+}
+
+interface RecognisedTimetableLolCatalogue extends TimetableLolCatalogue {
+  events: readonly TimetableLolCatalogueEvent[];
 }
 
 interface TimetableLolCatalogueEvent {
@@ -131,25 +134,47 @@ export class TimetableLolLineupService {
       return this.catalogue;
     }
 
-    const response = await fetch(timetableLolAssetUrl);
-
-    if (!response.ok) {
-      throw new Error('The community timetable could not be reached.');
-    }
-
-    const data: unknown = await response.json();
-    const catalogue = data as TimetableLolCatalogue;
+    const catalogue = await fetchFirstRecognisedCatalogue(getCatalogueSourceUrls());
     const events = catalogue.events;
-
-    if (!Array.isArray(events) || !events.every(isTimetableLolCatalogueEvent)) {
-      throw new Error('The community timetable format was not recognised.');
-    }
 
     this.catalogue = events;
     this.catalogueGeneratedAt = typeof catalogue.generatedAt === 'string' ? catalogue.generatedAt : null;
 
     return this.catalogue;
   }
+}
+
+async function fetchFirstRecognisedCatalogue(sourceUrls: readonly string[]): Promise<RecognisedTimetableLolCatalogue> {
+  for (const sourceUrl of sourceUrls) {
+    try {
+      const response = await fetch(sourceUrl);
+
+      if (!response.ok) {
+        continue;
+      }
+
+      const data: unknown = await response.json();
+      const catalogue = data as TimetableLolCatalogue;
+      const events = catalogue.events;
+
+      if (Array.isArray(events) && events.every(isTimetableLolCatalogueEvent)) {
+        return { ...catalogue, events };
+      }
+    } catch {
+      continue;
+    }
+  }
+
+  throw new Error('The community timetable could not be reached.');
+}
+
+function getCatalogueSourceUrls(): string[] {
+  const configuredUrls = [
+    environment.timetableLolCatalogue.remoteUrl,
+    environment.timetableLolCatalogue.bundledUrl,
+  ].filter((sourceUrl): sourceUrl is string => typeof sourceUrl === 'string' && sourceUrl.length > 0);
+
+  return [...new Set(configuredUrls)];
 }
 
 export function getLineupAvailabilityLabel(

@@ -32,6 +32,8 @@ See [product specification](docs/product-specification.md) for the current scope
 
 Run `npm run timetable-lol:sync` to fetch Timetable.lol's public events and planner-data API endpoints and generate the compact bundled catalogue used by the community import flow. Only live events with importable timed sets are included; the script reports skipped events and malformed rows for review before committing. The app visibly attributes imported catalogue data as “Data provided by Timetable.lol”.
 
+The app can also load a hosted catalogue before using the bundled fallback. Set `environment.timetableLolCatalogue.remoteUrl` to the public JSON URL for builds that should receive catalogue updates without a new app-store release. Keep `src/assets/timetables/timetable-lol-catalogue.json` current as the offline and failure fallback.
+
 ## Technical direction
 
 - Angular and Ionic Angular
