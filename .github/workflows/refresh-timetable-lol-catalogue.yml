@@ -1,0 +1,50 @@
+name: Refresh Timetable.lol catalogue
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '17 7 * * 1'
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  refresh:
+    name: Refresh bundled catalogue
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Refresh catalogue asset
+        shell: pwsh
+        run: ./scripts/sync-timetable-lol-index.ps1
+
+      - name: Open catalogue update pull request
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $assetPath = 'src/assets/timetables/timetable-lol-catalogue.json'
+          if (git diff --quiet -- $assetPath) {
+            Write-Output 'No catalogue content changes detected.'
+            exit 0
+          }
+
+          $branch = 'automation/timetable-lol-catalogue'
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git checkout -B $branch
+          git add $assetPath
+          git commit -m 'chore: refresh Timetable.lol catalogue'
+          git push --force-with-lease origin $branch
+
+          $pullRequestNumber = gh pr list --head $branch --state open --json number --jq '.[0].number'
+          if (-not $pullRequestNumber) {
+            gh pr create --base main --head $branch --title 'chore: refresh Timetable.lol catalogue' --body 'Automated catalogue refresh. Please review event metadata, locations, tickets, and line-up changes before merging.'
+          } else {
+            Write-Output "Updated existing pull request #$pullRequestNumber."
+          }

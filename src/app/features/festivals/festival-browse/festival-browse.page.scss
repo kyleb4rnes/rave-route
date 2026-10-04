@@ -197,6 +197,11 @@ ion-content {
   text-align: center;
 }
 
+.festival-browse__attribution span {
+  display: block;
+  margin-top: 0.25rem;
+}
+
 .festival-browse__attribution a {
   color: var(--rr-primary-dark);
   font-weight: 800;

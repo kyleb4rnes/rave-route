@@ -69,6 +69,7 @@ export class FestivalBrowsePage {
   readonly showPastFestivals = signal(false);
   readonly isLoading = signal(true);
   readonly error = signal<string | null>(null);
+  readonly catalogueUpdatedAt = signal<string | null>(null);
   readonly countries = computed(() => getCountries(this.presets()));
   readonly cities = computed(() => getCities(this.presets(), this.filters().country));
   readonly genres = computed(() => getGenres(this.presets()));
@@ -160,6 +161,27 @@ export class FestivalBrowsePage {
     return formatBrowseLocation(preset.location);
   }
 
+  formatCatalogueUpdatedAt(): string | null {
+    const value = this.catalogueUpdatedAt();
+
+    if (!value) {
+      return null;
+    }
+
+    const date = new Date(value);
+
+    if (Number.isNaN(date.getTime())) {
+      return null;
+    }
+
+    return new Intl.DateTimeFormat('en-GB', {
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric',
+      timeZone: 'UTC',
+    }).format(date);
+  }
+
   private updateFilters(changes: Partial<TimetableLolBrowseFilters>): void {
     this.filters.update((filters) => ({ ...filters, ...changes }));
   }
@@ -167,6 +189,7 @@ export class FestivalBrowsePage {
   private async loadCatalogue(): Promise<void> {
     try {
       this.presets.set(await this.timetableService.loadPresets());
+      this.catalogueUpdatedAt.set(await this.timetableService.getCatalogueGeneratedAt());
     } catch {
       this.error.set('We could not load the festival catalogue. Please try again.');
     } finally {

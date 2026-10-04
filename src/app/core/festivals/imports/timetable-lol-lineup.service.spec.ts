@@ -2,6 +2,7 @@ import { Festival } from '../models/festival';
 import { TimetableLolLineupService } from './timetable-lol-lineup.service';
 
 const catalogueFixture = {
+  generatedAt: '2026-10-01T20:39:31.000Z',
   events: [
     {
       eventSlug: 'api-festival-2026',
@@ -101,6 +102,14 @@ describe('TimetableLolLineupService', () => {
         detail: 'Set times not released yet',
       }),
     ]);
+  });
+
+  it('exposes the catalogue refresh timestamp', async () => {
+    const service = new TimetableLolLineupService();
+
+    await service.loadPresets();
+
+    await expectAsync(service.getCatalogueGeneratedAt()).toBeResolvedTo(catalogueFixture.generatedAt);
   });
 
   it('imports all selected planner sets or filters them to an existing festival range', async () => {

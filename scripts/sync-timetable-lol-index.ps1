@@ -223,6 +223,27 @@ $asset = [ordered]@{
 $outputDirectory = Join-Path $PSScriptRoot '..\src\assets\timetables'
 $outputPath = Join-Path $outputDirectory 'timetable-lol-catalogue.json'
 
+$existingAsset = $null
+if (Test-Path -LiteralPath $outputPath) {
+  try {
+    $existingAsset = Get-Content -Raw -LiteralPath $outputPath | ConvertFrom-Json
+  } catch {
+    Write-Warning 'The existing catalogue could not be parsed and will be replaced.'
+  }
+}
+
+$newEventsJson = @($catalogueEvents | ConvertTo-Json -Depth 8 -Compress)
+$existingEventsJson = if ($null -ne $existingAsset -and $null -ne $existingAsset.events) {
+  @($existingAsset.events | ConvertTo-Json -Depth 8 -Compress)
+} else {
+  ''
+}
+
+if ($newEventsJson -eq $existingEventsJson) {
+  Write-Output 'No catalogue content changes detected. The existing asset was kept.'
+  exit 0
+}
+
 New-Item -ItemType Directory -Force -Path $outputDirectory | Out-Null
 $asset | ConvertTo-Json -Depth 8 -Compress | Set-Content -LiteralPath $outputPath -NoNewline -Encoding utf8
 

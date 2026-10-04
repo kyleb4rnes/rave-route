@@ -24,6 +24,7 @@ export interface TimetableLolPreset extends LineupImportPreset {
 }
 
 interface TimetableLolCatalogue {
+  generatedAt?: unknown;
   events?: unknown;
 }
 
@@ -54,6 +55,7 @@ interface TimetableLolCatalogueSet {
 @Injectable({ providedIn: 'root' })
 export class TimetableLolLineupService {
   private catalogue: readonly TimetableLolCatalogueEvent[] | null = null;
+  private catalogueGeneratedAt: string | null = null;
 
   async loadPresets(): Promise<TimetableLolPreset[]> {
     const events = await this.loadCatalogue();
@@ -80,6 +82,11 @@ export class TimetableLolLineupService {
       .sort((firstPreset, secondPreset) =>
         firstPreset.startDate.localeCompare(secondPreset.startDate) || firstPreset.label.localeCompare(secondPreset.label),
       );
+  }
+
+  async getCatalogueGeneratedAt(): Promise<string | null> {
+    await this.loadCatalogue();
+    return this.catalogueGeneratedAt;
   }
 
   async loadSets(preset: TimetableLolPreset, festival: Festival): Promise<FestivalSetImport[]> {
@@ -131,13 +138,15 @@ export class TimetableLolLineupService {
     }
 
     const data: unknown = await response.json();
-    const events = (data as TimetableLolCatalogue).events;
+    const catalogue = data as TimetableLolCatalogue;
+    const events = catalogue.events;
 
     if (!Array.isArray(events) || !events.every(isTimetableLolCatalogueEvent)) {
       throw new Error('The community timetable format was not recognised.');
     }
 
     this.catalogue = events;
+    this.catalogueGeneratedAt = typeof catalogue.generatedAt === 'string' ? catalogue.generatedAt : null;
 
     return this.catalogue;
   }
