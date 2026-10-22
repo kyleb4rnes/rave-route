@@ -1,6 +1,10 @@
+import { provideZoneChangeDetection } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { RouteReuseStrategy, provideRouter } from '@angular/router';
-import { IonicRouteStrategy, provideIonicAngular } from '@ionic/angular/standalone';
+import {
+  IonicRouteStrategy,
+  provideIonicAngular,
+} from '@ionic/angular/standalone';
 
 import { AppComponent } from './app/app.component';
 import { routes } from './app/app.routes';
@@ -10,9 +14,13 @@ import { raveRoutePageTransition } from './app/core/animations/page-transition.a
 
 bootstrapApplication(AppComponent, {
   providers: [
+    provideZoneChangeDetection(),
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     { provide: FESTIVAL_REPOSITORY, useClass: LocalStorageFestivalRepository },
-    provideIonicAngular({ animated: true, navAnimation: raveRoutePageTransition }),
+    provideIonicAngular({
+      animated: true,
+      navAnimation: raveRoutePageTransition,
+    }),
     provideRouter(routes),
   ],
 }).catch((error: unknown) => console.error(error));
