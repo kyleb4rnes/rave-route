@@ -28,6 +28,16 @@ updates:
           - "@angular-devkit/*"
           - "@angular-eslint/*"
         update-types: ["minor", "patch"]
+      # Keep non-Angular major upgrades separate from routine minor/patch work.
+      major-version-updates:
+        applies-to: "version-updates"
+        patterns:
+          - "*"
+        exclude-patterns:
+          - "@angular/*"
+          - "@angular-devkit/*"
+          - "@angular-eslint/*"
+        update-types: ["major"]
       # Group security alerts too; groups default to version updates unless this
       # is stated explicitly.
       angular-platform-security-updates:

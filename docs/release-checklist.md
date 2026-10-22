@@ -1,5 +1,7 @@
 # Rave Route public release checklist
 
+The staged execution path for these checks is documented in [Public-release execution plan](public-release-execution-plan.md).
+
 ## Verified for this release candidate
 
 - [x] Production Angular build succeeds.
