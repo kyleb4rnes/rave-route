@@ -10,6 +10,13 @@
     </header>
 
     <div class="help-page__sections">
+      <section class="help-page__card" aria-labelledby="welcome-tour-title">
+        <button class="help-page__section-toggle" type="button" (click)="replayWelcome()">
+          <span id="welcome-tour-title">Watch the welcome tour again</span>
+          <span aria-hidden="true">›</span>
+        </button>
+      </section>
+
       <section class="help-page__card" aria-labelledby="getting-started-title">
         <button class="help-page__section-toggle" type="button" aria-controls="getting-started-content" [attr.aria-expanded]="expandedSection() === 'getting-started'" (click)="toggleSection('getting-started')">
           <span id="getting-started-title">Getting started</span>

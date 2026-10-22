@@ -2,6 +2,7 @@ import { Component, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { IonContent } from '@ionic/angular/standalone';
 import { AppHeaderComponent } from '../../components/app-header/app-header.component';
+import { OnboardingStore } from '../../core/onboarding/onboarding.store';
 
 @Component({
   selector: 'app-help',
@@ -12,6 +13,7 @@ import { AppHeaderComponent } from '../../components/app-header/app-header.compo
 })
 export class HelpPage {
   private readonly router = inject(Router);
+  private readonly onboardingStore = inject(OnboardingStore);
 
   readonly isClosing = signal(false);
   readonly expandedSection = signal<string | null>(null);
@@ -27,5 +29,9 @@ export class HelpPage {
 
     this.isClosing.set(true);
     setTimeout(() => void this.router.navigate(['/home']), 650);
+  }
+
+  replayWelcome(): void {
+    this.onboardingStore.openReplay();
   }
 }

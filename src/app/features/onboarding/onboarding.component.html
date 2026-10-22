@@ -1,0 +1,28 @@
+<section class="onboarding" [class.onboarding--leaving]="isLeaving()" [class.onboarding--ready]="ready()" aria-labelledby="onboarding-title">
+  <div class="onboarding__glow" aria-hidden="true"></div>
+  <div class="onboarding__content" [class.onboarding__content--changing]="isChanging()">
+    <div class="onboarding__top-row">
+      <div class="onboarding__progress" [attr.aria-label]="'Step ' + (stepIndex() + 1) + ' of ' + steps.length">
+        @for (step of steps; track step.title; let index = $index) {
+          <span [class.onboarding__progress-segment--complete]="index < stepIndex()" [class.onboarding__progress-segment--current]="index === stepIndex()"></span>
+        }
+      </div>
+      <button class="onboarding__skip" type="button" (click)="skip()">Skip intro</button>
+    </div>
+
+    <div class="onboarding__video-shell">
+      <video [attr.aria-label]="currentStep().videoLabel" [autoplay]="!prefersReducedMotion" [poster]="currentStep().posterSrc" [src]="currentStep().videoSrc" loop muted playsinline preload="auto"></video>
+    </div>
+
+    <div class="onboarding__copy">
+      <p>RAVE ROUTE</p>
+      <h1 id="onboarding-title">{{ currentStep().title }}</h1>
+      <span>{{ currentStep().description }}</span>
+    </div>
+
+    <div class="onboarding__actions">
+      <button class="onboarding__back" [class.onboarding__back--hidden]="!canGoBack()" type="button" (click)="previous()">Back</button>
+      <button class="onboarding__next" type="button" (click)="next()">{{ isFinalStep() ? 'Start planning' : 'Next' }}</button>
+    </div>
+  </div>
+</section>

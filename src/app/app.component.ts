@@ -6,29 +6,34 @@ import { ImageStorageService } from './core/images/image-storage.service';
 import { appearancePalettes } from './core/settings/appearance-modes';
 import { themeColourPresets } from './core/settings/theme-colours';
 import { RaveRouteLogoComponent } from './components/rave-route-logo/rave-route-logo.component';
+import { OnboardingStore } from './core/onboarding/onboarding.store';
+import { OnboardingComponent } from './features/onboarding/onboarding.component';
 
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
   styleUrls: ['app.component.scss'],
   standalone: true,
-  imports: [IonApp, IonRouterOutlet, IonSpinner, RaveRouteLogoComponent],
+  imports: [IonApp, IonRouterOutlet, IonSpinner, RaveRouteLogoComponent, OnboardingComponent],
 })
 export class AppComponent {
   private readonly festivalStore = inject(FestivalStore);
   private readonly appSettingsStore = inject(AppSettingsStore);
   private readonly imageStorage = inject(ImageStorageService);
+  private readonly onboardingStore = inject(OnboardingStore);
   private readonly appBackgroundImageUrl = signal('');
   private readonly launchStateSignal = signal<'loading' | 'leaving' | 'complete'>('loading');
   private readonly launchStartedAt = Date.now();
   private exitTimer: ReturnType<typeof setTimeout> | undefined;
 
-  // Temporary development delay: remove or set to 0 once launch timing is approved.
-  private readonly minimumLaunchDurationMs = 5000;
+  private readonly minimumLaunchDurationMs = new URLSearchParams(window.location.search).has('capture') ? 0 : 1400;
   private readonly exitAnimationDurationMs = 900;
 
   readonly launchState = this.launchStateSignal.asReadonly();
   readonly launchScreenVisible = computed(() => this.launchState() !== 'complete');
+  readonly onboardingOpen = this.onboardingStore.isOpen;
+  readonly onboardingReady = computed(() => this.launchState() === 'complete');
+  readonly hideRoutedContent = computed(() => this.onboardingOpen() && !this.onboardingReady());
   readonly appearance = computed(() => appearancePalettes[this.appSettingsStore.appearanceMode()]);
   readonly theme = computed(() => {
     const colourTheme = themeColourPresets[this.appSettingsStore.themeColour()];

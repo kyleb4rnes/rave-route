@@ -18,14 +18,15 @@ Run and review `npm audit --omit=dev` before each release candidate. The full au
 
 ## Remote catalogue release path
 
-The Timetable.lol catalogue loader can try a configured hosted JSON file before using the bundled fallback. Before relying on no-release catalogue updates:
+The production loader requests `https://rave-route-catalogue.pages.dev/timetable-lol-catalogue.json` before the bundled fallback. `src/assets/timetables/timetable-lol-catalogue.json` is the single source of truth: committing and pushing it to `main` updates the Pages copy automatically and includes it in the next app build.
 
-1. Choose the public catalogue host. Preferred current candidate: Cloudflare Pages serving static JSON.
-2. Publish `timetable-lol-catalogue.json` to a stable HTTPS URL.
-3. Set `environment.timetableLolCatalogue.remoteUrl` for production builds.
-4. Confirm a native build loads the hosted catalogue when online.
-5. Temporarily break or block the hosted URL and confirm the app falls back to the bundled catalogue.
-6. Keep the bundled catalogue refreshed for every store release so offline installs and hosting failures still have a current-enough fallback.
+For each catalogue update:
+
+1. Run `npm run timetable-lol:sync`, review its output and the JSON changes, then commit the approved `src/assets/timetables/timetable-lol-catalogue.json` update.
+2. Push to `main` and confirm the Pages deployment succeeds and the public URL serves the expected catalogue.
+3. Use `[skip pages]` for unrelated commits when a Pages deployment should be skipped.
+4. Keep the bundled catalogue refreshed for every store release so offline installs and hosting failures still have a current-enough fallback.
+5. Before release, confirm a native build loads the hosted catalogue when online; then temporarily block the URL and confirm it uses the bundled catalogue.
 
 ## Android device acceptance
 
@@ -69,7 +70,11 @@ The repository now contains Dependabot configuration and a quality workflow. The
 
 ## iOS preparation
 
-iOS packaging needs a Mac with Xcode and an Apple Developer account. On that Mac, add the Capacitor iOS platform, set Apple signing, add the Camera/photo-library permission text, and add the Filesystem privacy manifest entry required by Apple. Then test photo selection and stored images on a physical iPhone.
+iOS packaging needs macOS with Xcode and an Apple Developer account. The current operating decision is to rent cloud-Mac access for iOS builds, signing, App Store Connect uploads, and release work instead of buying a Mac immediately. Catalogue updates are published through Cloudflare Pages and do not require a Mac or App Store release.
+
+Use the rented Mac when an app build changes: the initial iOS packaging, a code or dependency update, a native bug fix, a new permission/capability, or an Apple SDK compatibility update. During active iOS development, rent it for the development period or use it for several release sessions per month; once stable, use it only for planned app releases and periodic compatibility maintenance.
+
+On the cloud Mac, add the Capacitor iOS platform, set Apple signing, add the Camera/photo-library permission text, and add the Filesystem privacy manifest entry required by Apple. Keep certificates, private keys, provisioning profiles, App Store Connect credentials, and Apple ID recovery details in approved secure storage rather than the repository or a persisted rental image. Use TestFlight on a physical iPhone for routine device acceptance. If a native device-only issue needs USB debugging, camera investigation, or detailed Xcode device logs, arrange temporary access to a physical Mac before deciding whether ownership is worthwhile.
 
 ## Required owner decisions and assets
 

@@ -30,5 +30,6 @@ export async function seedFestival(page: Page): Promise<void> {
   await page.addInitScript((festival) => {
     localStorage.clear();
     localStorage.setItem('rave-route.festivals.v1', JSON.stringify([festival]));
+    localStorage.setItem('rave-route.onboarding.v1', 'complete');
   }, testFestival);
 }

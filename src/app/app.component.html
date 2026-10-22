@@ -20,7 +20,7 @@
   [style.--rr-primary-dark]="theme().primaryDark"
   [style.--rr-primary-soft]="theme().primarySoft"
 >
-  <ion-router-outlet></ion-router-outlet>
+  <ion-router-outlet [class.app-router-outlet--hidden]="hideRoutedContent()"></ion-router-outlet>
 
   @if (launchScreenVisible()) {
     <section
@@ -36,5 +36,9 @@
         <ion-spinner aria-label="Loading your festival route" name="crescent"></ion-spinner>
       </div>
     </section>
+  }
+
+  @if (onboardingOpen()) {
+    <app-onboarding [ready]="onboardingReady()"></app-onboarding>
   }
 </ion-app>

@@ -73,7 +73,7 @@ The current product still does not include:
 
 ## Backend direction
 
-The near-term backend work is limited to hosting the generated public catalogue as a static JSON file, with Cloudflare Pages as the preferred free candidate. This keeps weekly catalogue updates independent of app-store releases while preserving the bundled catalogue as a fallback.
+The near-term backend work is limited to the generated public catalogue, hosted as static JSON on Cloudflare Pages at `https://rave-route-catalogue.pages.dev/timetable-lol-catalogue.json`. The repository copy at `src/assets/timetables/timetable-lol-catalogue.json` is the single source of truth: a push to `main` updates the hosted copy and the same file is bundled with the next app build. This keeps catalogue updates independent of app-store releases while preserving a reliable offline/failure fallback.
 
 Future accounts and shared set-time calendars should be designed as a separate backend phase. Supabase is the preferred candidate to evaluate because it provides authentication, a relational Postgres database, row-level permissions, storage, and realtime capabilities that fit shared calendar ownership and membership rules.
 

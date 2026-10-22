@@ -1,5 +1,12 @@
 # Development log
 
+## 2026-10-22 — Hosted catalogue configuration
+
+- Configured production builds to request the Timetable.lol catalogue from the Rave Route Cloudflare Pages URL before using the bundled offline copy.
+- Retained the existing validated remote-first loader, which falls back to the bundled catalogue for network, HTTP, and malformed-response failures.
+- Recorded the iOS operating decision: rent cloud-Mac access for Xcode builds, signing, App Store Connect uploads, and app releases rather than purchasing a Mac now. Weekly catalogue updates are published through Cloudflare Pages and require neither Xcode nor an App Store release; TestFlight on a physical iPhone is the routine device-test path.
+- The Pages hostname did not resolve from the development machine immediately after configuration, so live-host and native fallback acceptance testing remains required before release.
+
 ## 2026-09-29 — Product direction and future work
 
 - Reframed current documentation around ongoing product development rather than an MVP milestone.
@@ -167,3 +174,4 @@
 - 2026-10-04: Added the Playwright browser user-flow suite as a distinct GitHub Actions quality job on pull requests and pushes to main.
 - 2026-10-04: Made the Timetable.lol catalogue loader remote-ready and updated the roadmap: the next operational step is hosting the generated public catalogue JSON so weekly data updates do not require app-store releases. The current preferred split is Cloudflare Pages/static JSON for the public catalogue and a later Supabase evaluation for accounts, shared set-time calendars, permissions, and realtime collaboration.
 - 2026-10-04: Reviewed the account-related architecture and prepared `docs/user-accounts-plan.md`. Recommended optional Supabase accounts with owner-scoped local storage, resumable guest migration, offline plan/budget sync, and staged private photo storage. Recorded free-tier/email constraints, native callback work, account isolation/deletion requirements, delivery stages and acceptance tests. Planning only: no application code, dependencies or external services changed; application tests were not run.
+- 2026-10-22: Added a first-run Rave Route welcome tour. The red launch screen now fades out before a four-step, accessible mobile overlay fades in: Find your festival, Build your route, Get festival-ready, and Stay on top of it. Each step has a silent looping mobile WebM demo captured from the real app, clear progress segments, Back, Skip intro, and Next/Start planning controls. Completion is device-local and the tour is replayable from Help and App settings. Lint, all 59 unit tests, and the production build passed.

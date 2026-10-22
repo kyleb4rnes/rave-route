@@ -18,16 +18,19 @@
 
 - [x] Run the complete journey on at least one physical Android device.
 - [ ] Decide whether the current splash artwork is final before public release.
+- [ ] Review the first-run onboarding flow and its four mobile demonstration videos on a physical device before public release.
 - [ ] Define release signing and generate a signed release bundle.
 - [x] Version 1 storage decision: device-only, with no backup, export, accounts, or cloud synchronisation.
-- [ ] Package and test the iOS application on macOS with Xcode if iOS distribution is planned.
+- [x] iOS access decision: use a rented cloud Mac for builds, signing, App Store Connect uploads, and periodic maintenance; do not buy a Mac unless this becomes more cost-effective or physical-device debugging becomes routine.
+- [ ] Package and test the iOS application on the rented macOS/Xcode environment if iOS distribution is planned.
+- [ ] Test the iOS build through TestFlight on a physical iPhone, including catalogue loading, catalogue fallback, photo selection, stored images, navigation, and external links.
 - [x] Enabled GitHub Dependabot alerts/security updates, private vulnerability reporting, and CodeQL default setup.
 - [x] Run and review the production dependency vulnerability audit (`npm run audit:production` reported 0 vulnerabilities on 2026-10-04).
 - [x] Store selected images as private Capacitor Filesystem files rather than base64 data in browser local storage.
 - [ ] Test image retention through app upgrades, reinstalls, and storage-pressure scenarios.
 - [x] Establish Android versioning: version name `0.1.0`, version code `1`, and environment-based release signing configuration.
-- [ ] Choose the hosted catalogue provider and stable HTTPS URL. Preferred current candidate: Cloudflare Pages serving the generated public JSON.
-- [ ] Configure `environment.timetableLolCatalogue.remoteUrl` for production builds once the hosted URL is live.
+- [x] Choose Cloudflare Pages for the hosted catalogue URL: `https://rave-route-catalogue.pages.dev/timetable-lol-catalogue.json`.
+- [x] Configure `environment.timetableLolCatalogue.remoteUrl` for production builds.
 - [ ] Verify online hosted-catalogue loading and bundled fallback behaviour in a native build.
 - [ ] Create the protected upload keystore and generate the signed Android App Bundle.
 - [ ] Create and verify a Google Play Console developer account and complete the app identity/profile requirements.

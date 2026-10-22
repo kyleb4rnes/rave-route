@@ -13,6 +13,7 @@
     "e2e:headed": "playwright test --headed",
     "e2e:ui": "playwright test --ui",
     "e2e:report": "playwright show-report",
+    "onboarding:videos": "node scripts/record-onboarding-demos.cjs",
     "audit:production": "npm audit --omit=dev --audit-level=low",
     "verify": "npm run lint && npm run test -- --watch=false --browsers=ChromeHeadless && npm run audit:production && npm run build",
     "android:sync": "npm run build && npx cap sync android",

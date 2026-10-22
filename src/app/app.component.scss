@@ -4,7 +4,11 @@
   inset: 0;
   justify-content: center;
   position: fixed;
-  z-index: 10000;
+  z-index: 10002;
+}
+
+.app-router-outlet--hidden {
+  visibility: hidden;
 }
 
 .launch-screen__backdrop {
@@ -37,7 +41,7 @@
 }
 
 .launch-screen--leaving .launch-screen__backdrop {
-  height: calc(3.5rem + env(safe-area-inset-top));
+  height: 0;
 }
 
 .launch-screen--leaving .launch-screen__content {

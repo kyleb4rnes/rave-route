@@ -28,11 +28,13 @@ The current product lets a user:
 
 See [product specification](docs/product-specification.md) for the current scope and known deferred work.
 
-## Refreshing the Timetable.lol catalogue
+## Refreshing and publishing the Timetable.lol catalogue
 
 Run `npm run timetable-lol:sync` to fetch Timetable.lol's public events and planner-data API endpoints and generate the compact bundled catalogue used by the community import flow. Only live events with importable timed sets are included; the script reports skipped events and malformed rows for review before committing. The app visibly attributes imported catalogue data as “Data provided by Timetable.lol”.
 
-The app can also load a hosted catalogue before using the bundled fallback. Set `environment.timetableLolCatalogue.remoteUrl` to the public JSON URL for builds that should receive catalogue updates without a new app-store release. Keep `src/assets/timetables/timetable-lol-catalogue.json` current as the offline and failure fallback.
+`src/assets/timetables/timetable-lol-catalogue.json` is the single source of truth. When it changes, commit and push it to `main`: Cloudflare Pages automatically publishes it at `https://rave-route-catalogue.pages.dev/timetable-lol-catalogue.json`, while the same file remains bundled in the next Android/web build.
+
+Production builds request the Pages copy first and automatically fall back to the bundled copy for offline use, network/HTTP failures, or an invalid hosted catalogue. This keeps catalogue updates independent of app-store releases without making the app dependent on the network. After pushing a catalogue change, confirm the Pages deployment succeeds and that the public URL serves the expected JSON. Use `[skip pages]` in an unrelated commit message when a Pages deployment should be skipped.
 
 ## Technical direction
 
