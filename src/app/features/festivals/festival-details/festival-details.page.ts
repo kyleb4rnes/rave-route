@@ -1,4 +1,10 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import {
+  Component,
+  computed,
+  inject,
+  signal,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import {
   IonAlert,
@@ -19,7 +25,11 @@ import {
   getAccommodationSearchUrl,
   getTransportSearchUrl,
 } from '../../../core/festivals/festival-plan-links.utils';
-import { Festival, isCustomFestival, PackingListItem } from '../../../core/festivals/models/festival';
+import {
+  Festival,
+  isCustomFestival,
+  PackingListItem,
+} from '../../../core/festivals/models/festival';
 import { FestivalStore } from '../../../core/festivals/festival.store';
 import { hasFestivalTicketLinks } from '../../../core/festivals/festival-ticket-links.utils';
 
@@ -30,6 +40,7 @@ addIcons({ cameraOutline });
   templateUrl: './festival-details.page.html',
   styleUrls: ['./festival-details.page.scss'],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FestivalImageComponent,
     AppHeaderComponent,
@@ -46,10 +57,13 @@ export class FestivalDetailsPage {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly festivalStore = inject(FestivalStore);
-  private readonly festivalId = this.route.snapshot.paramMap.get('festivalId') ?? '';
+  private readonly festivalId =
+    this.route.snapshot.paramMap.get('festivalId') ?? '';
 
   readonly loading = this.festivalStore.loading;
-  readonly festival = computed(() => this.festivalStore.getFestivalById(this.festivalId));
+  readonly festival = computed(() =>
+    this.festivalStore.getFestivalById(this.festivalId)
+  );
   readonly isDeleteAlertOpen = signal(false);
   readonly isUpdatingImage = signal(false);
   readonly imageUpdateError = signal<string | null>(null);
@@ -59,10 +73,16 @@ export class FestivalDetailsPage {
   readonly packingListError = signal<string | null>(null);
   readonly newPackingItem = signal('');
   readonly packingItems = computed(() => this.festival()?.packingList ?? []);
-  readonly packedItemCount = computed(() => this.packingItems().filter((item) => item.packed).length);
+  readonly packedItemCount = computed(
+    () => this.packingItems().filter((item) => item.packed).length
+  );
   readonly deleteAlertButtons = [
     { text: 'Cancel', role: 'cancel' },
-    { text: 'Delete', role: 'destructive', handler: () => void this.deleteFestival() },
+    {
+      text: 'Delete',
+      role: 'destructive',
+      handler: () => void this.deleteFestival(),
+    },
   ];
 
   formatDateRange(festival: Festival): string {
@@ -73,7 +93,11 @@ export class FestivalDetailsPage {
       timeZone: 'UTC',
     });
 
-    return `${dateFormatter.format(new Date(`${festival.startDate}T00:00:00.000Z`))} – ${dateFormatter.format(new Date(`${festival.endDate}T00:00:00.000Z`))}`;
+    return `${dateFormatter.format(
+      new Date(`${festival.startDate}T00:00:00.000Z`)
+    )} – ${dateFormatter.format(
+      new Date(`${festival.endDate}T00:00:00.000Z`)
+    )}`;
   }
 
   getCountdownLabel(festival: Festival): string {
@@ -103,7 +127,10 @@ export class FestivalDetailsPage {
   getStayLengthLabel(festival: Festival): string {
     const start = new Date(`${festival.startDate}T00:00:00.000Z`);
     const end = new Date(`${festival.endDate}T00:00:00.000Z`);
-    const nights = Math.max(1, Math.round((end.getTime() - start.getTime()) / 86_400_000) + 1);
+    const nights = Math.max(
+      1,
+      Math.round((end.getTime() - start.getTime()) / 86_400_000)
+    );
 
     return `${nights} ${nights === 1 ? 'night' : 'nights'}`;
   }
@@ -133,11 +160,20 @@ export class FestivalDetailsPage {
       }
 
       this.isUpdatingImage.set(true);
-      if (!(await this.festivalStore.updateFestivalImage(this.festivalId, photo.dataUrl))) {
-        this.imageUpdateError.set('We could not save that photo. Please try again.');
+      if (
+        !(await this.festivalStore.updateFestivalImage(
+          this.festivalId,
+          photo.dataUrl
+        ))
+      ) {
+        this.imageUpdateError.set(
+          'We could not save that photo. Please try again.'
+        );
       }
     } catch {
-      this.imageUpdateError.set('We could not select that photo. Please try again.');
+      this.imageUpdateError.set(
+        'We could not select that photo. Please try again.'
+      );
     } finally {
       this.isUpdatingImage.set(false);
     }
@@ -152,13 +188,17 @@ export class FestivalDetailsPage {
     this.isUpdatingImage.set(true);
 
     if (!(await this.festivalStore.updateFestivalImage(this.festivalId, ''))) {
-      this.imageUpdateError.set('We could not remove that photo. Please try again.');
+      this.imageUpdateError.set(
+        'We could not remove that photo. Please try again.'
+      );
     }
 
     this.isUpdatingImage.set(false);
   }
 
-  async updateTransportArrangement(event: CustomEvent<{ checked: boolean }>): Promise<void> {
+  async updateTransportArrangement(
+    event: CustomEvent<{ checked: boolean }>
+  ): Promise<void> {
     const festival = this.festival();
 
     if (!festival) {
@@ -168,11 +208,13 @@ export class FestivalDetailsPage {
     await this.updateArrangements(
       festival.ticketArranged ?? false,
       event.detail.checked,
-      festival.accommodationArranged ?? false,
+      festival.accommodationArranged ?? false
     );
   }
 
-  async updateAccommodationArrangement(event: CustomEvent<{ checked: boolean }>): Promise<void> {
+  async updateAccommodationArrangement(
+    event: CustomEvent<{ checked: boolean }>
+  ): Promise<void> {
     const festival = this.festival();
 
     if (!festival) {
@@ -182,11 +224,13 @@ export class FestivalDetailsPage {
     await this.updateArrangements(
       festival.ticketArranged ?? false,
       festival.transportArranged,
-      event.detail.checked,
+      event.detail.checked
     );
   }
 
-  async updateTicketArrangement(event: CustomEvent<{ checked: boolean }>): Promise<void> {
+  async updateTicketArrangement(
+    event: CustomEvent<{ checked: boolean }>
+  ): Promise<void> {
     const festival = this.festival();
 
     if (!festival) {
@@ -196,14 +240,14 @@ export class FestivalDetailsPage {
     await this.updateArrangements(
       event.detail.checked,
       festival.transportArranged,
-      festival.accommodationArranged ?? false,
+      festival.accommodationArranged ?? false
     );
   }
 
   async togglePackingItem(itemId: string): Promise<void> {
     const items = this.packingItems();
     const updatedItems = items.map((item) =>
-      item.id === itemId ? { ...item, packed: !item.packed } : item,
+      item.id === itemId ? { ...item, packed: !item.packed } : item
     );
     await this.savePackingList(updatedItems);
   }
@@ -223,10 +267,14 @@ export class FestivalDetailsPage {
   }
 
   async removePackingItem(itemId: string): Promise<void> {
-    await this.savePackingList(this.packingItems().filter((item) => item.id !== itemId));
+    await this.savePackingList(
+      this.packingItems().filter((item) => item.id !== itemId)
+    );
   }
 
-  private async savePackingList(packingList: readonly PackingListItem[]): Promise<void> {
+  private async savePackingList(
+    packingList: readonly PackingListItem[]
+  ): Promise<void> {
     if (this.isUpdatingPackingList()) {
       return;
     }
@@ -234,8 +282,15 @@ export class FestivalDetailsPage {
     this.packingListError.set(null);
     this.isUpdatingPackingList.set(true);
 
-    if (!(await this.festivalStore.updatePackingList(this.festivalId, packingList))) {
-      this.packingListError.set('We could not save your packing list. Please try again.');
+    if (
+      !(await this.festivalStore.updatePackingList(
+        this.festivalId,
+        packingList
+      ))
+    ) {
+      this.packingListError.set(
+        'We could not save your packing list. Please try again.'
+      );
     }
 
     this.isUpdatingPackingList.set(false);
@@ -260,7 +315,7 @@ export class FestivalDetailsPage {
   private async updateArrangements(
     ticketArranged: boolean,
     transportArranged: boolean,
-    accommodationArranged: boolean,
+    accommodationArranged: boolean
   ): Promise<void> {
     if (this.isUpdatingArrangements()) {
       return;
@@ -269,13 +324,17 @@ export class FestivalDetailsPage {
     this.arrangementUpdateError.set(null);
     this.isUpdatingArrangements.set(true);
 
-    if (!(await this.festivalStore.updateFestivalArrangements(
-      this.festivalId,
-      ticketArranged,
-      transportArranged,
-      accommodationArranged,
-    ))) {
-      this.arrangementUpdateError.set('We could not save your arrangements. Please try again.');
+    if (
+      !(await this.festivalStore.updateFestivalArrangements(
+        this.festivalId,
+        ticketArranged,
+        transportArranged,
+        accommodationArranged
+      ))
+    ) {
+      this.arrangementUpdateError.set(
+        'We could not save your arrangements. Please try again.'
+      );
     }
 
     this.isUpdatingArrangements.set(false);

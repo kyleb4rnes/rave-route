@@ -91,7 +91,7 @@
                 {{ selectedFestival.transportArranged ? 'Arranged' : 'To arrange' }}
               </span>
             </div>
-            <p class="festival-details__plan-estimate"><span>Price estimate</span>Compare live fares for your route</p>
+            <p class="festival-details__plan-estimate">Compare transport options for this festival</p>
           </div>
           <a class="festival-details__plan-link" [href]="getTransportSearchUrl(selectedFestival)" target="_blank" rel="noopener noreferrer">Explore transport</a>
           <ion-toggle
@@ -111,7 +111,7 @@
                 {{ selectedFestival.accommodationArranged ? 'Arranged' : 'To arrange' }}
               </span>
             </div>
-            <p class="festival-details__plan-estimate"><span>Stay estimate</span>Compare live prices for {{ getStayLengthLabel(selectedFestival) }}</p>
+            <p class="festival-details__plan-estimate">Compare live prices for {{ getStayLengthLabel(selectedFestival) }}</p>
           </div>
           <a class="festival-details__plan-link" [href]="getAccommodationSearchUrl(selectedFestival)" target="_blank" rel="noopener noreferrer">Search Booking.com</a>
           <ion-toggle
