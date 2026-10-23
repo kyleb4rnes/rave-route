@@ -27,7 +27,6 @@ export class OnboardingStore {
       return true;
     }
 
-    return false; //debugging
     try {
       return localStorage.getItem(storageKey) === 'complete';
     } catch {

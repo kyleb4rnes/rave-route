@@ -1,4 +1,9 @@
-import { Component, input, output } from '@angular/core';
+import {
+  Component,
+  input,
+  output,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import {
   IonCard,
   IonCardContent,
@@ -15,6 +20,7 @@ import { FestivalImageComponent } from '../festival-image/festival-image.compone
   templateUrl: './upcoming-festival-card.component.html',
   styleUrls: ['./upcoming-festival-card.component.scss'],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FestivalImageComponent,
     IonCard,

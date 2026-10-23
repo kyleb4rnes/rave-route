@@ -1,23 +1,31 @@
-import { Component, inject, signal } from '@angular/core';
+import {
+  Component,
+  inject,
+  signal,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { Router } from '@angular/router';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import {
-  IonButton,
-  IonContent,
-  IonNote,
-} from '@ionic/angular/standalone';
+import { IonButton, IonContent, IonNote } from '@ionic/angular/standalone';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { AppHeaderComponent } from '../../components/app-header/app-header.component';
 import { AppSettingsStore } from '../../core/settings/app-settings.store';
 import { ImageStorageService } from '../../core/images/image-storage.service';
-import { AppearanceMode, appearanceModeOptions } from '../../core/settings/appearance-modes';
-import { ThemeColour, themeColourOptions } from '../../core/settings/theme-colours';
+import {
+  AppearanceMode,
+  appearanceModeOptions,
+} from '../../core/settings/appearance-modes';
+import {
+  ThemeColour,
+  themeColourOptions,
+} from '../../core/settings/theme-colours';
 
 @Component({
   selector: 'app-settings',
   templateUrl: './app-settings.page.html',
   styleUrls: ['./app-settings.page.scss'],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     AppHeaderComponent,
     IonButton,
@@ -38,17 +46,28 @@ export class AppSettingsPage {
   readonly themeColourOptions = themeColourOptions;
   readonly appearanceModeOptions = appearanceModeOptions;
   readonly form = new FormGroup({
-    homeBackgroundImageUrl: new FormControl(this.appSettingsStore.homeBackgroundImageUrl(), { nonNullable: true }),
-    themeColour: new FormControl<ThemeColour>(this.appSettingsStore.themeColour(), {
-      nonNullable: true,
-    }),
-    appearanceMode: new FormControl<AppearanceMode>(this.appSettingsStore.appearanceMode(), {
-      nonNullable: true,
-    }),
+    homeBackgroundImageUrl: new FormControl(
+      this.appSettingsStore.homeBackgroundImageUrl(),
+      { nonNullable: true }
+    ),
+    themeColour: new FormControl<ThemeColour>(
+      this.appSettingsStore.themeColour(),
+      {
+        nonNullable: true,
+      }
+    ),
+    appearanceMode: new FormControl<AppearanceMode>(
+      this.appSettingsStore.appearanceMode(),
+      {
+        nonNullable: true,
+      }
+    ),
   });
 
   constructor() {
-    this.form.controls.homeBackgroundImageUrl.valueChanges.subscribe((imageUrl) => this.resolveImagePreview(imageUrl));
+    this.form.controls.homeBackgroundImageUrl.valueChanges.subscribe(
+      (imageUrl) => this.resolveImagePreview(imageUrl)
+    );
     this.resolveImagePreview(this.form.controls.homeBackgroundImageUrl.value);
   }
 
@@ -63,7 +82,7 @@ export class AppSettingsPage {
     const saved = await this.appSettingsStore.saveSettings(
       this.form.controls.homeBackgroundImageUrl.value,
       this.form.controls.themeColour.value,
-      this.form.controls.appearanceMode.value,
+      this.form.controls.appearanceMode.value
     );
 
     if (!saved) {
@@ -84,7 +103,11 @@ export class AppSettingsPage {
   }
 
   handleThemeColourKeydown(event: KeyboardEvent, index: number): void {
-    const nextIndex = this.getRadioOptionIndex(event.key, index, this.themeColourOptions.length);
+    const nextIndex = this.getRadioOptionIndex(
+      event.key,
+      index,
+      this.themeColourOptions.length
+    );
 
     if (nextIndex === null) {
       return;
@@ -96,7 +119,11 @@ export class AppSettingsPage {
   }
 
   handleAppearanceModeKeydown(event: KeyboardEvent, index: number): void {
-    const nextIndex = this.getRadioOptionIndex(event.key, index, this.appearanceModeOptions.length);
+    const nextIndex = this.getRadioOptionIndex(
+      event.key,
+      index,
+      this.appearanceModeOptions.length
+    );
 
     if (nextIndex === null) {
       return;
@@ -123,7 +150,9 @@ export class AppSettingsPage {
         this.form.controls.homeBackgroundImageUrl.setValue(photo.dataUrl);
       }
     } catch {
-      this.imageSelectionError.set('We could not select that image. Please try again.');
+      this.imageSelectionError.set(
+        'We could not select that image. Please try again.'
+      );
     }
   }
 
@@ -141,18 +170,25 @@ export class AppSettingsPage {
   }
 
   private resolveImagePreview(imageUrl: string): void {
-    void this.imageStorage.resolveImageUrl(imageUrl).then((resolvedUrl) => {
-      if (this.form.controls.homeBackgroundImageUrl.value === imageUrl) {
-        this.imagePreviewUrl.set(resolvedUrl);
-      }
-    }).catch(() => {
-      if (this.form.controls.homeBackgroundImageUrl.value === imageUrl) {
-        this.imagePreviewUrl.set('');
-      }
-    });
+    void this.imageStorage
+      .resolveImageUrl(imageUrl)
+      .then((resolvedUrl) => {
+        if (this.form.controls.homeBackgroundImageUrl.value === imageUrl) {
+          this.imagePreviewUrl.set(resolvedUrl);
+        }
+      })
+      .catch(() => {
+        if (this.form.controls.homeBackgroundImageUrl.value === imageUrl) {
+          this.imagePreviewUrl.set('');
+        }
+      });
   }
 
-  private getRadioOptionIndex(key: string, currentIndex: number, optionCount: number): number | null {
+  private getRadioOptionIndex(
+    key: string,
+    currentIndex: number,
+    optionCount: number
+  ): number | null {
     if (key === 'Home') {
       return 0;
     }
@@ -172,9 +208,15 @@ export class AppSettingsPage {
     return null;
   }
 
-  private focusRadioOption(currentTarget: EventTarget | null, nextIndex: number): void {
-    const radioGroup = (currentTarget as HTMLElement | null)?.closest('[role="radiogroup"]');
-    const options = radioGroup?.querySelectorAll<HTMLButtonElement>('[role="radio"]');
+  private focusRadioOption(
+    currentTarget: EventTarget | null,
+    nextIndex: number
+  ): void {
+    const radioGroup = (currentTarget as HTMLElement | null)?.closest(
+      '[role="radiogroup"]'
+    );
+    const options =
+      radioGroup?.querySelectorAll<HTMLButtonElement>('[role="radio"]');
 
     options?.item(nextIndex)?.focus();
   }

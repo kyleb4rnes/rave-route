@@ -1,10 +1,18 @@
-import { Component, effect, inject, input, signal } from '@angular/core';
+import {
+  Component,
+  effect,
+  inject,
+  input,
+  signal,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { ImageStorageService } from '../../core/images/image-storage.service';
 
 @Component({
   selector: 'app-festival-image',
   templateUrl: './festival-image.component.html',
   styleUrls: ['./festival-image.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: true,
 })
 export class FestivalImageComponent {
@@ -24,15 +32,18 @@ export class FestivalImageComponent {
         return;
       }
 
-      void this.imageStorage.resolveImageUrl(imageUrl).then((resolvedUrl) => {
-        if (this.imageUrl() === imageUrl) {
-          this.displayUrl.set(resolvedUrl);
-        }
-      }).catch(() => {
-        if (this.imageUrl() === imageUrl) {
-          this.displayUrl.set(undefined);
-        }
-      });
+      void this.imageStorage
+        .resolveImageUrl(imageUrl)
+        .then((resolvedUrl) => {
+          if (this.imageUrl() === imageUrl) {
+            this.displayUrl.set(resolvedUrl);
+          }
+        })
+        .catch(() => {
+          if (this.imageUrl() === imageUrl) {
+            this.displayUrl.set(undefined);
+          }
+        });
     });
   }
 }

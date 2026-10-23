@@ -1,4 +1,11 @@
-import { Component, computed, inject, input, signal } from '@angular/core';
+import {
+  Component,
+  computed,
+  inject,
+  input,
+  signal,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { OnboardingStore } from '../../core/onboarding/onboarding.store';
 
 type OnboardingStep = {
@@ -13,6 +20,7 @@ type OnboardingStep = {
   selector: 'app-onboarding',
   templateUrl: './onboarding.component.html',
   styleUrls: ['./onboarding.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: true,
 })
 export class OnboardingComponent {
@@ -26,28 +34,33 @@ export class OnboardingComponent {
   readonly steps: readonly OnboardingStep[] = [
     {
       title: 'Find your festival',
-      description: 'Browse the catalogue, search by location or genre, or add a festival of your own.',
+      description:
+        'Browse the catalogue, search by location or genre, or add a festival of your own.',
       videoSrc: 'assets/onboarding/find-your-festival.webm',
       posterSrc: 'assets/onboarding/find-your-festival.png',
-      videoLabel: 'A demonstration of browsing and searching the festival catalogue',
+      videoLabel:
+        'A demonstration of browsing and searching the festival catalogue',
     },
     {
       title: 'Build your route',
-      description: 'Explore set times, save the artists you cannot miss, and keep an eye on clashes.',
+      description:
+        'Explore set times, save the artists you cannot miss, and keep an eye on clashes.',
       videoSrc: 'assets/onboarding/build-your-route.webm',
       posterSrc: 'assets/onboarding/build-your-route.png',
       videoLabel: 'A demonstration of saving a must-see set in a line-up',
     },
     {
       title: 'Get festival-ready',
-      description: 'Keep tickets, travel, accommodation, and your packing list together.',
+      description:
+        'Keep tickets, travel, accommodation, and your packing list together.',
       videoSrc: 'assets/onboarding/get-festival-ready.webm',
       posterSrc: 'assets/onboarding/get-festival-ready.png',
       videoLabel: 'A demonstration of preparing practical festival details',
     },
     {
       title: 'Stay on top of it',
-      description: 'Track your budget, then return home for your next adventure whenever you need it.',
+      description:
+        'Track your budget, then return home for your next adventure whenever you need it.',
       videoSrc: 'assets/onboarding/stay-on-top.webm',
       posterSrc: 'assets/onboarding/stay-on-top.png',
       videoLabel: 'A demonstration of adding a festival expense',
@@ -56,9 +69,13 @@ export class OnboardingComponent {
   readonly stepIndex = this.stepIndexSignal.asReadonly();
   readonly isChanging = this.isChangingSignal.asReadonly();
   readonly isLeaving = this.isLeavingSignal.asReadonly();
-  readonly prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  readonly prefersReducedMotion = window.matchMedia(
+    '(prefers-reduced-motion: reduce)'
+  ).matches;
   readonly currentStep = computed(() => this.steps[this.stepIndex()]);
-  readonly isFinalStep = computed(() => this.stepIndex() === this.steps.length - 1);
+  readonly isFinalStep = computed(
+    () => this.stepIndex() === this.steps.length - 1
+  );
   readonly canGoBack = computed(() => this.stepIndex() > 0);
 
   next(): void {

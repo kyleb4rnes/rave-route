@@ -1,4 +1,12 @@
-import { Component, effect, inject, input, output, signal } from '@angular/core';
+import {
+  Component,
+  effect,
+  inject,
+  input,
+  output,
+  signal,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import {
   AbstractControl,
   FormControl,
@@ -44,7 +52,9 @@ type EmptyFestivalFormValue = {
   accommodationArranged: boolean;
 };
 
-const dateRangeValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
+const dateRangeValidator: ValidatorFn = (
+  control: AbstractControl
+): ValidationErrors | null => {
   const { startDate, endDate } = control.value as Partial<FestivalDraft>;
 
   if (!startDate || !endDate || endDate >= startDate) {
@@ -59,6 +69,7 @@ const dateRangeValidator: ValidatorFn = (control: AbstractControl): ValidationEr
   templateUrl: './festival-form.component.html',
   styleUrls: ['./festival-form.component.scss'],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     IonButton,
     IonDatetime,
@@ -90,8 +101,14 @@ export class FestivalFormComponent {
         nonNullable: true,
         validators: [Validators.required, Validators.maxLength(100)],
       }),
-      startDate: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
-      endDate: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+      startDate: new FormControl('', {
+        nonNullable: true,
+        validators: [Validators.required],
+      }),
+      endDate: new FormControl('', {
+        nonNullable: true,
+        validators: [Validators.required],
+      }),
       imageUrl: new FormControl('', { nonNullable: true }),
       location: new FormControl('', {
         nonNullable: true,
@@ -100,7 +117,7 @@ export class FestivalFormComponent {
       transportArranged: new FormControl(false, { nonNullable: true }),
       accommodationArranged: new FormControl(false, { nonNullable: true }),
     },
-    { validators: dateRangeValidator },
+    { validators: dateRangeValidator }
   );
 
   constructor() {
@@ -118,11 +135,13 @@ export class FestivalFormComponent {
               transportArranged: festival.transportArranged,
               accommodationArranged: festival.accommodationArranged ?? false,
             }
-          : this.emptyFormValue(),
+          : this.emptyFormValue()
       );
     });
 
-    this.form.controls.imageUrl.valueChanges.subscribe((imageUrl) => this.resolveImagePreview(imageUrl));
+    this.form.controls.imageUrl.valueChanges.subscribe((imageUrl) =>
+      this.resolveImagePreview(imageUrl)
+    );
     this.resolveImagePreview(this.form.controls.imageUrl.value);
   }
 
@@ -159,7 +178,9 @@ export class FestivalFormComponent {
         this.form.controls.imageUrl.setValue(photo.dataUrl);
       }
     } catch {
-      this.imageSelectionError.set('We could not select that image. Please try again.');
+      this.imageSelectionError.set(
+        'We could not select that image. Please try again.'
+      );
     }
   }
 
@@ -170,7 +191,10 @@ export class FestivalFormComponent {
   }
 
   get isEndDateInvalid(): boolean {
-    return this.form.controls.endDate.touched && this.form.hasError('endDateBeforeStartDate');
+    return (
+      this.form.controls.endDate.touched &&
+      this.form.hasError('endDateBeforeStartDate')
+    );
   }
 
   openDateRangePicker(): void {
@@ -184,7 +208,9 @@ export class FestivalFormComponent {
     this.pendingStartDate.set(null);
   }
 
-  selectRangeDate(event: CustomEvent<{ value?: string | string[] | null }>): void {
+  selectRangeDate(
+    event: CustomEvent<{ value?: string | string[] | null }>
+  ): void {
     const value = event.detail.value;
     const selectedDate = typeof value === 'string' ? value.slice(0, 10) : null;
 
@@ -268,14 +294,17 @@ export class FestivalFormComponent {
   }
 
   private resolveImagePreview(imageUrl: string): void {
-    void this.imageStorage.resolveImageUrl(imageUrl).then((resolvedUrl) => {
-      if (this.form.controls.imageUrl.value === imageUrl) {
-        this.imagePreviewUrl.set(resolvedUrl);
-      }
-    }).catch(() => {
-      if (this.form.controls.imageUrl.value === imageUrl) {
-        this.imagePreviewUrl.set('');
-      }
-    });
+    void this.imageStorage
+      .resolveImageUrl(imageUrl)
+      .then((resolvedUrl) => {
+        if (this.form.controls.imageUrl.value === imageUrl) {
+          this.imagePreviewUrl.set(resolvedUrl);
+        }
+      })
+      .catch(() => {
+        if (this.form.controls.imageUrl.value === imageUrl) {
+          this.imagePreviewUrl.set('');
+        }
+      });
   }
 }

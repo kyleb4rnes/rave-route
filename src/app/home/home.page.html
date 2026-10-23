@@ -1,17 +1,20 @@
 <app-header title="Rave Route" [showLogo]="true"></app-header>
 
 <ion-content>
-  <main class="home-shell" [class.home-shell--empty]="!loading() && !error() && allFestivals().length === 0">
+  <main
+    class="home-shell"
+    [class.home-shell--empty]="!loading() && !error() && allFestivals().length === 0"
+  >
     @if (activeFestival(); as festival) {
-      <app-active-festival-card
-        [festival]="festival"
-        [currentSet]="activeFestivalSchedule()?.currentSets?.[0]"
-        [currentSetCount]="activeFestivalSchedule()?.currentSets?.length ?? 0"
-        [nextSet]="activeFestivalSchedule()?.nextSets?.[0]"
-        [nextSetCount]="activeFestivalSchedule()?.nextSets?.length ?? 0"
-        (viewDetails)="viewFestival(festival.id)"
-        (viewLineup)="viewLineup(festival.id)"
-      ></app-active-festival-card>
+    <app-active-festival-card
+      [festival]="festival"
+      [currentSet]="$safeNavigationMigration(activeFestivalSchedule()?.currentSets?.[0])"
+      [currentSetCount]="activeFestivalSchedule()?.currentSets?.length ?? 0"
+      [nextSet]="$safeNavigationMigration(activeFestivalSchedule()?.nextSets?.[0])"
+      [nextSetCount]="activeFestivalSchedule()?.nextSets?.length ?? 0"
+      (viewDetails)="viewFestival(festival.id)"
+      (viewLineup)="viewLineup(festival.id)"
+    ></app-active-festival-card>
     }
 
     <header class="page-intro">
@@ -20,113 +23,126 @@
     </header>
 
     @if (loading()) {
-      <p class="page-status" role="status" aria-live="polite">Loading your festivals…</p>
+    <p class="page-status" role="status" aria-live="polite">
+      Loading your festivals…
+    </p>
     } @else if (error()) {
-      <section class="page-status page-status--error" role="alert">
-        <p>{{ error() }}</p>
-        <ion-button fill="clear" (click)="retryLoadingFestivals()">Try again</ion-button>
-      </section>
-    } @else if (allFestivals().length === 0) {
-      <app-empty-festival-state></app-empty-festival-state>
-    } @else if (routeNextFestival(); as festival) {
-      <app-upcoming-festival-card
-        [title]="festival.title"
-        [location]="festival.location"
-        [dateLabel]="formatDateRange(festival)"
-        [countdownLabel]="getCountdownLabel(festival)"
-        [ticketLabel]="getTicketLabel(festival)"
-        [transportLabel]="getTransportLabel(festival)"
-        [accommodationLabel]="getAccommodationLabel(festival)"
-        [imageUrl]="festival.imageUrl"
-        (viewLineup)="viewLineup(festival.id)"
-        (viewDetails)="viewFestival(festival.id)"
-      ></app-upcoming-festival-card>
-
-      @if (routeLaterUpcomingFestivals().length > 0) {
-        <section class="future-festivals" aria-labelledby="future-festivals-title">
-          <h2 id="future-festivals-title">Later adventures</h2>
-          @for (futureFestival of routeLaterUpcomingFestivals(); track futureFestival.id) {
-            <app-collapsed-festival-card
-              [title]="futureFestival.title"
-              [dateLabel]="formatDateRange(futureFestival)"
-              [location]="futureFestival.location"
-              [countdownLabel]="getCountdownLabel(futureFestival)"
-              [ticketLabel]="getTicketLabel(futureFestival)"
-              [transportLabel]="getTransportLabel(futureFestival)"
-              [accommodationLabel]="getAccommodationLabel(futureFestival)"
-              [expanded]="expandedFestivalId() === futureFestival.id"
-              (toggled)="toggleFestival(futureFestival.id)"
-              (viewLineup)="viewLineup(futureFestival.id)"
-              (viewDetails)="viewFestival(futureFestival.id)"
-            ></app-collapsed-festival-card>
-          }
-        </section>
-      }
-    } @else {
-      <section class="page-status">
-        <p>{{ activeFestival() ? 'You have no festivals planned after the live one yet.' : 'You have no upcoming festivals yet. Add one to start planning.' }}</p>
-      </section>
-    }
-
-    @if (pastFestivals().length > 0) {
-      <section class="past-festivals" aria-labelledby="past-festivals-title">
-        <button
-          [attr.aria-expanded]="isPastFestivalsOpen()"
-          aria-controls="past-festivals-list"
-          class="past-festivals__toggle"
-          type="button"
-          (click)="togglePastFestivals()"
-        >
-          <span id="past-festivals-title">Past adventures ({{ pastFestivals().length }})</span>
-          <span aria-hidden="true">{{ isPastFestivalsOpen() ? '−' : '+' }}</span>
-        </button>
-
-        @if (isPastFestivalsOpen()) {
-          <div id="past-festivals-list" class="past-festivals__list">
-            @for (pastFestival of pastFestivals(); track pastFestival.id) {
-              <app-collapsed-festival-card
-                [title]="pastFestival.title"
-                [dateLabel]="formatDateRange(pastFestival)"
-                [location]="pastFestival.location"
-                countdownLabel="Festival complete"
-                [ticketLabel]="getTicketLabel(pastFestival)"
-                [transportLabel]="getTransportLabel(pastFestival)"
-                [accommodationLabel]="getAccommodationLabel(pastFestival)"
-                [expanded]="expandedFestivalId() === pastFestival.id"
-                (toggled)="toggleFestival(pastFestival.id)"
-                (viewLineup)="viewLineup(pastFestival.id)"
-                (viewDetails)="viewFestival(pastFestival.id)"
-              ></app-collapsed-festival-card>
-            }
-          </div>
-        }
-      </section>
-    }
-
-    @if (!loading() && !error() && !activeFestival()) {
-      <button
-        class="live-demo-button"
-        type="button"
-        [disabled]="isCreatingLiveDemo()"
-        (click)="createLiveDemoFestival()"
+    <section class="page-status page-status--error" role="alert">
+      <p>{{ error() }}</p>
+      <ion-button fill="clear" (click)="retryLoadingFestivals()"
+        >Try again</ion-button
       >
-        {{ isCreatingLiveDemo() ? 'Creating live demo…' : 'Add live festival demo' }}
+    </section>
+    } @else if (allFestivals().length === 0) {
+    <app-empty-festival-state></app-empty-festival-state>
+    } @else if (routeNextFestival(); as festival) {
+    <app-upcoming-festival-card
+      [title]="festival.title"
+      [location]="festival.location"
+      [dateLabel]="formatDateRange(festival)"
+      [countdownLabel]="getCountdownLabel(festival)"
+      [ticketLabel]="getTicketLabel(festival)"
+      [transportLabel]="getTransportLabel(festival)"
+      [accommodationLabel]="getAccommodationLabel(festival)"
+      [imageUrl]="festival.imageUrl"
+      (viewLineup)="viewLineup(festival.id)"
+      (viewDetails)="viewFestival(festival.id)"
+    ></app-upcoming-festival-card>
+
+    @if (routeLaterUpcomingFestivals().length > 0) {
+    <section class="future-festivals" aria-labelledby="future-festivals-title">
+      <h2 id="future-festivals-title">Later adventures</h2>
+      @for (futureFestival of routeLaterUpcomingFestivals(); track
+      futureFestival.id) {
+      <app-collapsed-festival-card
+        [title]="futureFestival.title"
+        [dateLabel]="formatDateRange(futureFestival)"
+        [location]="futureFestival.location"
+        [countdownLabel]="getCountdownLabel(futureFestival)"
+        [ticketLabel]="getTicketLabel(futureFestival)"
+        [transportLabel]="getTransportLabel(futureFestival)"
+        [accommodationLabel]="getAccommodationLabel(futureFestival)"
+        [expanded]="expandedFestivalId() === futureFestival.id"
+        (toggled)="toggleFestival(futureFestival.id)"
+        (viewLineup)="viewLineup(futureFestival.id)"
+        (viewDetails)="viewFestival(futureFestival.id)"
+      ></app-collapsed-festival-card>
+      }
+    </section>
+    } } @else {
+    <section class="page-status">
+      <p>
+        {{ activeFestival() ? 'You have no festivals planned after the live one
+        yet.' : 'You have no upcoming festivals yet. Add one to start planning.'
+        }}
+      </p>
+    </section>
+    } @if (pastFestivals().length > 0) {
+    <section class="past-festivals" aria-labelledby="past-festivals-title">
+      <button
+        [attr.aria-expanded]="isPastFestivalsOpen()"
+        aria-controls="past-festivals-list"
+        class="past-festivals__toggle"
+        type="button"
+        (click)="togglePastFestivals()"
+      >
+        <span id="past-festivals-title"
+          >Past adventures ({{ pastFestivals().length }})</span
+        >
+        <span aria-hidden="true">{{ isPastFestivalsOpen() ? '−' : '+' }}</span>
       </button>
+
+      @if (isPastFestivalsOpen()) {
+      <div id="past-festivals-list" class="past-festivals__list">
+        @for (pastFestival of pastFestivals(); track pastFestival.id) {
+        <app-collapsed-festival-card
+          [title]="pastFestival.title"
+          [dateLabel]="formatDateRange(pastFestival)"
+          [location]="pastFestival.location"
+          countdownLabel="Festival complete"
+          [ticketLabel]="getTicketLabel(pastFestival)"
+          [transportLabel]="getTransportLabel(pastFestival)"
+          [accommodationLabel]="getAccommodationLabel(pastFestival)"
+          [expanded]="expandedFestivalId() === pastFestival.id"
+          (toggled)="toggleFestival(pastFestival.id)"
+          (viewLineup)="viewLineup(pastFestival.id)"
+          (viewDetails)="viewFestival(pastFestival.id)"
+        ></app-collapsed-festival-card>
+        }
+      </div>
+      }
+    </section>
+    } @if (!loading() && !error() && !activeFestival()) {
+    <button
+      class="live-demo-button"
+      type="button"
+      [disabled]="isCreatingLiveDemo()"
+      (click)="createLiveDemoFestival()"
+    >
+      {{ isCreatingLiveDemo() ? 'Creating live demo…' : 'Add live festival demo'
+      }}
+    </button>
     }
 
-    <ion-button class="rr-button add-festival-button" expand="block" [disabled]="loading()" (click)="openAddFestivalForm()">
+    <ion-button
+      class="rr-button add-festival-button"
+      expand="block"
+      [disabled]="loading()"
+      (click)="openAddFestivalForm()"
+    >
       Add Festival
     </ion-button>
 
     @if (!loading() && !error() && allFestivals().length > 0) {
-      <button
-        class="clear-data-button"
-        type="button"
-        [disabled]="isClearingData()"
-        (click)="openClearDataConfirmation()"
-      >
-        {{ isClearingData() ? 'Clearing local data…' : 'Clear all local festival data' }}
-      </button>
+    <button
+      class="clear-data-button"
+      type="button"
+      [disabled]="isClearingData()"
+      (click)="openClearDataConfirmation()"
+    >
+      {{ isClearingData() ? 'Clearing local data…' : 'Clear all local festival
+      data' }}
+    </button>
     }
   </main>
 

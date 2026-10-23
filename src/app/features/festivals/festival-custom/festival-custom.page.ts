@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { Router } from '@angular/router';
 import { IonContent } from '@ionic/angular/standalone';
 
@@ -12,6 +12,7 @@ import { FestivalFormComponent } from '../festival-form/festival-form.component'
   templateUrl: './festival-custom.page.html',
   styleUrls: ['./festival-custom.page.scss'],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [AppHeaderComponent, FestivalFormComponent, IonContent],
 })
 export class FestivalCustomPage {

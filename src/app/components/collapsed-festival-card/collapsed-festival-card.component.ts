@@ -1,4 +1,9 @@
-import { Component, input, output } from '@angular/core';
+import {
+  Component,
+  input,
+  output,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { IonButton, IonIcon } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { chevronDown, chevronForward } from 'ionicons/icons';
@@ -10,6 +15,7 @@ addIcons({ chevronDown, chevronForward });
   templateUrl: './collapsed-festival-card.component.html',
   styleUrls: ['./collapsed-festival-card.component.scss'],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [IonButton, IonIcon],
 })
 export class CollapsedFestivalCardComponent {

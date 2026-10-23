@@ -1,4 +1,10 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import {
+  Component,
+  computed,
+  inject,
+  signal,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { Router } from '@angular/router';
 import {
   IonButton,
@@ -13,7 +19,12 @@ import {
   IonSpinner,
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { calendarOutline, chevronForward, filterOutline, locationOutline } from 'ionicons/icons';
+import {
+  calendarOutline,
+  chevronForward,
+  filterOutline,
+  locationOutline,
+} from 'ionicons/icons';
 
 import { AppHeaderComponent } from '../../../components/app-header/app-header.component';
 import {
@@ -35,7 +46,10 @@ import {
   getPastPresets,
   TimetableLolBrowseFilters,
 } from '../../../core/festivals/imports/timetable-lol-browse-filter.utils';
-import { FestivalGenre, festivalGenres } from '../../../core/festivals/models/festival';
+import {
+  FestivalGenre,
+  festivalGenres,
+} from '../../../core/festivals/models/festival';
 
 addIcons({ calendarOutline, chevronForward, filterOutline, locationOutline });
 
@@ -44,6 +58,7 @@ addIcons({ calendarOutline, chevronForward, filterOutline, locationOutline });
   templateUrl: './festival-browse.page.html',
   styleUrls: ['./festival-browse.page.scss'],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     AppHeaderComponent,
     IonButton,
@@ -64,25 +79,33 @@ export class FestivalBrowsePage {
 
   readonly presets = signal<readonly TimetableLolPreset[]>([]);
   readonly searchTerm = signal('');
-  readonly filters = signal<TimetableLolBrowseFilters>(defaultTimetableLolBrowseFilters);
+  readonly filters = signal<TimetableLolBrowseFilters>(
+    defaultTimetableLolBrowseFilters
+  );
   readonly showFilters = signal(false);
   readonly showPastFestivals = signal(false);
   readonly isLoading = signal(true);
   readonly error = signal<string | null>(null);
   readonly catalogueUpdatedAt = signal<string | null>(null);
   readonly countries = computed(() => getCountries(this.presets()));
-  readonly cities = computed(() => getCities(this.presets(), this.filters().country));
-  readonly genres = computed(() => getGenres(this.presets()));
-  readonly activeFilterCount = computed(() => countActiveBrowseFilters(this.filters()));
-  readonly matchingPresets = computed(() =>
-    filterTimetableLolPresets(this.presets(), this.searchTerm(), this.filters()),
+  readonly cities = computed(() =>
+    getCities(this.presets(), this.filters().country)
   );
-  readonly currentAndFuturePresets = computed(() => getCurrentAndFuturePresets(this.matchingPresets()));
+  readonly genres = computed(() => getGenres(this.presets()));
+  readonly activeFilterCount = computed(() =>
+    countActiveBrowseFilters(this.filters())
+  );
+  readonly matchingPresets = computed(() =>
+    filterTimetableLolPresets(this.presets(), this.searchTerm(), this.filters())
+  );
+  readonly currentAndFuturePresets = computed(() =>
+    getCurrentAndFuturePresets(this.matchingPresets())
+  );
   readonly pastPresets = computed(() => getPastPresets(this.matchingPresets()));
   readonly visiblePresets = computed(() =>
     this.showPastFestivals()
       ? [...this.pastPresets(), ...this.currentAndFuturePresets()]
-      : this.currentAndFuturePresets(),
+      : this.currentAndFuturePresets()
   );
 
   constructor() {
@@ -147,7 +170,9 @@ export class FestivalBrowsePage {
       year: 'numeric',
       timeZone: 'UTC',
     });
-    const start = formatter.format(new Date(`${preset.startDate}T00:00:00.000Z`));
+    const start = formatter.format(
+      new Date(`${preset.startDate}T00:00:00.000Z`)
+    );
     const end = formatter.format(new Date(`${preset.endDate}T00:00:00.000Z`));
 
     return preset.startDate === preset.endDate ? start : `${start} – ${end}`;
@@ -189,9 +214,13 @@ export class FestivalBrowsePage {
   private async loadCatalogue(): Promise<void> {
     try {
       this.presets.set(await this.timetableService.loadPresets());
-      this.catalogueUpdatedAt.set(await this.timetableService.getCatalogueGeneratedAt());
+      this.catalogueUpdatedAt.set(
+        await this.timetableService.getCatalogueGeneratedAt()
+      );
     } catch {
-      this.error.set('We could not load the festival catalogue. Please try again.');
+      this.error.set(
+        'We could not load the festival catalogue. Please try again.'
+      );
     } finally {
       this.isLoading.set(false);
     }
@@ -199,7 +228,13 @@ export class FestivalBrowsePage {
 }
 
 function isDateRange(value: unknown): value is BrowseDateRange {
-  return ['all', 'upcoming', 'next-3-months', 'next-6-months', 'this-year'].includes(value as string);
+  return [
+    'all',
+    'upcoming',
+    'next-3-months',
+    'next-6-months',
+    'this-year',
+  ].includes(value as string);
 }
 
 function isDuration(value: unknown): value is BrowseDuration {
@@ -207,5 +242,7 @@ function isDuration(value: unknown): value is BrowseDuration {
 }
 
 function isGenre(value: unknown): value is FestivalGenre {
-  return typeof value === 'string' && festivalGenres.includes(value as FestivalGenre);
+  return (
+    typeof value === 'string' && festivalGenres.includes(value as FestivalGenre)
+  );
 }

@@ -1,4 +1,11 @@
-import { Component, computed, effect, inject, signal } from '@angular/core';
+import {
+  Component,
+  computed,
+  effect,
+  inject,
+  signal,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import {
   IonButton,
@@ -10,7 +17,12 @@ import {
   IonSegmentButton,
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { heart, heartOutline, layersOutline, timeOutline } from 'ionicons/icons';
+import {
+  heart,
+  heartOutline,
+  layersOutline,
+  timeOutline,
+} from 'ionicons/icons';
 
 import { AppHeaderComponent } from '../../../components/app-header/app-header.component';
 import {
@@ -41,6 +53,7 @@ type TimeSchedule = {
   templateUrl: './festival-lineup.page.html',
   styleUrls: ['./festival-lineup.page.scss'],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     AppHeaderComponent,
     IonButton,
@@ -56,34 +69,41 @@ export class FestivalLineupPage {
   private readonly route = inject(ActivatedRoute);
   private readonly festivalStore = inject(FestivalStore);
   private readonly timetableService = inject(TimetableLolLineupService);
-  private readonly festivalId = this.route.snapshot.paramMap.get('festivalId') ?? '';
+  private readonly festivalId =
+    this.route.snapshot.paramMap.get('festivalId') ?? '';
 
-  readonly festival = computed(() => this.festivalStore.getFestivalById(this.festivalId));
+  readonly festival = computed(() =>
+    this.festivalStore.getFestivalById(this.festivalId)
+  );
   readonly selectedDay = signal('');
   readonly viewMode = signal<'time' | 'stage'>('stage');
   readonly isMustSeeFilterActive = signal(false);
   readonly actionError = signal<string | null>(null);
   readonly refreshMessage = signal<string | null>(null);
   readonly isRefreshing = signal(false);
-  readonly hasPublishedSets = computed(() => (this.festival()?.lineupSets?.length ?? 0) > 0);
+  readonly hasPublishedSets = computed(
+    () => (this.festival()?.lineupSets?.length ?? 0) > 0
+  );
   readonly festivalDays = computed(() => {
     const festival = this.festival();
 
     return festival ? getFestivalDays(festival) : [];
   });
-  readonly selectedDayLabel = computed(() => this.formatDay(this.selectedDay()));
+  readonly selectedDayLabel = computed(() =>
+    this.formatDay(this.selectedDay())
+  );
   readonly selectedDaySets = computed(() =>
     (this.festival()?.lineupSets ?? [])
       .filter(
         (set) =>
           set.day === this.selectedDay() &&
-          (!this.isMustSeeFilterActive() || set.isMustSee),
+          (!this.isMustSeeFilterActive() || set.isMustSee)
       )
       .sort(
         (firstSet, secondSet) =>
           getFestivalDayTimeSortValue(firstSet.startTime) -
-          getFestivalDayTimeSortValue(secondSet.startTime),
-      ),
+          getFestivalDayTimeSortValue(secondSet.startTime)
+      )
   );
   readonly schedules = computed<StageSchedule[]>(() => {
     const scheduleByStage = new Map<string, FestivalSet[]>();
@@ -94,14 +114,18 @@ export class FestivalLineupPage {
     }
 
     return [...scheduleByStage.entries()]
-      .sort(([firstStage], [secondStage]) => firstStage.localeCompare(secondStage))
+      .sort(([firstStage], [secondStage]) =>
+        firstStage.localeCompare(secondStage)
+      )
       .map(([stage, sets]) => ({ stage, sets }));
   });
   readonly timeSchedules = computed<TimeSchedule[]>(() => {
     const sets = this.selectedDaySets();
 
     if (!this.isMustSeeFilterActive()) {
-      return sets.length > 0 ? [{ key: 'all-sets', sets, hasClash: false }] : [];
+      return sets.length > 0
+        ? [{ key: 'all-sets', sets, hasClash: false }]
+        : [];
     }
 
     const schedules: Array<TimeSchedule & { latestEndSortValue: number }> = [];
@@ -111,11 +135,14 @@ export class FestivalLineupPage {
       const startSortValue = getFestivalDayTimeSortValue(set.startTime);
       const endSortValue = getSetEndSortValue(set);
 
-      if (currentSchedule && startSortValue < currentSchedule.latestEndSortValue) {
+      if (
+        currentSchedule &&
+        startSortValue < currentSchedule.latestEndSortValue
+      ) {
         currentSchedule.sets.push(set);
         currentSchedule.latestEndSortValue = Math.max(
           currentSchedule.latestEndSortValue,
-          endSortValue,
+          endSortValue
         );
         currentSchedule.hasClash = true;
       } else {
@@ -128,7 +155,9 @@ export class FestivalLineupPage {
       }
     }
 
-    return schedules.map(({ latestEndSortValue: _latestEndSortValue, ...schedule }) => schedule);
+    return schedules.map(
+      ({ latestEndSortValue: _latestEndSortValue, ...schedule }) => schedule
+    );
   });
 
   constructor() {
@@ -161,7 +190,13 @@ export class FestivalLineupPage {
   async toggleMustSee(set: FestivalSet): Promise<void> {
     this.actionError.set(null);
 
-    if (!(await this.festivalStore.setLineupSetMustSee(this.festivalId, set.id, !set.isMustSee))) {
+    if (
+      !(await this.festivalStore.setLineupSetMustSee(
+        this.festivalId,
+        set.id,
+        !set.isMustSee
+      ))
+    ) {
       this.actionError.set('We could not update that set. Please try again.');
     }
   }
@@ -190,7 +225,9 @@ export class FestivalLineupPage {
 
     try {
       const presets = await this.timetableService.loadPresets();
-      const preset = presets.find((candidate) => candidate.eventSlug === eventSlug);
+      const preset = presets.find(
+        (candidate) => candidate.eventSlug === eventSlug
+      );
 
       if (!preset) {
         this.actionError.set('This festival is not in the latest catalogue.');
@@ -203,22 +240,28 @@ export class FestivalLineupPage {
         sets,
         preset.lineupStatus,
         preset.sourceGenres,
-        preset.genres,
+        preset.genres
       );
 
       if (!summary) {
-        this.actionError.set('We could not update the line-up. Please try again.');
+        this.actionError.set(
+          'We could not update the line-up. Please try again.'
+        );
       } else if (sets.length === 0) {
-        this.refreshMessage.set(this.getEmptyLineupMessage(this.festival() ?? festival));
+        this.refreshMessage.set(
+          this.getEmptyLineupMessage(this.festival() ?? festival)
+        );
       } else if (summary.added === 0 && summary.updated === 0) {
         this.refreshMessage.set('Your line-up is up to date.');
       } else {
         this.refreshMessage.set(
-          `Line-up updated: ${summary.added} added and ${summary.updated} refreshed.`,
+          `Line-up updated: ${summary.added} added and ${summary.updated} refreshed.`
         );
       }
     } catch {
-      this.actionError.set('We could not check for set times. Please try again.');
+      this.actionError.set(
+        'We could not check for set times. Please try again.'
+      );
     } finally {
       this.isRefreshing.set(false);
     }

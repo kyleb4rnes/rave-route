@@ -1,5 +1,12 @@
 import { Location } from '@angular/common';
-import { Component, computed, inject, input, output } from '@angular/core';
+import {
+  Component,
+  computed,
+  inject,
+  input,
+  output,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { NavigationEnd, Router, RouterLink } from '@angular/router';
 import {
   IonButton,
@@ -10,19 +17,41 @@ import {
   IonToolbar,
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { chevronBack, close, helpCircleOutline, homeOutline, settingsOutline } from 'ionicons/icons';
+import {
+  chevronBack,
+  close,
+  helpCircleOutline,
+  homeOutline,
+  settingsOutline,
+} from 'ionicons/icons';
 import { filter, map } from 'rxjs';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { RaveRouteLogoComponent } from '../rave-route-logo/rave-route-logo.component';
 
-addIcons({ chevronBack, close, helpCircleOutline, homeOutline, settingsOutline });
+addIcons({
+  chevronBack,
+  close,
+  helpCircleOutline,
+  homeOutline,
+  settingsOutline,
+});
 
 @Component({
   selector: 'app-header',
   templateUrl: './app-header.component.html',
   styleUrls: ['./app-header.component.scss'],
   standalone: true,
-  imports: [IonButton, IonButtons, IonHeader, IonIcon, IonTitle, IonToolbar, RaveRouteLogoComponent, RouterLink],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  imports: [
+    IonButton,
+    IonButtons,
+    IonHeader,
+    IonIcon,
+    IonTitle,
+    IonToolbar,
+    RaveRouteLogoComponent,
+    RouterLink,
+  ],
 })
 export class AppHeaderComponent {
   private readonly location = inject(Location);
@@ -30,9 +59,9 @@ export class AppHeaderComponent {
   private readonly currentUrl = toSignal(
     this.router.events.pipe(
       filter((event): event is NavigationEnd => event instanceof NavigationEnd),
-      map(() => this.router.url),
+      map(() => this.router.url)
     ),
-    { initialValue: this.router.url },
+    { initialValue: this.router.url }
   );
 
   readonly title = input.required<string>();

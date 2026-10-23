@@ -1,4 +1,11 @@
-import { Component, computed, DestroyRef, inject, signal } from '@angular/core';
+import {
+  Component,
+  computed,
+  DestroyRef,
+  inject,
+  signal,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { Router } from '@angular/router';
 import { IonAlert, IonButton, IonContent } from '@ionic/angular/standalone';
 import { AppHeaderComponent } from '../components/app-header/app-header.component';
@@ -6,8 +13,14 @@ import { ActiveFestivalCardComponent } from '../components/active-festival-card/
 import { CollapsedFestivalCardComponent } from '../components/collapsed-festival-card/collapsed-festival-card.component';
 import { EmptyFestivalStateComponent } from '../components/empty-festival-state/empty-festival-state.component';
 import { UpcomingFestivalCardComponent } from '../components/upcoming-festival-card/upcoming-festival-card.component';
-import { calculateDaysRemaining, getUpcomingFestivals } from '../core/festivals/festival-date.utils';
-import { getActiveFestival, getActiveFestivalSchedule } from '../core/festivals/active-festival.utils';
+import {
+  calculateDaysRemaining,
+  getUpcomingFestivals,
+} from '../core/festivals/festival-date.utils';
+import {
+  getActiveFestival,
+  getActiveFestivalSchedule,
+} from '../core/festivals/active-festival.utils';
 import { Festival } from '../core/festivals/models/festival';
 import { FestivalStore } from '../core/festivals/festival.store';
 
@@ -16,6 +29,7 @@ import { FestivalStore } from '../core/festivals/festival.store';
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     CollapsedFestivalCardComponent,
     EmptyFestivalStateComponent,
@@ -43,25 +57,38 @@ export class HomePage {
   readonly isClearingData = signal(false);
   readonly clearDataAlertButtons = [
     { text: 'Cancel', role: 'cancel' },
-    { text: 'Clear data', role: 'destructive', handler: () => void this.clearAllFestivalData() },
+    {
+      text: 'Clear data',
+      role: 'destructive',
+      handler: () => void this.clearAllFestivalData(),
+    },
   ];
   readonly now = signal(new Date());
-  readonly activeFestival = computed(() => getActiveFestival(this.allFestivals(), this.now()));
+  readonly activeFestival = computed(() =>
+    getActiveFestival(this.allFestivals(), this.now())
+  );
   readonly routeUpcomingFestivals = computed(() =>
     getUpcomingFestivals(this.allFestivals(), this.now()).filter(
-      (festival) => festival.id !== this.activeFestival()?.id,
-    ),
+      (festival) => festival.id !== this.activeFestival()?.id
+    )
   );
   readonly routeNextFestival = computed(() => this.routeUpcomingFestivals()[0]);
-  readonly routeLaterUpcomingFestivals = computed(() => this.routeUpcomingFestivals().slice(1));
+  readonly routeLaterUpcomingFestivals = computed(() =>
+    this.routeUpcomingFestivals().slice(1)
+  );
   readonly activeFestivalSchedule = computed(() => {
     const festival = this.activeFestival();
 
-    return festival ? getActiveFestivalSchedule(festival, this.now()) : undefined;
+    return festival
+      ? getActiveFestivalSchedule(festival, this.now())
+      : undefined;
   });
 
   constructor() {
-    const refreshInterval = window.setInterval(() => this.now.set(new Date()), 60_000);
+    const refreshInterval = window.setInterval(
+      () => this.now.set(new Date()),
+      60_000
+    );
 
     this.destroyRef.onDestroy(() => window.clearInterval(refreshInterval));
   }
@@ -93,10 +120,31 @@ export class HomePage {
       const laterStart = this.addDays(now, 1);
 
       const demoSets = [
-        this.createDemoSet('Bassline', currentStart, this.addMinutes(now, 30), 'Main Stage'),
-        this.createDemoSet('Your Must-see Set', clashStart, this.addMinutes(now, 45), 'The Warehouse', true),
-        this.createDemoSet('Next Horizon', nextStart, this.addMinutes(now, 105), 'Main Stage'),
-        this.createDemoSet('Tomorrow’s Opener', laterStart, this.addMinutes(laterStart, 60), 'The Warehouse'),
+        this.createDemoSet(
+          'Bassline',
+          currentStart,
+          this.addMinutes(now, 30),
+          'Main Stage'
+        ),
+        this.createDemoSet(
+          'Your Must-see Set',
+          clashStart,
+          this.addMinutes(now, 45),
+          'The Warehouse',
+          true
+        ),
+        this.createDemoSet(
+          'Next Horizon',
+          nextStart,
+          this.addMinutes(now, 105),
+          'Main Stage'
+        ),
+        this.createDemoSet(
+          'Tomorrow’s Opener',
+          laterStart,
+          this.addMinutes(laterStart, 60),
+          'The Warehouse'
+        ),
       ];
 
       for (const demoSet of demoSets) {
@@ -109,7 +157,7 @@ export class HomePage {
 
   toggleFestival(festivalId: string): void {
     this.expandedFestivalId.update((expandedFestivalId) =>
-      expandedFestivalId === festivalId ? null : festivalId,
+      expandedFestivalId === festivalId ? null : festivalId
     );
   }
 
@@ -160,7 +208,9 @@ export class HomePage {
     const startDate = new Date(`${festival.startDate}T00:00:00.000Z`);
     const endDate = new Date(`${festival.endDate}T00:00:00.000Z`);
 
-    return `${dateFormatter.format(startDate)} – ${dateFormatter.format(endDate)}`;
+    return `${dateFormatter.format(startDate)} – ${dateFormatter.format(
+      endDate
+    )}`;
   }
 
   getCountdownLabel(festival: Festival): string {
@@ -174,7 +224,9 @@ export class HomePage {
   }
 
   getTransportLabel(festival: Festival): string {
-    return festival.transportArranged ? 'Transport arranged' : 'Transport to arrange';
+    return festival.transportArranged
+      ? 'Transport arranged'
+      : 'Transport to arrange';
   }
 
   getTicketLabel(festival: Festival): string {
@@ -182,7 +234,9 @@ export class HomePage {
   }
 
   getAccommodationLabel(festival: Festival): string {
-    return festival.accommodationArranged ? 'Accommodation arranged' : 'Accommodation to arrange';
+    return festival.accommodationArranged
+      ? 'Accommodation arranged'
+      : 'Accommodation to arrange';
   }
 
   private createDemoSet(
@@ -190,8 +244,15 @@ export class HomePage {
     startsAt: Date,
     endsAt: Date,
     stage: string,
-    isMustSee = false,
-  ): { artist: string; day: string; startTime: string; endTime: string; stage: string; isMustSee?: boolean } {
+    isMustSee = false
+  ): {
+    artist: string;
+    day: string;
+    startTime: string;
+    endTime: string;
+    stage: string;
+    isMustSee?: boolean;
+  } {
     return {
       artist,
       day: this.toLocalDateKey(startsAt),
@@ -222,6 +283,8 @@ export class HomePage {
   }
 
   private toLocalTime(value: Date): string {
-    return `${String(value.getHours()).padStart(2, '0')}:${String(value.getMinutes()).padStart(2, '0')}`;
+    return `${String(value.getHours()).padStart(2, '0')}:${String(
+      value.getMinutes()
+    ).padStart(2, '0')}`;
   }
 }

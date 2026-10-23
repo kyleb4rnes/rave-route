@@ -1,4 +1,9 @@
-import { Component, input, output } from '@angular/core';
+import {
+  Component,
+  input,
+  output,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { IonButton, IonIcon } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { heart, heartOutline, timeOutline } from 'ionicons/icons';
@@ -13,6 +18,7 @@ addIcons({ heart, heartOutline, timeOutline });
   templateUrl: './active-festival-card.component.html',
   styleUrls: ['./active-festival-card.component.scss'],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [IonButton, IonIcon],
 })
 export class ActiveFestivalCardComponent {
@@ -29,7 +35,10 @@ export class ActiveFestivalCardComponent {
   }
 
   formatDay(day: string): string {
-    return new Intl.DateTimeFormat('en-GB', { weekday: 'short', day: 'numeric', month: 'short' })
-      .format(new Date(`${day}T12:00:00`));
+    return new Intl.DateTimeFormat('en-GB', {
+      weekday: 'short',
+      day: 'numeric',
+      month: 'short',
+    }).format(new Date(`${day}T12:00:00`));
   }
 }

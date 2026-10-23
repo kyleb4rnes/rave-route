@@ -1,4 +1,9 @@
-import { Component, computed, inject } from '@angular/core';
+import {
+  Component,
+  computed,
+  inject,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IonButton, IonContent } from '@ionic/angular/standalone';
 
@@ -13,21 +18,20 @@ import { FestivalFormComponent } from '../festival-form/festival-form.component'
   templateUrl: './festival-edit.page.html',
   styleUrls: ['./festival-edit.page.scss'],
   standalone: true,
-  imports: [
-    FestivalFormComponent,
-    AppHeaderComponent,
-    IonButton,
-    IonContent,
-  ],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  imports: [FestivalFormComponent, AppHeaderComponent, IonButton, IonContent],
 })
 export class FestivalEditPage {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly festivalStore = inject(FestivalStore);
-  private readonly festivalId = this.route.snapshot.paramMap.get('festivalId') ?? '';
+  private readonly festivalId =
+    this.route.snapshot.paramMap.get('festivalId') ?? '';
 
   readonly loading = this.festivalStore.loading;
-  readonly festival = computed(() => this.festivalStore.getFestivalById(this.festivalId));
+  readonly festival = computed(() =>
+    this.festivalStore.getFestivalById(this.festivalId)
+  );
   readonly isEditable = computed(() => {
     const festival = this.festival();
 
@@ -35,7 +39,10 @@ export class FestivalEditPage {
   });
 
   async saveFestival(draft: FestivalDraft): Promise<void> {
-    const festival = await this.festivalStore.updateFestival(this.festivalId, draft);
+    const festival = await this.festivalStore.updateFestival(
+      this.festivalId,
+      draft
+    );
 
     if (festival) {
       await this.router.navigate(['/festivals', festival.id]);

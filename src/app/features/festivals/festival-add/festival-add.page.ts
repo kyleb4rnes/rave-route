@@ -1,4 +1,10 @@
-import { Component, DestroyRef, inject, signal } from '@angular/core';
+import {
+  Component,
+  DestroyRef,
+  inject,
+  signal,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
@@ -13,7 +19,10 @@ import { calendarOutline } from 'ionicons/icons';
 
 import { AppHeaderComponent } from '../../../components/app-header/app-header.component';
 import { FestivalStore } from '../../../core/festivals/festival.store';
-import { TimetableLolLineupService, TimetableLolPreset } from '../../../core/festivals/imports/timetable-lol-lineup.service';
+import {
+  TimetableLolLineupService,
+  TimetableLolPreset,
+} from '../../../core/festivals/imports/timetable-lol-lineup.service';
 
 addIcons({ calendarOutline });
 
@@ -22,6 +31,7 @@ addIcons({ calendarOutline });
   templateUrl: './festival-add.page.html',
   styleUrls: ['./festival-add.page.scss'],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     AppHeaderComponent,
     IonButton,
@@ -43,12 +53,16 @@ export class FestivalAddPage {
   readonly error = signal<string | null>(null);
   private selectedEventSlug: string | null = null;
   constructor() {
-    this.route.queryParamMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params) => {
-      this.selectedEventSlug = params.get('event');
-      if (!this.selectedEventSlug) {
-        void this.router.navigate(['/festivals/browse'], { replaceUrl: true });
-      }
-    });
+    this.route.queryParamMap
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((params) => {
+        this.selectedEventSlug = params.get('event');
+        if (!this.selectedEventSlug) {
+          void this.router.navigate(['/festivals/browse'], {
+            replaceUrl: true,
+          });
+        }
+      });
     void this.loadCatalogue();
   }
 
@@ -59,7 +73,9 @@ export class FestivalAddPage {
       return;
     }
 
-    const existingFestival = this.festivalStore.getFestivalByCatalogueSlug(preset.eventSlug);
+    const existingFestival = this.festivalStore.getFestivalByCatalogueSlug(
+      preset.eventSlug
+    );
 
     if (existingFestival) {
       await this.router.navigate(['/festivals', existingFestival.id]);
@@ -72,7 +88,10 @@ export class FestivalAddPage {
 
     try {
       const sets = await this.timetableService.loadAllSets(preset);
-      const festival = await this.festivalStore.addCatalogueFestival(preset, sets);
+      const festival = await this.festivalStore.addCatalogueFestival(
+        preset,
+        sets
+      );
 
       if (!festival) {
         this.error.set('We could not add that festival. Please try again.');
@@ -88,7 +107,9 @@ export class FestivalAddPage {
   }
 
   isAlreadyAdded(preset: TimetableLolPreset): boolean {
-    return Boolean(this.festivalStore.getFestivalByCatalogueSlug(preset.eventSlug));
+    return Boolean(
+      this.festivalStore.getFestivalByCatalogueSlug(preset.eventSlug)
+    );
   }
 
   formatDateRange(preset: TimetableLolPreset): string {
@@ -98,7 +119,9 @@ export class FestivalAddPage {
       year: 'numeric',
       timeZone: 'UTC',
     });
-    const start = formatter.format(new Date(`${preset.startDate}T00:00:00.000Z`));
+    const start = formatter.format(
+      new Date(`${preset.startDate}T00:00:00.000Z`)
+    );
     const end = formatter.format(new Date(`${preset.endDate}T00:00:00.000Z`));
 
     return preset.startDate === preset.endDate ? start : `${start} – ${end}`;
@@ -109,12 +132,16 @@ export class FestivalAddPage {
 
     try {
       const presets = await this.timetableService.loadPresets();
-      const selectedPreset = presets.find((preset) => preset.eventSlug === this.selectedEventSlug);
+      const selectedPreset = presets.find(
+        (preset) => preset.eventSlug === this.selectedEventSlug
+      );
       if (selectedPreset) {
         this.selectedPreset.set(selectedPreset);
       }
     } catch {
-      this.error.set('We could not load the festival catalogue. Please try again.');
+      this.error.set(
+        'We could not load the festival catalogue. Please try again.'
+      );
     }
   }
 }

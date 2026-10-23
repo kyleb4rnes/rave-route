@@ -1,4 +1,9 @@
-import { Component, inject, signal } from '@angular/core';
+import {
+  Component,
+  inject,
+  signal,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { Router } from '@angular/router';
 import { IonContent } from '@ionic/angular/standalone';
 import { AppHeaderComponent } from '../../components/app-header/app-header.component';
@@ -9,6 +14,7 @@ import { OnboardingStore } from '../../core/onboarding/onboarding.store';
   templateUrl: './help.page.html',
   styleUrls: ['./help.page.scss'],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [AppHeaderComponent, IonContent],
 })
 export class HelpPage {
@@ -19,7 +25,9 @@ export class HelpPage {
   readonly expandedSection = signal<string | null>(null);
 
   toggleSection(section: string): void {
-    this.expandedSection.update((expandedSection) => expandedSection === section ? null : section);
+    this.expandedSection.update((expandedSection) =>
+      expandedSection === section ? null : section
+    );
   }
 
   closeHelp(): void {
