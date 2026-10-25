@@ -46,6 +46,7 @@ test.describe('Rave Route journeys', () => {
     await page.goto('/festivals/browse');
 
     await expect(page.getByRole('heading', { name: 'Find your next route' })).toBeVisible();
+    await page.getByRole('button', { name: /View past festivals/ }).click();
     await page.locator('ion-searchbar input').fill('Vroeger Was Alles Beter');
     const festival = page.getByRole('button', { name: /Vroeger Was Alles Beter 2026/ });
     await expect(festival).toBeVisible();
