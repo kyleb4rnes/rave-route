@@ -18,6 +18,10 @@
     "verify": "npm run lint && npm run test -- --watch=false --browsers=ChromeHeadless && npm run audit:production && npm run build",
     "android:sync": "npm run build && npx cap sync android",
     "android:open": "npx cap open android",
+    "ios:add": "npx cap add ios",
+    "ios:sync": "npm run build && npx cap sync ios",
+    "ios:open": "npx cap open ios",
+    "ios:run": "npm run ios:sync && npx cap run ios",
     "timetable-lol:sync": "powershell -ExecutionPolicy Bypass -File scripts/sync-timetable-lol-index.ps1"
   },
   "private": true,
@@ -34,6 +38,7 @@
     "@capacitor/camera": "^8.2.6",
     "@capacitor/core": "8.5.3",
     "@capacitor/filesystem": "^8.1.5",
+    "@capacitor/ios": "8.5.3",
     "@ionic/angular": "^8.0.0",
     "ionicons": "^7.0.0",
     "rxjs": "~7.8.0",

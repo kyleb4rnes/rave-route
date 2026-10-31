@@ -85,6 +85,10 @@ npm run android:open
 
 Run the project from Android Studio on an emulator or a physical Android device. iOS packaging is intentionally unverified until the project is opened on macOS with Xcode.
 
+## Private iOS testing
+
+The Mac setup, Xcode configuration, device checks, and invite-only TestFlight path are documented in [Mac setup and private iOS beta runbook](docs/mac-private-beta.md).
+
 ## Known limitations
 
 - Festival data stays on the current device/browser only; there is currently no account, sync, backup, or cloud storage.
