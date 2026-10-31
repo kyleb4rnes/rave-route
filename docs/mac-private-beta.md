@@ -12,6 +12,21 @@ This is the smallest practical path for packaging the current device-only Rave R
 
 The first private test remains device-only: there are no accounts, cloud sync, backup, analytics, or push notifications. Tell testers that deleting the app can delete local festival plans and private images.
 
+## Minimum-Mac-use strategy
+
+Do all ordinary preparation on Windows first. The Mac should be reserved for the native iOS project, real-iPhone checks, signing, archiving, and TestFlight upload.
+
+### Before opening the Mac — Windows/CI
+
+1. Finish the intended code and content changes on Windows.
+2. Run `npm ci` and `npm run verify`.
+3. Run the browser end-to-end tests when the change affects a user journey.
+4. Confirm the production catalogue URL and bundled catalogue are correct.
+5. Commit and push the candidate to `main`.
+6. Write down the candidate commit, intended version, build number, and the specific iPhone checks required.
+
+Do not spend Mac time fixing ordinary Angular, Ionic, TypeScript, catalogue, or browser-test issues. Fix those on Windows, push again, and only then use the Mac.
+
 ## One-time Mac setup
 
 1. Update macOS and install Xcode from the Mac App Store.
@@ -21,6 +36,8 @@ The first private test remains device-only: there are no accounts, cloud sync, b
 5. Install dependencies: `npm ci`.
 6. Generate the native project once: `npm run ios:add`. If `ios/` already exists, use `npm run ios:sync` instead.
 7. Open it with `npm run ios:open`.
+
+After the first native project is generated and configured, commit the complete `ios/` directory and the Xcode project settings back to GitHub. This is the main one-time Mac handoff. Do not commit certificates, private keys, provisioning profiles, or credentials. Once `ios/` is in the repository, later Mac sessions only need to pull it and sync the web build.
 
 ## Xcode configuration
 
@@ -47,6 +64,17 @@ npm ci
 npm run verify
 npm run ios:sync
 ```
+
+For a later session, do not run the full verification suite on the Mac if it already passed on Windows/CI. The shortest normal Mac path is:
+
+```bash
+git pull --ff-only
+npm ci
+npm run ios:sync
+npm run ios:open
+```
+
+Use `npm run verify` on Windows or CI before the Mac session. Run it on the Mac only when the Mac itself, Xcode, the iOS project, or a native plugin has changed.
 
 Run from Xcode on a connected iPhone and check onboarding, catalogue import and offline fallback, festival CRUD and relaunch, photo selection/replacement/removal, line-up, must-see, packing, budget, settings, help, external links, Light/Dark modes, accent colours, and relaunch after image operations.
 
@@ -195,6 +223,23 @@ npm run ios:open
 ```
 
 Increment the Xcode build number, archive, upload, and replace the TestFlight build only after the checks pass. Never commit certificates, provisioning profiles, or App Store Connect API keys.
+
+## Mac session decision guide
+
+Use the smallest session that matches the change:
+
+| Change | Mac required? | Mac work |
+| --- | --- | --- |
+| Angular/Ionic UI or business logic | No, unless releasing iOS | Windows verification; later Mac sync/archive |
+| Catalogue JSON or hosted catalogue | No | Windows/CI and Cloudflare Pages |
+| Dependency update with no native plugin change | Only to release iOS | Pull, `npm ci`, sync, smoke-test, archive |
+| Capacitor/plugin update | Yes | Sync, inspect native changes, test on iPhone, archive |
+| iOS permission/capability | Yes | Xcode project settings, privacy text, real-device test |
+| iOS-only defect | Yes | Reproduce with Xcode logs, fix on Windows where possible, retest |
+| New TestFlight build | Yes | Pull, sync, smoke-test, archive, upload |
+| Public store release | Yes | Final archive, App Store submission, review responses |
+
+If the Mac is too slow or its Xcode is too old to upload, use it for the real-iPhone diagnosis and use a newer/cloud Mac only for the archive/upload step.
 
 ## What does not need the Mac
 
