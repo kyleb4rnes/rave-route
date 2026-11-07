@@ -1,4 +1,4 @@
-import { provideZoneChangeDetection } from '@angular/core';
+import { provideZoneChangeDetection, isDevMode } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { RouteReuseStrategy, provideRouter } from '@angular/router';
 import {
@@ -11,6 +11,7 @@ import { routes } from './app/app.routes';
 import { FESTIVAL_REPOSITORY } from './app/core/festivals/data/festival-repository.token';
 import { LocalStorageFestivalRepository } from './app/core/festivals/data/local-storage-festival.repository';
 import { raveRoutePageTransition } from './app/core/animations/page-transition.animation';
+import { provideServiceWorker } from '@angular/service-worker';
 
 bootstrapApplication(AppComponent, {
   providers: [
@@ -22,5 +23,9 @@ bootstrapApplication(AppComponent, {
       navAnimation: raveRoutePageTransition,
     }),
     provideRouter(routes),
+    provideServiceWorker('ngsw-worker.js', {
+      enabled: !isDevMode(),
+      registrationStrategy: 'registerWhenStable:30000',
+    }),
   ],
 }).catch((error: unknown) => console.error(error));
