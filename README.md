@@ -6,7 +6,7 @@ The project is part of **Project Freedom**, a personal mission focused on greate
 
 ## Project status
 
-Active product development is underway, with Android beta preparation underway.
+Active product development is continuing through the installable web app. The web app is currently the sufficient path for iPhone testing and day-to-day development; native iOS work will resume when a MacBook is available.
 
 The app persists festival plans locally and supports catalogue-first festival browsing, Timetable.lol imports, festival CRUD, line-ups and set times, an automatic Live now view for active festivals, expandable cards, ticket and resale links, packing lists, budgets, photo-library artwork, accessible navigation, personal backgrounds, selectable colour themes, Help, and Settings. The Android project uses the `com.raveroute.app` application ID, version `0.1.0` / code `1`, and supports environment-based release signing.
 
@@ -54,7 +54,9 @@ Production builds request the Pages copy first and automatically fall back to th
 - [Development workflow](docs/development-workflow.md)
 - [Architecture](docs/architecture.md)
 - [Release checklist](docs/release-checklist.md)
+- [Roadmap to public release](docs/roadmap-to-public-release.md)
 - [Developer agent guide](developer.agent.md)
+- [Mac setup and private iOS beta runbook](docs/mac-private-beta.md)
 
 ## Development
 
@@ -83,17 +85,17 @@ npm run android:sync
 npm run android:open
 ```
 
-Run the project from Android Studio on an emulator or a physical Android device. iOS packaging is intentionally unverified until the project is opened on macOS with Xcode.
+Run the project from Android Studio on an emulator or a physical Android device. The installable web app can be tested from Safari on an iPhone without Xcode. iOS packaging is intentionally deferred until a MacBook is available.
 
 ## Private iOS testing
 
-The Mac setup, Xcode configuration, device checks, and invite-only TestFlight path are documented in [Mac setup and private iOS beta runbook](docs/mac-private-beta.md).
+The future Mac setup, Xcode configuration, device checks, and invite-only TestFlight path are documented in [Mac setup and private iOS beta runbook](docs/mac-private-beta.md). Native iOS work will wait until a personal MacBook is purchased; the web app is sufficient for current development.
 
 ## Known limitations
 
 - Festival data stays on the current device/browser only; there is currently no account, sync, backup, or cloud storage.
 - Device-selected images are stored alongside local festival data, so many large images can exhaust browser/device storage.
 - The Android project still needs release signing, an Android App Bundle, Play Console setup, and beta testing before public distribution.
-- iOS has not been packaged or tested because that requires macOS and Xcode.
+- Native iOS has not been packaged or tested because that requires macOS and Xcode; Safari iPhone testing is available through the web app.
 
 The original staged build plan is complete through Stage 19. Current priorities and release tasks are tracked in [the developer guide](developer.agent.md), [the release checklist](docs/release-checklist.md), and [the pre-release runbook](docs/pre-release-runbook.md).

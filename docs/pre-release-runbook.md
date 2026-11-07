@@ -70,11 +70,11 @@ The repository now contains Dependabot configuration and a quality workflow. The
 
 ## iOS preparation
 
-iOS packaging needs macOS with Xcode and an Apple Developer account. The current operating decision is to rent cloud-Mac access for iOS builds, signing, App Store Connect uploads, and release work instead of buying a Mac immediately. Catalogue updates are published through Cloudflare Pages and do not require a Mac or App Store release.
+iOS packaging needs macOS with Xcode and an Apple Developer account. The current operating decision is to wait for personal MacBook access around January 2027. Catalogue updates and the installable web app do not require a Mac or App Store release.
 
-Use the rented Mac when an app build changes: the initial iOS packaging, a code or dependency update, a native bug fix, a new permission/capability, or an Apple SDK compatibility update. During active iOS development, rent it for the development period or use it for several release sessions per month; once stable, use it only for planned app releases and periodic compatibility maintenance.
+Use a personal MacBook when an app build changes: the initial iOS packaging, a code or dependency update, a native bug fix, a new permission/capability, or an Apple SDK compatibility update. Native iOS work is deferred until that MacBook is available; use the installable web app for current iPhone testing.
 
-On the cloud Mac, add the Capacitor iOS platform, set Apple signing, add the Camera/photo-library permission text, and add the Filesystem privacy manifest entry required by Apple. Keep certificates, private keys, provisioning profiles, App Store Connect credentials, and Apple ID recovery details in approved secure storage rather than the repository or a persisted rental image. Use TestFlight on a physical iPhone for routine device acceptance. If a native device-only issue needs USB debugging, camera investigation, or detailed Xcode device logs, arrange temporary access to a physical Mac before deciding whether ownership is worthwhile.
+On the MacBook, add the Capacitor iOS platform, set Apple signing, add the Camera/photo-library permission text, and add the Filesystem privacy manifest entry required by Apple. Keep certificates, private keys, provisioning profiles, App Store Connect credentials, and Apple ID recovery details in approved secure storage. Use TestFlight on a physical iPhone for native device acceptance. Until then, use Safari/PWA testing and record native-only issues for later.
 
 ## Required owner decisions and assets
 

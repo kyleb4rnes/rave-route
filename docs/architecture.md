@@ -1,6 +1,6 @@
 # Rave Route architecture
 
-Rave Route is a mobile-first Ionic Angular application packaged for Android with Capacitor. The web application remains platform-neutral so an iOS Capacitor project can be added on macOS when iPhone testing is introduced.
+Rave Route is a mobile-first Ionic Angular application available as an installable PWA and packaged for Android with Capacitor. The web application is currently the active iPhone testing path. An iOS Capacitor project can be added on macOS when a personal MacBook is available.
 
 ## Layers
 
@@ -33,6 +33,8 @@ The Android project currently targets API 36, uses min SDK 24, and still needs a
 
 ## Deferred platform, security, and identity work
 
-- Add, configure, sign, and test the Capacitor iOS project from macOS/Xcode before claiming iPhone support.
+- Add, configure, sign, and test the Capacitor iOS project from macOS/Xcode when a personal MacBook is available. Until then, validate the web app in Safari on iPhone.
+- Review iPad layouts and standalone behaviour as a future platform pass.
+- Investigate Apple Watch support as a separate future companion-app decision after the iOS foundation exists.
 - GitHub dependency alerts/security updates and CodeQL are enabled; include dependency-audit, Dependabot, and CodeQL review in release preparation.
 - Keep data local until account, authentication, authorisation, cloud storage, session, and migration requirements have been designed together.

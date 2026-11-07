@@ -107,18 +107,24 @@ Stage checkboxes show roadmap progress, not permission to begin the next stage.
 
 Do not implement these unless they are explicitly brought into scope later:
 
+The dated [roadmap to public release](docs/roadmap-to-public-release.md) is the source of truth for sequencing all future work through 31 March 2027. It includes the complete future-work inventory and keeps non-critical work out of the release path.
+
 ### Recommended next work, in priority order
 
 1. **Catalogue refresh operations** - use `src/assets/timetables/timetable-lol-catalogue.json` as the single source of truth; review scheduled Timetable.lol refreshes, validate location and ticket metadata, push approved JSON to `main`, and verify Cloudflare Pages publishes it at the configured URL. Keep the bundled copy current for offline use.
 2. **Manual device and UX regression pass** - verify the latest Help/Settings overlay behaviour, catalogue-first Add Festival flow, festival ordering, sticky browse controls, packing removal, budget summaries, external ticket links, and hosted-catalogue fallback on a physical device or browser-sized viewport.
-3. **Public-release hardening** - work through the release checklist: dependency/security findings, Android signing and store packaging, iOS readiness, image-storage resilience, privacy/support materials, and physical-device coverage.
-5. **First-run setup and onboarding** - design an initial welcome flow for new installs, including a short introduction and useful preferences without making setup feel mandatory or heavy.
-6. **Appearance refinement** - review whether accent colours and surfaces need clearer, mode-specific treatment in Light and Dark appearance settings, and generate an app icon variant that follows the selected colour theme where the platform permits it.
-7. **Music playback** - investigate a royalty-free in-app option or a safe Spotify connection, including licensing, authentication, offline behaviour, and platform rules before choosing an implementation.
-8. **Travel planning refinement** - build on the current destination-aware Google Maps and Booking.com search shortcuts. Explore traveller-origin capture, relevant local services, and flight-search links to suitable providers without embedding bookings or payments.
-9. **Optional flight suggestions** - add a clear “Suggest flights” action that asks for the traveller's departure location only when they choose it, combines that with the festival location and dates, and opens a provider search with those details. Treat suggestions as search shortcuts, not personalised booking advice, and handle missing venue/airport data gracefully.
-10. **Maps and navigation** - decide whether reviewed venue/address data should be geocoded and linked to navigation, and reuse that location data for travel-search shortcuts.
-11. **Line-up extensions** - consider bulk set-time import and additional import providers once the core catalogue refresh is dependable.
+3. **iPhone web-app refinement** - use Safari/PWA testing to capture small UI improvements, including the white fade at the top of the app, and address web-compatible issues as they are found.
+4. **Public-release hardening** - work through the release checklist: dependency/security findings, Android signing and store packaging, iOS readiness, image-storage resilience, privacy/support materials, and physical-device coverage.
+5. **Native Apple platform work** - when a personal MacBook is available, create and maintain the Capacitor iOS project, complete Xcode/device/TestFlight work, and assess iPad-specific layouts.
+6. **Apple Watch support** - investigate a companion experience after the iOS foundation is working; define the useful watch scope before committing to implementation.
+7. **Native onboarding media refresh** - recreate the onboarding videos when the native app experience is being built and the final device constraints are known.
+8. **First-run setup and onboarding** - design an initial welcome flow for new installs, including a short introduction and useful preferences without making setup feel mandatory or heavy.
+9. **Appearance refinement** - review whether accent colours and surfaces need clearer, mode-specific treatment in Light and Dark appearance settings, and generate an app icon variant that follows the selected colour theme where the platform permits it.
+10. **Music playback** - investigate a royalty-free in-app option or a safe Spotify connection, including licensing, authentication, offline behaviour, and platform rules before choosing an implementation.
+11. **Travel planning refinement** - build on the current destination-aware Google Maps and Booking.com search shortcuts. Explore traveller-origin capture, relevant local services, and flight-search links to suitable providers without embedding bookings or payments.
+12. **Optional flight suggestions** - add a clear “Suggest flights” action that asks for the traveller's departure location only when they choose it, combines that with the festival location and dates, and opens a provider search with those details. Treat suggestions as search shortcuts, not personalised booking advice, and handle missing venue/airport data gracefully.
+13. **Maps and navigation** - decide whether reviewed venue/address data should be geocoded and linked to navigation, and reuse that location data for travel-search shortcuts.
+14. **Line-up extensions** - consider bulk set-time import and additional import providers once the core catalogue refresh is dependable.
 
 - Accounts, cloud synchronisation, and shared set-time calendars: design as a deliberate backend phase after the remote public catalogue is stable. Preferred current direction: evaluate Supabase for auth, relational membership/permissions, shared calendar ownership, invites, and future realtime updates. Define data ownership, recovery, migration, privacy, deletion, and conflict-handling before implementation.
 - Payments

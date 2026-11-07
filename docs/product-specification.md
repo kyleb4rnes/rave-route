@@ -1,6 +1,6 @@
 # Rave Route Product Specification
 
-This document describes the current local-first product and its intended user experience. The original staged implementation plan is complete through Stage 19; remaining work is ongoing product development, release preparation, remote catalogue operations, and explicitly deferred features.
+This document describes the current local-first product and its intended user experience. The original staged implementation plan is complete through Stage 19; remaining work is ongoing product development, release preparation, remote catalogue operations, and explicitly deferred features. The dated [roadmap to public release](roadmap-to-public-release.md) is the source of truth for the release sequence and consolidated future-work inventory.
 
 ## Product goal
 

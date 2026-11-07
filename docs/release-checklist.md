@@ -23,8 +23,8 @@ The staged execution path for these checks is documented in [Public-release exec
 - [ ] Review the first-run onboarding flow and its four mobile demonstration videos on a physical device before public release.
 - [ ] Define release signing and generate a signed release bundle.
 - [x] Version 1 storage decision: device-only, with no backup, export, accounts, or cloud synchronisation.
-- [x] iOS access decision: use a rented cloud Mac for builds, signing, App Store Connect uploads, and periodic maintenance; do not buy a Mac unless this becomes more cost-effective or physical-device debugging becomes routine.
-- [ ] Package and test the iOS application on the rented macOS/Xcode environment if iOS distribution is planned.
+- [x] iOS access decision: defer native iOS work until a personal MacBook is available; use the installable web app for current iPhone testing.
+- [ ] Package and test the iOS application on macOS/Xcode when a personal MacBook is available, if iOS distribution is planned.
 - [ ] Test the iOS build through TestFlight on a physical iPhone, including catalogue loading, catalogue fallback, photo selection, stored images, navigation, and external links.
 - [x] Enabled GitHub Dependabot alerts/security updates, private vulnerability reporting, and CodeQL default setup.
 - [x] Run and review the production dependency vulnerability audit (`npm run audit:production` reported 0 vulnerabilities on 2026-10-04).

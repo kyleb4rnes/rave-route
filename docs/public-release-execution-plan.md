@@ -1,6 +1,6 @@
 # Rave Route public-release execution plan
 
-This plan takes the current feature-complete device-only app to a private beta and then a public store release. The feature scope is frozen for this release. New work should be limited to defects, platform requirements, privacy/release obligations, and usability issues discovered during acceptance testing.
+This document is the detailed release gate behind the dated [Roadmap to public release](roadmap-to-public-release.md). It takes the current feature-complete device-only app to a public web release and, if the January–March Mac phase completes successfully, native store releases. The feature scope is frozen for this release. New work should be limited to defects, platform requirements, privacy/release obligations, and usability issues discovered during acceptance testing.
 
 ## Release outcome
 
@@ -101,14 +101,14 @@ Exit criteria:
 
 **Goal:** produce and test the first iPhone build.
 
-Prerequisites before renting the Mac:
+Prerequisites before using a personal MacBook:
 
 - Apple Developer Program membership is active.
 - App Store Connect access works and an app record exists for the chosen bundle ID.
 - The repository candidate has passed Milestones 0–3, or any remaining exceptions are explicitly accepted.
 - Permission copy, privacy wording, icon, splash, support contact, and beta test notes are prepared.
 
-Tasks on the rented Mac:
+Tasks on the MacBook:
 
 - Install the compatible Xcode and command-line tools.
 - Add `@capacitor/ios`, generate the iOS project, build the web app, and run `npx cap sync ios`.
@@ -189,14 +189,14 @@ Scope freeze
   -> catalogue readiness
   -> Android physical QA
   -> Apple account + App Store Connect setup
-  -> rented Mac / iOS project
+  -> personal MacBook / iOS project
   -> TestFlight iPhone QA
   -> store/privacy package
   -> signed beta hardening
   -> go/no-go and public release
 ```
 
-The most efficient next work is Milestone 0 followed by Milestone 1. Do not rent the Mac until the candidate is stable enough that the rental session is for iOS packaging, signing, and device testing—not feature development.
+The most efficient next work is Milestone 0 followed by Milestone 1. Do not begin native Mac work until a personal MacBook is available and the candidate is stable enough that the session is for iOS packaging, signing, and device testing—not feature development. Until then, the web app is the active iPhone path.
 
 ## Go/no-go checklist
 

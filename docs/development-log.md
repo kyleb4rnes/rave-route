@@ -1,5 +1,15 @@
 # Development log
 
+## 2026-11-07 — Web-first iPhone testing and Apple platform roadmap
+
+- Confirmed that the installable web app is sufficient for continued development and iPhone testing from Safari.
+- Deferred rented/cloud Mac work; native iOS and Xcode work will wait until a personal MacBook is available.
+- Added iPad support, Apple Watch investigation, and eventual Xcode/native work to future planning.
+- Added near-term manual UX refinement, including reviewing the white fade at the top of the app.
+- Recorded onboarding-video recreation as future work for the eventual native app experience.
+- Audited deferred work across the product, release, account, shared-calendar, architecture, and development documents. The dated roadmap now consolidates the complete inventory and separates release-critical work from post-release product phases.
+- Ranked every inventory item from least to most urgent within the web/PWA, Mac/native, and post-release phases, with a realistic March scope boundary.
+
 ## 2026-10-22 — Hosted catalogue configuration
 
 - Configured production builds to request the Timetable.lol catalogue from the Rave Route Cloudflare Pages URL before using the bundled offline copy.

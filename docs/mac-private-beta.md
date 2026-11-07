@@ -1,6 +1,10 @@
 # Mac setup and private iOS beta runbook
 
-This is the smallest practical path for packaging the current device-only Rave Route app for private iPhone testing through TestFlight. The Mac is needed for Xcode, iOS signing, and uploading the build; normal web and Android development can continue on Windows.
+This is the future path for packaging the current device-only Rave Route app for private iPhone testing through TestFlight. Native iOS work is intentionally paused until the developer has a personal MacBook. Until then, the installable web app is sufficient for iPhone testing and continued development. The Mac will be needed for Xcode, iOS signing, and uploading the build; normal web and Android development can continue on Windows.
+
+## Current decision
+
+Do not rent or configure a cloud Mac for routine development at this stage. Continue testing the PWA from Safari on iPhone, record UI and device-specific issues, and fix web-compatible changes on Windows. Revisit this runbook when a personal MacBook is available.
 
 ## Before using the Mac
 
@@ -239,7 +243,7 @@ Use the smallest session that matches the change:
 | New TestFlight build | Yes | Pull, sync, smoke-test, archive, upload |
 | Public store release | Yes | Final archive, App Store submission, review responses |
 
-If the Mac is too slow or its Xcode is too old to upload, use it for the real-iPhone diagnosis and use a newer/cloud Mac only for the archive/upload step.
+If the MacBook is too slow or its Xcode is too old to upload, use it for the real-iPhone diagnosis and arrange a newer Mac only for the archive/upload step.
 
 ## What does not need the Mac
 
