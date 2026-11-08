@@ -4,14 +4,14 @@ import {
   output,
   ChangeDetectionStrategy,
 } from '@angular/core';
-import { IonButton, IonIcon } from '@ionic/angular/standalone';
+import { IonIcon } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { heart, heartOutline, timeOutline } from 'ionicons/icons';
+import { heart } from 'ionicons/icons';
 
 import { Festival } from '../../core/festivals/models/festival';
 import { FestivalSet } from '../../core/festivals/models/festival-set';
 
-addIcons({ heart, heartOutline, timeOutline });
+addIcons({ heart });
 
 @Component({
   selector: 'app-active-festival-card',
@@ -19,7 +19,7 @@ addIcons({ heart, heartOutline, timeOutline });
   styleUrls: ['./active-festival-card.component.scss'],
   standalone: true,
   changeDetection: ChangeDetectionStrategy.Eager,
-  imports: [IonButton, IonIcon],
+  imports: [IonIcon],
 })
 export class ActiveFestivalCardComponent {
   readonly festival = input.required<Festival>();
@@ -28,7 +28,7 @@ export class ActiveFestivalCardComponent {
   readonly nextSet = input<FestivalSet | undefined>();
   readonly nextSetCount = input(0);
   readonly viewDetails = output<void>();
-  readonly viewLineup = output<void>();
+  readonly viewLineup = output<string>();
 
   formatSetTime(set: FestivalSet): string {
     return `${set.startTime}–${set.endTime}`;

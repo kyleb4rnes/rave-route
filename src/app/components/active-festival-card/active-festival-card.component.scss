@@ -6,27 +6,10 @@
 }
 
 .active-festival-card__heading,
-.active-festival-card h2,
+.active-festival-card__festival,
 .active-festival-card__location {
   margin-left: var(--rr-spacing-page);
   margin-right: var(--rr-spacing-page);
-}
-
-.active-festival-card__details {
-  background: transparent;
-  border: 0;
-  color: inherit;
-  cursor: pointer;
-  display: block;
-  font: inherit;
-  padding: 0;
-  text-align: left;
-  width: 100%;
-}
-
-.active-festival-card__details:focus-visible {
-  outline: 2px solid var(--rr-primary-contrast);
-  outline-offset: -2px;
 }
 
 .active-festival-card__heading {
@@ -63,7 +46,7 @@
   opacity: 0.85;
 }
 
-.active-festival-card h2 {
+.active-festival-card__festival h2 {
   font-size: 1.625rem;
   line-height: 1.1;
   margin-bottom: 0.25rem;
@@ -76,6 +59,22 @@
   opacity: 0.85;
 }
 
+.active-festival-card__title {
+  background: transparent;
+  border: 0;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+}
+
+.active-festival-card__title:focus-visible {
+  outline: 2px solid var(--rr-primary-contrast);
+  outline-offset: 2px;
+}
+
 .active-festival-card__sets {
   background: var(--rr-surface);
   color: var(--rr-text);
@@ -84,13 +83,24 @@
 }
 
 .active-festival-card__set {
+  background: transparent;
+  border: 0;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
   display: grid;
   gap: 0.25rem;
   padding: 1rem;
+  text-align: left;
 }
 
 .active-festival-card__set + .active-festival-card__set {
   border-left: 1px solid var(--rr-border);
+}
+
+.active-festival-card__set:focus-visible {
+  outline: 2px solid var(--rr-primary-dark);
+  outline-offset: -2px;
 }
 
 .active-festival-card__set > p {
@@ -103,6 +113,12 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.active-festival-card__set strong ion-icon {
+  color: var(--rr-primary-dark);
+  margin-left: 0.25rem;
+  vertical-align: -0.1em;
 }
 
 .active-festival-card__set span,
@@ -127,9 +143,9 @@
   font-size: 0.875rem;
 }
 
-.active-festival-card > ion-button {
-  --color: var(--rr-primary-contrast);
-  margin: 0.125rem 0.5rem 0.25rem;
+.active-festival-card__footer {
+  background: var(--rr-primary);
+  height: 0.75rem;
 }
 
 @keyframes live-pulse {

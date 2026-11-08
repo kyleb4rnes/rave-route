@@ -13,7 +13,7 @@
       [nextSet]="$safeNavigationMigration(activeFestivalSchedule()?.nextSets?.[0])"
       [nextSetCount]="activeFestivalSchedule()?.nextSets?.length ?? 0"
       (viewDetails)="viewFestival(festival.id)"
-      (viewLineup)="viewLineup(festival.id)"
+      (viewLineup)="viewLineup(festival.id, $event)"
     ></app-active-festival-card>
     }
 

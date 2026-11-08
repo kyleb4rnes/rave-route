@@ -19,6 +19,20 @@
               {{ isRefreshing() ? 'Checking…' : (hasPublishedSets() ? 'Update line-up' : 'Check for set times') }}
             </ion-button>
           }
+          @if (hasMustSeeSets()) {
+            <ion-button
+              class="festival-lineup__share"
+              fill="outline"
+              size="small"
+              type="button"
+              (click)="openMustSeeShare()"
+            >
+              <ion-icon aria-hidden="true" name="share-outline"></ion-icon>
+              Share must-sees
+            </ion-button>
+          } @else {
+            <p class="festival-lineup__share-hint">Heart sets to share your plan.</p>
+          }
         </header>
 
         <ion-segment class="lineup-day-picker" [scrollable]="true" [value]="selectedDay()" (ionChange)="selectDay($event.detail.value)">

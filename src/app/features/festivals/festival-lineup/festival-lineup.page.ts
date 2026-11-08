@@ -7,6 +7,7 @@ import {
   ChangeDetectionStrategy,
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { ActionSheetController } from '@ionic/angular';
 import {
   IonButton,
   IonContent,
@@ -20,7 +21,10 @@ import { addIcons } from 'ionicons';
 import {
   heart,
   heartOutline,
+  calendarOutline,
+  copyOutline,
   layersOutline,
+  shareOutline,
   timeOutline,
 } from 'ionicons/icons';
 
@@ -34,8 +38,14 @@ import { FestivalStore } from '../../../core/festivals/festival.store';
 import { Festival } from '../../../core/festivals/models/festival';
 import { FestivalSet } from '../../../core/festivals/models/festival-set';
 import { TimetableLolLineupService } from '../../../core/festivals/imports/timetable-lol-lineup.service';
+import { MustSeeShareService } from '../../../core/festivals/must-see-share.service';
+import {
+  buildMustSeeExport,
+  formatMustSeeIcs,
+  formatMustSeeText,
+} from '../../../core/festivals/must-see-export.utils';
 
-addIcons({ heart, heartOutline, layersOutline, timeOutline });
+addIcons({ calendarOutline, copyOutline, heart, heartOutline, layersOutline, shareOutline, timeOutline });
 
 type StageSchedule = {
   stage: string;
@@ -69,8 +79,11 @@ export class FestivalLineupPage {
   private readonly route = inject(ActivatedRoute);
   private readonly festivalStore = inject(FestivalStore);
   private readonly timetableService = inject(TimetableLolLineupService);
+  private readonly actionSheetController = inject(ActionSheetController);
+  private readonly shareService = inject(MustSeeShareService);
   private readonly festivalId =
     this.route.snapshot.paramMap.get('festivalId') ?? '';
+  private readonly requestedDay = this.route.snapshot.queryParamMap.get('day');
 
   readonly festival = computed(() =>
     this.festivalStore.getFestivalById(this.festivalId)
@@ -83,6 +96,9 @@ export class FestivalLineupPage {
   readonly isRefreshing = signal(false);
   readonly hasPublishedSets = computed(
     () => (this.festival()?.lineupSets?.length ?? 0) > 0
+  );
+  readonly hasMustSeeSets = computed(
+    () => (this.festival()?.lineupSets ?? []).some((set) => set.isMustSee === true)
   );
   readonly festivalDays = computed(() => {
     const festival = this.festival();
@@ -166,7 +182,11 @@ export class FestivalLineupPage {
       const festivalDays = this.festivalDays();
 
       if (festival && !festivalDays.includes(this.selectedDay())) {
-        this.selectedDay.set(getDefaultLineupDay(festival));
+        this.selectedDay.set(
+          this.requestedDay && festivalDays.includes(this.requestedDay)
+            ? this.requestedDay
+            : getDefaultLineupDay(festival)
+        );
       }
     });
   }
@@ -185,6 +205,50 @@ export class FestivalLineupPage {
 
   toggleMustSeeFilter(): void {
     this.isMustSeeFilterActive.update((isActive) => !isActive);
+  }
+
+  async openMustSeeShare(): Promise<void> {
+    const festival = this.festival();
+    if (!festival || !this.hasMustSeeSets()) return;
+
+    const sheet = await this.actionSheetController.create({
+      header: 'Share your must-sees',
+      buttons: [
+        { text: 'Share itinerary', icon: 'share-outline', handler: () => void this.shareItinerary(festival) },
+        { text: 'Add to calendar', icon: 'calendar-outline', handler: () => void this.addToCalendar(festival) },
+        { text: 'Copy itinerary', icon: 'copy-outline', handler: () => void this.copyItinerary(festival) },
+        { text: 'Cancel', role: 'cancel' },
+      ],
+    });
+    await sheet.present();
+  }
+
+  private async shareItinerary(festival: Festival): Promise<void> {
+    const text = formatMustSeeText(buildMustSeeExport(festival));
+    const result = await this.shareService.shareText(`Must-sees at ${festival.title}`, text);
+    if (result === 'unavailable') {
+      await this.copyItinerary(festival);
+    }
+  }
+
+  private async copyItinerary(festival: Festival): Promise<void> {
+    const copied = await this.shareService.copyText(formatMustSeeText(buildMustSeeExport(festival)));
+    this.refreshMessage.set(copied ? 'Must-see itinerary copied.' : 'We could not copy the itinerary.');
+  }
+
+  private async addToCalendar(festival: Festival): Promise<void> {
+    const exportData = buildMustSeeExport(festival);
+    const filename = `rave-route-${festival.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'festival'}-must-sees.ics`;
+    const result = await this.shareService.shareCalendar(
+      `Must-sees at ${festival.title}`,
+      filename,
+      formatMustSeeIcs(exportData),
+    );
+    if (result === 'downloaded' || result === 'shared') {
+      this.refreshMessage.set('Calendar export ready.');
+    } else if (result === 'unavailable') {
+      this.refreshMessage.set('Calendar sharing is not available on this device.');
+    }
   }
 
   async toggleMustSee(set: FestivalSet): Promise<void> {

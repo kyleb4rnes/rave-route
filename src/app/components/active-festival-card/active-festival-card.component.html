@@ -1,51 +1,59 @@
 <section class="active-festival-card" aria-label="Current festival schedule">
-  <button class="active-festival-card__details" type="button" (click)="viewDetails.emit()">
-    <div class="active-festival-card__heading">
-      <span><i aria-hidden="true"></i> LIVE NOW</span>
-      <p>{{ formatDay(currentSet()?.day ?? nextSet()?.day ?? festival().startDate) }}</p>
-    </div>
+  <div class="active-festival-card__heading">
+    <span><i aria-hidden="true"></i> LIVE NOW</span>
+    <p>{{ formatDay(currentSet()?.day ?? nextSet()?.day ?? festival().startDate) }}</p>
+  </div>
 
-    <h2>{{ festival().title }}</h2>
+  <div class="active-festival-card__festival">
+    <h2>
+      <button class="active-festival-card__title" type="button" (click)="viewDetails.emit()">
+        {{ festival().title }}
+      </button>
+    </h2>
     <p class="active-festival-card__location">{{ festival().location }}</p>
+  </div>
 
-    <div class="active-festival-card__sets">
-      <section class="active-festival-card__set" aria-label="Now playing">
-        <p>NOW PLAYING</p>
-        @if (currentSet(); as set) {
-          <strong>{{ set.artist }}</strong>
-          <span>{{ set.stage || 'Stage to be confirmed' }}</span>
-          <span>{{ formatSetTime(set) }}</span>
+  <div class="active-festival-card__sets">
+    <button class="active-festival-card__set" type="button" aria-label="Open set times for now playing" (click)="viewLineup.emit(currentSet()?.day ?? festival().startDate)">
+      <p>NOW PLAYING</p>
+      @if (currentSet(); as set) {
+        <strong>
+          {{ set.artist }}
           @if (set.isMustSee) {
-            <small><ion-icon name="heart" aria-hidden="true"></ion-icon> Must-see</small>
+            <ion-icon name="heart" aria-label="Must-see"></ion-icon>
           }
-          @if (currentSetCount() > 1) {
-            <small>+ {{ currentSetCount() - 1 }} clash{{ currentSetCount() === 2 ? '' : 'es' }}</small>
-          }
-        } @else {
-          <strong>Nothing scheduled</strong>
-          <span>Take a breather — the next set is below.</span>
+        </strong>
+        <span>{{ set.stage || 'Stage to be confirmed' }}</span>
+        <span>{{ formatSetTime(set) }}</span>
+        @if (currentSetCount() > 1) {
+          <small>+ {{ currentSetCount() - 1 }} clash{{ currentSetCount() === 2 ? '' : 'es' }}</small>
         }
-      </section>
+      } @else {
+        <strong>Nothing scheduled</strong>
+        <span>Take a breather — the next set is below.</span>
+      }
+    </button>
 
-      <section class="active-festival-card__set" aria-label="Up next">
-        <p>UP NEXT</p>
-        @if (nextSet(); as set) {
-          <strong>{{ set.artist }}</strong>
-          <span>{{ set.stage || 'Stage to be confirmed' }}</span>
-          <span>{{ formatSetTime(set) }}</span>
-          @if (nextSetCount() > 1) {
-            <small>+ {{ nextSetCount() - 1 }} at this time</small>
+    <button class="active-festival-card__set" type="button" aria-label="Open set times for up next" (click)="viewLineup.emit(nextSet()?.day ?? festival().startDate)">
+      <p>UP NEXT</p>
+      @if (nextSet(); as set) {
+        <strong>
+          {{ set.artist }}
+          @if (set.isMustSee) {
+            <ion-icon name="heart" aria-label="Must-see"></ion-icon>
           }
-        } @else {
-          <strong>No more sets listed</strong>
-          <span>Enjoy the rest of the festival.</span>
+        </strong>
+        <span>{{ set.stage || 'Stage to be confirmed' }}</span>
+        <span>{{ formatSetTime(set) }}</span>
+        @if (nextSetCount() > 1) {
+          <small>+ {{ nextSetCount() - 1 }} at this time</small>
         }
-      </section>
-    </div>
-  </button>
+      } @else {
+        <strong>No more sets listed</strong>
+        <span>Enjoy the rest of the festival.</span>
+      }
+    </button>
+  </div>
 
-  <ion-button fill="clear" type="button" (click)="viewLineup.emit()">
-    <ion-icon name="time-outline" slot="start" aria-hidden="true"></ion-icon>
-    Open line-up
-  </ion-button>
+  <div class="active-festival-card__footer" aria-hidden="true"></div>
 </section>

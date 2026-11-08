@@ -49,6 +49,25 @@ ion-content {
   margin: 0.75rem 0 0;
 }
 
+.festival-lineup__share {
+  --border-color: var(--rr-primary);
+  --border-radius: var(--rr-radius-control);
+  --color: var(--rr-primary-dark);
+  font-size: 0.75rem;
+  font-weight: 800;
+  margin: 0.5rem 0 0;
+}
+
+.festival-lineup__share ion-icon {
+  margin-inline-end: 0.35rem;
+}
+
+.festival-lineup__share-hint {
+  color: var(--rr-text-muted);
+  font-size: 0.8125rem;
+  margin: 0.75rem 0 0;
+}
+
 .lineup-day-picker ion-segment-button {
   --padding-bottom: 0.5rem;
   --padding-end: 0.75rem;

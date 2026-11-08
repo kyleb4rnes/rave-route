@@ -169,7 +169,14 @@ export class HomePage {
     void this.router.navigate(['/festivals', festivalId]);
   }
 
-  viewLineup(festivalId: string): void {
+  viewLineup(festivalId: string, day?: string): void {
+    if (day) {
+      void this.router.navigate(['/festivals', festivalId, 'lineup'], {
+        queryParams: { day },
+      });
+      return;
+    }
+
     void this.router.navigate(['/festivals', festivalId, 'lineup']);
   }
 

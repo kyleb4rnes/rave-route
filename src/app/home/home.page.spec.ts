@@ -41,4 +41,16 @@ describe('HomePage', () => {
 
     expect(router.navigate).toHaveBeenCalledWith(['/festivals/browse']);
   });
+
+  it('opens a festival set-times page on the selected day', () => {
+    const router = TestBed.inject(Router);
+    spyOn(router, 'navigate').and.resolveTo(true);
+
+    component.viewLineup('festival-1', '2026-07-18');
+
+    expect(router.navigate).toHaveBeenCalledWith(
+      ['/festivals', 'festival-1', 'lineup'],
+      { queryParams: { day: '2026-07-18' } }
+    );
+  });
 });
