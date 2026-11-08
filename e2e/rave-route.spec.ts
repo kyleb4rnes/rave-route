@@ -46,7 +46,15 @@ test.describe('Rave Route journeys', () => {
     await page.goto('/festivals/browse');
 
     await expect(page.getByRole('heading', { name: 'Find your next route' })).toBeVisible();
-    await page.getByRole('button', { name: /View past festivals/ }).click();
+    await expect(page.locator('.festival-browse__festival').first()).toBeVisible();
+    await page.locator('ion-content').hover();
+    await page.mouse.wheel(0, 1000);
+    await page.mouse.wheel(0, -1000);
+    const pastFestivalsButton = page.getByRole('button', {
+      name: /Show festivals from the past year/,
+    });
+    await expect(pastFestivalsButton).toBeVisible();
+    await pastFestivalsButton.click();
     await page.locator('ion-searchbar input').fill('Vroeger Was Alles Beter');
     const festival = page.getByRole('button', { name: /Vroeger Was Alles Beter 2026/ });
     await expect(festival).toBeVisible();
