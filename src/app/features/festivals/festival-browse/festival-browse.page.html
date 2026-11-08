@@ -1,6 +1,6 @@
 <app-header title="Browse festivals"></app-header>
 
-<ion-content>
+<ion-content [scrollEvents]="true" (ionScroll)="onContentScroll($event)">
   <main class="festival-browse">
     <header>
       <p>FESTIVAL CATALOGUE</p>
@@ -119,17 +119,16 @@
         </section>
       }
 
-      @if (!isLoading() && !error() && pastPresets().length > 0) {
+      @if (!isLoading() && !error() && pastPresets().length > 0 && showPastFestivalToggle()) {
         <ion-button
           class="festival-browse__past-toggle"
-          expand="block"
-          fill="outline"
+          fill="clear"
           type="button"
           [attr.aria-expanded]="showPastFestivals()"
           aria-controls="festival-results"
           (click)="togglePastFestivals()"
         >
-          {{ showPastFestivals() ? 'Hide' : 'View' }} past festivals ({{ pastPresets().length }})
+          {{ showPastFestivals() ? 'Hide' : 'Show' }} festivals from the past year ({{ pastPresets().length }})
         </ion-button>
       }
     </div>

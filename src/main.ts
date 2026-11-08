@@ -10,7 +10,6 @@ import { AppComponent } from './app/app.component';
 import { routes } from './app/app.routes';
 import { FESTIVAL_REPOSITORY } from './app/core/festivals/data/festival-repository.token';
 import { LocalStorageFestivalRepository } from './app/core/festivals/data/local-storage-festival.repository';
-import { raveRoutePageTransition } from './app/core/animations/page-transition.animation';
 import { provideServiceWorker } from '@angular/service-worker';
 
 bootstrapApplication(AppComponent, {
@@ -18,10 +17,7 @@ bootstrapApplication(AppComponent, {
     provideZoneChangeDetection(),
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     { provide: FESTIVAL_REPOSITORY, useClass: LocalStorageFestivalRepository },
-    provideIonicAngular({
-      animated: true,
-      navAnimation: raveRoutePageTransition,
-    }),
+    provideIonicAngular({ animated: false }),
     provideRouter(routes),
     provideServiceWorker('ngsw-worker.js', {
       enabled: !isDevMode(),

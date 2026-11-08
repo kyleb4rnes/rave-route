@@ -129,9 +129,11 @@ ion-content {
 }
 
 .festival-browse__past-toggle {
-  --border-color: var(--rr-border);
   --color: var(--rr-primary-dark);
+  font-size: 0.8rem;
   margin: 0;
+  justify-self: start;
+  min-height: 2rem;
 }
 
 .festival-browse__list {

@@ -13,7 +13,6 @@ ion-content {
     max(var(--rr-spacing-page), env(safe-area-inset-left));
 }
 
-.festival-add header p,
 .festival-add__selection > p {
   color: var(--rr-primary-dark);
   font-size: 0.75rem;
@@ -31,13 +30,6 @@ ion-content {
 
 .festival-add header h1 {
   font-size: clamp(1.75rem, 8vw, 2.5rem);
-}
-
-.festival-add header > span,
-.festival-add__custom p {
-  color: var(--rr-text-muted);
-  display: block;
-  margin-top: 0.5rem;
 }
 
 .festival-add__selection {

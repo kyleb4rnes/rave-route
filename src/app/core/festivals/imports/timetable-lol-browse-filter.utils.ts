@@ -69,10 +69,19 @@ export function getPastPresets(
   today = new Date(),
 ): TimetableLolPreset[] {
   const todayDate = toLocalIsoDate(today);
+  const oldestPastDate = new Date(
+    today.getFullYear() - 1,
+    today.getMonth(),
+    today.getDate(),
+  );
+  const oldestPastIsoDate = toLocalIsoDate(oldestPastDate);
 
   return presets
-    .filter((preset) => preset.endDate < todayDate)
-    .sort((first, second) => first.startDate.localeCompare(second.startDate));
+    .filter(
+      (preset) =>
+        preset.endDate < todayDate && preset.endDate >= oldestPastIsoDate,
+    )
+    .sort((first, second) => second.startDate.localeCompare(first.startDate));
 }
 
 /** Keeps ISO country codes as filter values while presenting a friendly label in the UI. */

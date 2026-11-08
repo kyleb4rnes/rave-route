@@ -176,6 +176,7 @@
         </div>
         <form class="festival-details__packing-add" (submit)="$event.preventDefault(); addPackingItem()">
           <input
+            #packingItemInput
             aria-label="Add packing item"
             maxlength="80"
             placeholder="Add your own item"

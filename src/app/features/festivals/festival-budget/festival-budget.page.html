@@ -29,7 +29,7 @@
         <ion-button class="rr-button" expand="block" type="button" (click)="addExpense()">Add expense</ion-button>
       </section>
 
-      <section aria-labelledby="expenses-title">
+      <section class="festival-budget__expenses" aria-labelledby="expenses-title">
         <h2 id="expenses-title">Expenses</h2>
         @if (budget().items.length === 0) { <p class="festival-budget__empty">No expenses added yet.</p> }
         @for (item of budget().items; track item.id) {

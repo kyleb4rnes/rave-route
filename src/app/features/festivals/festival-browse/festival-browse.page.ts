@@ -84,6 +84,7 @@ export class FestivalBrowsePage {
   );
   readonly showFilters = signal(false);
   readonly showPastFestivals = signal(false);
+  readonly showPastFestivalToggle = signal(false);
   readonly isLoading = signal(true);
   readonly error = signal<string | null>(null);
   readonly catalogueUpdatedAt = signal<string | null>(null);
@@ -104,9 +105,10 @@ export class FestivalBrowsePage {
   readonly pastPresets = computed(() => getPastPresets(this.matchingPresets()));
   readonly visiblePresets = computed(() =>
     this.showPastFestivals()
-      ? [...this.pastPresets(), ...this.currentAndFuturePresets()]
+      ? [...this.currentAndFuturePresets(), ...this.pastPresets()]
       : this.currentAndFuturePresets()
   );
+  private lastScrollTop = 0;
 
   constructor() {
     void this.loadCatalogue();
@@ -130,6 +132,18 @@ export class FestivalBrowsePage {
 
   togglePastFestivals(): void {
     this.showPastFestivals.update((showPastFestivals) => !showPastFestivals);
+  }
+
+  onContentScroll(event: CustomEvent<{ scrollTop: number }>): void {
+    const scrollTop = event.detail.scrollTop;
+
+    if (scrollTop < this.lastScrollTop) {
+      this.showPastFestivalToggle.set(true);
+    } else if (scrollTop > this.lastScrollTop) {
+      this.showPastFestivalToggle.set(false);
+    }
+
+    this.lastScrollTop = scrollTop;
   }
 
   updateCountry(value: unknown): void {

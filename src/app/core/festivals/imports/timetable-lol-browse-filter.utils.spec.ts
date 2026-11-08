@@ -13,6 +13,7 @@ import {
 } from './timetable-lol-browse-filter.utils';
 
 const presets: TimetableLolPreset[] = [
+  createPreset('archived-2000', 'Archived 2000', '2000-06-12', '2000-06-14', 'NL', 'Amsterdam'),
   createPreset('older-past-nl', 'Older Past NL', '2026-06-12', '2026-06-14', 'NL', 'Amsterdam'),
   createPreset('past-uk', 'Past UK', '2026-08-20', '2026-08-22', 'UK', 'London'),
   createPreset('one-day-nl', 'One Day NL', '2026-10-10', '2026-10-10', 'NL', 'Amsterdam'),
@@ -58,8 +59,8 @@ describe('Timetable.lol browse filters', () => {
       'weekend-uk',
     ]);
     expect(getPastPresets(presets, today).map((preset) => preset.eventSlug)).toEqual([
-      'older-past-nl',
       'past-uk',
+      'older-past-nl',
     ]);
   });
 
@@ -72,9 +73,14 @@ describe('Timetable.lol browse filters', () => {
   });
 
   it('filters by a mapped genre and exposes only available genre options', () => {
-    const genrePresets = presets.map((preset, index) => ({
+    const genrePresets = presets.map((preset) => ({
       ...preset,
-      genres: index === 2 ? ['Hardstyle' as const] : index === 3 ? ['Hardstyle' as const, 'Hardcore' as const] : [],
+      genres:
+        preset.eventSlug === 'one-day-nl'
+          ? ['Hardstyle' as const]
+          : preset.eventSlug === 'weekend-nl'
+            ? ['Hardstyle' as const, 'Hardcore' as const]
+            : [],
     }));
 
     const result = filterTimetableLolPresets(

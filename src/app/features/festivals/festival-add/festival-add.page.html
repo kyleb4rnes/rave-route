@@ -3,9 +3,7 @@
 <ion-content>
   <main class="festival-add">
     <header>
-      <p>FIND YOUR FESTIVAL</p>
-      <h1>Where are you heading?</h1>
-      <span>Choose a festival now. Published set times will be added when available.</span>
+      <h1>Add festival</h1>
     </header>
 
     @if (selectedPreset(); as preset) {
@@ -20,6 +18,9 @@
         <span>{{ preset.location?.displayName ?? 'Location to be announced' }}</span>
         @if (preset.genres.length > 0) {
           <span>Genres: {{ preset.genres.join(' · ') }}</span>
+        }
+        @if ((preset.setCount ?? 0) > 0) {
+          <span>{{ preset.setCount }} published set{{ (preset.setCount ?? 0) === 1 ? '' : 's' }} included</span>
         }
         @if (preset.ticketLinks?.price; as ticketPrice) {
           <span class="festival-add__ticket-estimate">

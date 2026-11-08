@@ -1,8 +1,10 @@
 import {
   Component,
   computed,
+  ElementRef,
   inject,
   signal,
+  ViewChild,
   ChangeDetectionStrategy,
 } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -72,6 +74,7 @@ export class FestivalDetailsPage {
   readonly isUpdatingPackingList = signal(false);
   readonly packingListError = signal<string | null>(null);
   readonly newPackingItem = signal('');
+  @ViewChild('packingItemInput') private packingItemInput?: ElementRef<HTMLInputElement>;
   readonly packingItems = computed(() => this.festival()?.packingList ?? []);
   readonly packedItemCount = computed(
     () => this.packingItems().filter((item) => item.packed).length
@@ -264,6 +267,7 @@ export class FestivalDetailsPage {
       { id: crypto.randomUUID(), label, packed: false, custom: true },
     ]);
     this.newPackingItem.set('');
+    this.packingItemInput?.nativeElement.focus();
   }
 
   async removePackingItem(itemId: string): Promise<void> {
