@@ -1,4 +1,5 @@
 import {
+  afterRenderEffect,
   Component,
   computed,
   DOCUMENT,
@@ -14,6 +15,7 @@ import { ImageStorageService } from './core/images/image-storage.service';
 import { themeColourPresets } from './core/settings/theme-colours';
 import { RaveRouteLogoComponent } from './components/rave-route-logo/rave-route-logo.component';
 import { OnboardingStore } from './core/onboarding/onboarding.store';
+import { MotionPreference } from './core/motion/motion-preference';
 import { OnboardingComponent } from './features/onboarding/onboarding.component';
 import { WebIconService } from './core/branding/web-icon.service';
 
@@ -38,19 +40,12 @@ export class AppComponent {
   private readonly onboardingStore = inject(OnboardingStore);
   private readonly webIconService = inject(WebIconService);
   private readonly document = inject(DOCUMENT);
+  private tourWasOpen = false;
   private readonly appBackgroundImageUrl = signal('');
   private readonly launchStateSignal = signal<
     'loading' | 'leaving' | 'complete'
   >('loading');
-  private readonly launchStartedAt = Date.now();
-  private exitTimer: ReturnType<typeof setTimeout> | undefined;
-
-  private readonly minimumLaunchDurationMs = new URLSearchParams(
-    window.location.search
-  ).has('capture')
-    ? 0
-    : 1400;
-  private readonly exitAnimationDurationMs = 900;
+  readonly motion = inject(MotionPreference);
 
   readonly launchState = this.launchStateSignal.asReadonly();
   readonly launchScreenVisible = computed(
@@ -73,6 +68,21 @@ export class AppComponent {
   });
 
   constructor() {
+    afterRenderEffect(() => {
+      const open = this.onboardingOpen();
+      if (!open && this.tourWasOpen) {
+        const trigger = this.onboardingStore.replayTrigger;
+        this.onboardingStore.replayTrigger = undefined;
+        const target = trigger?.isConnected ? trigger : this.document.querySelector<HTMLElement>(
+          'ion-router-outlet > .ion-page:not(.ion-page-hidden) main h1'
+        );
+        if (target) {
+          if (target.tagName === 'H1') target.tabIndex = -1;
+          target.focus({ preventScroll: true });
+        }
+      }
+      this.tourWasOpen = open;
+    });
     effect(() => {
       const { documentElement } = this.document;
       const dark = this.appSettingsStore.appearanceMode() === 'dark';
@@ -110,30 +120,23 @@ export class AppComponent {
     });
 
     effect(() => {
-      if (
-        !this.festivalStore.loading() &&
-        this.launchState() === 'loading' &&
-        !this.exitTimer
-      ) {
-        const remainingDelay = Math.max(
-          0,
-          this.minimumLaunchDurationMs - (Date.now() - this.launchStartedAt)
-        );
-
-        this.exitTimer = setTimeout(
-          () => this.beginLaunchExit(),
-          remainingDelay
-        );
+      const state = this.launchState();
+      if (state !== 'complete' && !this.festivalStore.loading()) {
+        if (this.motion.reduced()) this.finishLaunch();
+        else if (state === 'loading') this.launchStateSignal.set('leaving');
       }
     });
   }
 
-  private beginLaunchExit(): void {
-    this.launchStateSignal.set('leaving');
+  setActivePage(entering: HTMLElement): void {
+    for (const page of Array.from(entering.parentElement?.children ?? [])) {
+      if (page instanceof HTMLElement && page.classList.contains('ion-page')) {
+        page.inert = page !== entering;
+      }
+    }
+  }
 
-    setTimeout(
-      () => this.launchStateSignal.set('complete'),
-      this.exitAnimationDurationMs
-    );
+  finishLaunch(): void {
+    this.launchStateSignal.set('complete');
   }
 }

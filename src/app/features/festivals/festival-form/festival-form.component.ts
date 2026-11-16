@@ -86,6 +86,7 @@ export class FestivalFormComponent {
   private readonly imageStorage = inject(ImageStorageService);
 
   readonly festival = input<Festival | null>(null);
+  readonly saving = input(false);
   readonly submitLabel = input('Save festival');
   readonly saved = output<FestivalDraft>();
   readonly cancelled = output<void>();
@@ -146,6 +147,7 @@ export class FestivalFormComponent {
   }
 
   submit(): void {
+    if (this.saving()) return;
     this.form.markAllAsTouched();
 
     if (this.form.invalid) {

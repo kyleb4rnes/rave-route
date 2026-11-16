@@ -1,12 +1,16 @@
 import {
+  afterRenderEffect,
   Component,
+  ElementRef,
   computed,
   inject,
-  input,
   signal,
+  viewChild,
   ChangeDetectionStrategy,
 } from '@angular/core';
 import { OnboardingStore } from '../../core/onboarding/onboarding.store';
+
+import { MotionPreference } from '../../core/motion/motion-preference';
 
 type OnboardingStep = {
   title: string;
@@ -26,10 +30,10 @@ type OnboardingStep = {
 export class OnboardingComponent {
   private readonly onboardingStore = inject(OnboardingStore);
   private readonly stepIndexSignal = signal(0);
-  private readonly isChangingSignal = signal(false);
-  private readonly isLeavingSignal = signal(false);
-
-  readonly ready = input(false);
+  readonly motion = inject(MotionPreference);
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+  private readonly heading = viewChild<ElementRef<HTMLElement>>('stepHeading');
+  private readonly video = viewChild<ElementRef<HTMLVideoElement>>('demo');
 
   readonly steps: readonly OnboardingStep[] = [
     {
@@ -67,55 +71,31 @@ export class OnboardingComponent {
     },
   ];
   readonly stepIndex = this.stepIndexSignal.asReadonly();
-  readonly isChanging = this.isChangingSignal.asReadonly();
-  readonly isLeaving = this.isLeavingSignal.asReadonly();
-  readonly prefersReducedMotion = window.matchMedia(
-    '(prefers-reduced-motion: reduce)'
-  ).matches;
   readonly currentStep = computed(() => this.steps[this.stepIndex()]);
   readonly isFinalStep = computed(
     () => this.stepIndex() === this.steps.length - 1
   );
   readonly canGoBack = computed(() => this.stepIndex() > 0);
 
+  constructor() {
+    afterRenderEffect(() => this.heading()?.nativeElement.focus({ preventScroll: true }));
+    afterRenderEffect(() => {
+      if (this.motion.reduced()) this.video()?.nativeElement.pause();
+    });
+  }
+
   next(): void {
-    if (this.isChanging()) {
-      return;
-    }
-
-    if (this.isFinalStep()) {
-      this.leaveOnboarding();
-
-      return;
-    }
-
-    this.changeStep(this.stepIndex() + 1);
+    if (this.isFinalStep()) this.skip();
+    else this.stepIndexSignal.update((index) => index + 1);
   }
 
   previous(): void {
-    if (this.canGoBack() && !this.isChanging()) {
-      this.changeStep(this.stepIndex() - 1);
-    }
+    if (this.canGoBack()) this.stepIndexSignal.update((index) => index - 1);
   }
 
   skip(): void {
-    this.leaveOnboarding();
-  }
-
-  private changeStep(nextIndex: number): void {
-    this.isChangingSignal.set(true);
-    setTimeout(() => {
-      this.stepIndexSignal.set(nextIndex);
-      this.isChangingSignal.set(false);
-    }, 170);
-  }
-
-  private leaveOnboarding(): void {
-    if (this.isLeaving()) {
-      return;
-    }
-
-    this.isLeavingSignal.set(true);
-    setTimeout(() => this.onboardingStore.complete(), 520);
+    this.host.nativeElement.inert = true;
+    this.video()?.nativeElement.pause();
+    this.onboardingStore.complete();
   }
 }

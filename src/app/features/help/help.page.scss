@@ -23,7 +23,7 @@ ion-content {
 }
 
 .help-page__backdrop {
-  animation: help-backdrop-expand 650ms cubic-bezier(0.4, 0, 0.2, 1) both;
+  animation: help-backdrop-expand 420ms var(--rr-ease-enter) both;
   background: var(--rr-primary);
   inset: 0;
   position: absolute;
@@ -32,7 +32,7 @@ ion-content {
 }
 
 .help-page__sections {
-  animation: help-content-enter 400ms 250ms ease-out both;
+  animation: help-content-enter 300ms 130ms var(--rr-ease-enter) both;
   background: var(--rr-background);
   border-radius: var(--rr-radius-card) var(--rr-radius-card) 0 0;
   margin-top: -1.25rem;
@@ -45,7 +45,7 @@ ion-content {
 }
 
 .help-page__hero {
-  animation: help-content-enter 350ms 200ms ease-out both;
+  animation: help-content-enter 260ms 90ms var(--rr-ease-enter) both;
   color: var(--rr-primary-contrast);
   padding: 2.5rem max(var(--rr-spacing-page), env(safe-area-inset-left)) 3rem
     max(var(--rr-spacing-page), env(safe-area-inset-right));
@@ -197,39 +197,24 @@ ion-content {
   font-weight: 700;
 }
 
-.help-page--closing .help-page__backdrop {
-  animation: help-backdrop-collapse 650ms cubic-bezier(0.4, 0, 0.2, 1) both;
-}
-
-.help-page--closing .help-page__hero {
-  animation: help-content-exit 240ms ease-in both;
-  pointer-events: none;
-}
-
-.help-page--closing .help-page__sections {
-  animation: help-sections-collapse 650ms cubic-bezier(0.4, 0, 0.2, 1) both;
-  pointer-events: none;
-}
-
 @keyframes help-backdrop-expand {
-  from { transform: scaleY(0); }
-  to { transform: scaleY(1); }
-}
+  from {
+    transform: scaleY(0);
+  }
 
-@keyframes help-backdrop-collapse {
-  from { transform: scaleY(1); }
-  to { transform: scaleY(0); }
+  to {
+    transform: scaleY(1);
+  }
 }
 
 @keyframes help-content-enter {
-  from { opacity: 0; transform: translateY(1.5rem); }
-  to { opacity: 1; transform: translateY(0); }
-}
+  from {
+    opacity: 0;
+    transform: translateY(0.75rem);
+  }
 
-@keyframes help-content-exit {
-  to { opacity: 0; transform: translateY(1.5rem); }
-}
-
-@keyframes help-sections-collapse {
-  to { clip-path: inset(0 0 100% 0); }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

@@ -6,7 +6,7 @@
 ></app-header>
 
 <ion-content>
-  <main class="settings-page" [class.settings-page--closing]="isClosing()">
+  <main class="settings-page">
     <div class="settings-page__backdrop" aria-hidden="true"></div>
     <header class="settings-page__hero">
       <p>{{ t('settings.eyebrow') }}</p>
@@ -61,15 +61,19 @@
         <div class="settings-background-image">
           @if (imagePreviewUrl()) {
             <div
-              class="settings-background-image__preview"
+              class="settings-background-image__preview rr-motion-enter"
               [style.background-image]="'url(' + imagePreviewUrl() + ')'"
               [style.background-position]="backgroundImagePosition().x + '% ' + backgroundImagePosition().y + '%'"
               [attr.aria-label]="t('settings.selectedBackgroundPreview')"
-              role="img"
+              role="group"
+              tabindex="0"
+              [attr.aria-description]="t('settings.backgroundKeyboard')"
+              (keydown)="moveBackgroundWithKeyboard($event)"
               (pointerdown)="startBackgroundDrag($event)"
               (pointermove)="moveBackgroundDrag($event)"
               (pointerup)="endBackgroundDrag($event)"
               (pointercancel)="endBackgroundDrag($event)"
+              (lostpointercapture)="endBackgroundDrag($event)"
             ></div>
           }
           <div class="settings-background-image__actions">

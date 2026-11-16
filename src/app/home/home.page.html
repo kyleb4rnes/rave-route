@@ -93,7 +93,7 @@
       </button>
 
       @if (isPastFestivalsOpen()) {
-      <div id="past-festivals-list" class="past-festivals__list">
+      <div id="past-festivals-list" class="past-festivals__list rr-motion-enter">
         @for (pastFestival of pastFestivals(); track pastFestival.id) {
         <app-collapsed-festival-card
           [title]="pastFestival.title"

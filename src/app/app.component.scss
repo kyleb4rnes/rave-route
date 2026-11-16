@@ -16,9 +16,8 @@
   height: 100dvh;
   inset: 0 auto auto 0;
   position: absolute;
-  transition: height 900ms cubic-bezier(0.4, 0, 0.2, 1);
+  transform-origin: top;
   width: 100%;
-  will-change: height;
 }
 
 .launch-screen__content {
@@ -41,11 +40,15 @@
 }
 
 .launch-screen--leaving .launch-screen__backdrop {
-  height: 0;
+  animation: launch-retract var(--rr-motion-launch) var(--rr-ease-enter) both;
 }
 
 .launch-screen--leaving .launch-screen__content {
-  animation: launch-content-exit 250ms ease-out forwards;
+  animation: launch-content-exit var(--rr-motion-component) var(--rr-ease-enter) forwards;
+}
+
+@keyframes launch-retract {
+  to { transform: scaleY(0); }
 }
 
 @keyframes launch-content-exit {

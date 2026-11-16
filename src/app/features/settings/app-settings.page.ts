@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import {
   IonButton,
@@ -43,20 +43,24 @@ export class AppSettingsPage {
 
   readonly imageSelectionError = signal<string | null>(null);
   readonly imagePreviewUrl = signal('');
-  readonly isClosing = signal(false);
   readonly themeColourOptions = themeColourOptions;
   readonly appearanceModeOptions = appearanceModeOptions;
   readonly appLanguageOptions = appLanguageOptions;
   readonly themeColour = this.appSettingsStore.themeColour;
   readonly appearanceMode = this.appSettingsStore.appearanceMode;
   readonly language = this.appSettingsStore.language;
-  readonly backgroundImagePosition = this.appSettingsStore.homeBackgroundImagePosition;
+  private readonly draggedPosition = signal<BackgroundImagePosition | null>(null);
+  readonly backgroundImagePosition = computed(() =>
+    this.draggedPosition() ?? this.appSettingsStore.homeBackgroundImagePosition()
+  );
   readonly hasBackgroundImage = () => Boolean(this.appSettingsStore.homeBackgroundImageUrl());
   private backgroundDrag: {
     pointerId: number;
     startX: number;
     startY: number;
     position: BackgroundImagePosition;
+    width: number;
+    height: number;
   } | null = null;
   readonly t = (key: TranslationKey): string => this.translationService.translate(key);
 
@@ -141,12 +145,17 @@ export class AppSettingsPage {
 
   startBackgroundDrag(event: PointerEvent): void {
     const preview = event.currentTarget as HTMLElement;
+    if (this.backgroundDrag || event.button !== 0) return;
+    const { width, height } = preview.getBoundingClientRect();
+    if (!width || !height) return;
     preview.setPointerCapture(event.pointerId);
     this.backgroundDrag = {
       pointerId: event.pointerId,
       startX: event.clientX,
       startY: event.clientY,
       position: this.backgroundImagePosition(),
+      width,
+      height,
     };
     event.preventDefault();
   }
@@ -154,14 +163,11 @@ export class AppSettingsPage {
   moveBackgroundDrag(event: PointerEvent): void {
     if (!this.backgroundDrag || this.backgroundDrag.pointerId !== event.pointerId) return;
 
-    const preview = event.currentTarget as HTMLElement;
-    const bounds = preview.getBoundingClientRect();
-    const position: BackgroundImagePosition = {
-      x: this.backgroundDrag.position.x - ((event.clientX - this.backgroundDrag.startX) / bounds.width) * 100,
-      y: this.backgroundDrag.position.y - ((event.clientY - this.backgroundDrag.startY) / bounds.height) * 100,
-    };
-
-    this.appSettingsStore.updateBackgroundImagePosition(position);
+    const drag = this.backgroundDrag;
+    this.draggedPosition.set({
+      x: Math.max(0, Math.min(100, drag.position.x - ((event.clientX - drag.startX) / drag.width) * 100)),
+      y: Math.max(0, Math.min(100, drag.position.y - ((event.clientY - drag.startY) / drag.height) * 100)),
+    });
     event.preventDefault();
   }
 
@@ -169,8 +175,27 @@ export class AppSettingsPage {
     if (this.backgroundDrag?.pointerId !== event.pointerId) return;
 
     this.backgroundDrag = null;
+    const position = this.draggedPosition();
+    this.draggedPosition.set(null);
+    if (position && event.type === 'pointerup') {
+      this.appSettingsStore.updateBackgroundImagePosition(position);
+    }
     const preview = event.currentTarget as HTMLElement;
     if (preview.hasPointerCapture(event.pointerId)) preview.releasePointerCapture(event.pointerId);
+  }
+
+  moveBackgroundWithKeyboard(event: KeyboardEvent): void {
+    const offsets: Record<string, readonly [number, number]> = {
+      ArrowLeft: [5, 0],
+      ArrowRight: [-5, 0],
+      ArrowUp: [0, 5],
+      ArrowDown: [0, -5],
+    };
+    const offset = offsets[event.key];
+    if (!offset || this.backgroundDrag) return;
+    event.preventDefault();
+    const { x, y } = this.backgroundImagePosition();
+    this.appSettingsStore.updateBackgroundImagePosition({ x: x + offset[0], y: y + offset[1] });
   }
 
   async clearBackgroundImage(): Promise<void> {
@@ -180,16 +205,17 @@ export class AppSettingsPage {
   }
 
   closeSettings(): void {
-    if (this.isClosing()) return;
-
-    this.isClosing.set(true);
-    setTimeout(() => void this.router.navigate(['/home']), 650);
+    void this.router.navigate(['/home']);
   }
 
   private resolveImagePreview(imageUrl: string): void {
     void this.imageStorage.resolveImageUrl(imageUrl)
-      .then((resolvedUrl) => this.imagePreviewUrl.set(resolvedUrl))
-      .catch(() => this.imagePreviewUrl.set(''));
+      .then((resolvedUrl) => {
+        if (this.appSettingsStore.homeBackgroundImageUrl() === imageUrl) this.imagePreviewUrl.set(resolvedUrl);
+      })
+      .catch(() => {
+        if (this.appSettingsStore.homeBackgroundImageUrl() === imageUrl) this.imagePreviewUrl.set('');
+      });
   }
 
   private getRadioOptionIndex(key: string, currentIndex: number, optionCount: number): number | null {

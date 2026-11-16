@@ -36,7 +36,7 @@
 </ion-header>
 
 @if (menuOpen()) {
-  <div #menu class="app-header-menu" role="menu" aria-label="App menu" (keydown)="handleMenuKeydown($event)" (focusout)="handleMenuFocusout($event)">
+  <div #menu animate.leave="rr-menu-leave" class="app-header-menu rr-motion-enter" role="menu" aria-label="App menu" (keydown)="handleMenuKeydown($event)" (focusout)="handleMenuFocusout($event)">
     @if (isHelp()) {
       <button role="menuitem" tabindex="-1" type="button" (click)="openHelp()">
         <ion-icon aria-hidden="true" name="close"></ion-icon>

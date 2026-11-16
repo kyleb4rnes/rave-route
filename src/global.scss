@@ -170,13 +170,69 @@ ion-action-sheet:is(.ios, .md) .action-sheet-title {
   line-height: 1;
 }
 
+:root {
+  --rr-motion-fast: 100ms;
+  --rr-motion-component: 160ms;
+  --rr-motion-launch: 300ms;
+  --rr-ease-enter: cubic-bezier(0.16, 1, 0.3, 1);
+  --rr-ease-exit: cubic-bezier(0.4, 0, 1, 1);
+}
+
+.rr-motion-enter {
+  animation: rr-enter var(--rr-motion-component) var(--rr-ease-enter) backwards;
+}
+
+.rr-tour-leave {
+  position: fixed;
+  inset: 0;
+  z-index: 10001;
+  pointer-events: none;
+  animation: rr-fade-out var(--rr-motion-fast) var(--rr-ease-exit) both;
+}
+
+.rr-menu-leave {
+  pointer-events: none;
+  animation: rr-fade-out var(--rr-motion-fast) var(--rr-ease-exit) both;
+}
+
+@keyframes rr-enter {
+  from { opacity: 0.65; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes rr-fade-out {
+  to { opacity: 0; }
+}
+
+@media (hover: hover) {
+  :is(.past-festivals__toggle, .collapsed-card__summary, .help-page__section-toggle, .app-header-menu button):hover {
+    background-color: var(--rr-primary-soft);
+  }
+}
+
+:is(.past-festivals__toggle, .appearance-mode-picker__option, .theme-colour-picker__option, .collapsed-card__summary, .help-page__section-toggle, .app-header-menu button) {
+  transition: background-color var(--rr-motion-fast) var(--rr-ease-enter),
+    border-color var(--rr-motion-fast) var(--rr-ease-enter);
+}
+
+:is(.past-festivals__toggle, .appearance-mode-picker__option, .theme-colour-picker__option, .collapsed-card__summary):focus-visible {
+  outline: 2px solid var(--rr-accent-foreground);
+  outline-offset: 2px;
+}
+
+:is(.past-festivals__toggle, .appearance-mode-picker__option, .theme-colour-picker__option, .collapsed-card__summary, .help-page__section-toggle):active {
+  background-color: var(--rr-primary-soft);
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
   *::after {
+    animation-delay: 0ms !important;
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     scroll-behavior: auto !important;
+    transition-delay: 0ms !important;
     transition-duration: 0.01ms !important;
   }
 }

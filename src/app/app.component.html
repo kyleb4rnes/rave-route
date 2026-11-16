@@ -1,5 +1,5 @@
 <ion-app [style.--rr-app-background]="appBackground()">
-  <ion-router-outlet [class.app-router-outlet--hidden]="hideRoutedContent()"></ion-router-outlet>
+  <ion-router-outlet (stackWillChange)="setActivePage($event.enteringView.element)" [inert]="onboardingOpen() || launchState() === 'loading'" [class.app-router-outlet--hidden]="hideRoutedContent()"></ion-router-outlet>
 
   @if (launchScreenVisible()) {
     <section
@@ -9,15 +9,15 @@
       aria-live="polite"
       role="status"
     >
-      <div class="launch-screen__backdrop" aria-hidden="true"></div>
+      <div class="launch-screen__backdrop" aria-hidden="true" (animationend)="finishLaunch()" (animationcancel)="finishLaunch()"></div>
       <div class="launch-screen__content">
         <app-rave-route-logo variant="launch"></app-rave-route-logo>
-        <ion-spinner aria-label="Loading your festival route" name="crescent"></ion-spinner>
+        <ion-spinner aria-label="Loading your festival route" name="crescent" [paused]="motion.reduced()"></ion-spinner>
       </div>
     </section>
   }
 
-  @if (onboardingOpen()) {
-    <app-onboarding [ready]="onboardingReady()"></app-onboarding>
+  @if (onboardingOpen() && onboardingReady()) {
+    <app-onboarding animate.leave="rr-tour-leave"></app-onboarding>
   }
 </ion-app>

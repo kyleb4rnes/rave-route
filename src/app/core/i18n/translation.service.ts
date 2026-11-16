@@ -24,6 +24,7 @@ const englishTranslations = {
   'settings.backgroundImage': 'Background image',
   'settings.backgroundImageDescription': 'Choose a photo, then position the part you want to show.',
   'settings.selectedBackgroundPreview': 'Selected app background preview',
+  'settings.backgroundKeyboard': 'Use the arrow keys to reposition the background image.',
   'settings.choosePhoto': 'Choose photo',
   'settings.remove': 'Remove',
   'settings.horizontalPosition': 'Horizontal position',

@@ -3,9 +3,13 @@
 <ion-content>
   <main class="festival-custom">
     <app-festival-form
+      [saving]="saving()"
       submitLabel="Add custom festival"
       (saved)="createFestival($event)"
       (cancelled)="cancelCreating()"
     ></app-festival-form>
+    @if (error() && !saving()) {
+      <p role="alert">{{ error() }}</p>
+    }
   </main>
 </ion-content>

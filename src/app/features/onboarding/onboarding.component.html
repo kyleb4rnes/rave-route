@@ -1,6 +1,6 @@
-<section class="onboarding" [class.onboarding--leaving]="isLeaving()" [class.onboarding--ready]="ready()" aria-labelledby="onboarding-title">
+<section class="onboarding" role="dialog" aria-modal="true" aria-labelledby="onboarding-title">
   <div class="onboarding__glow" aria-hidden="true"></div>
-  <div class="onboarding__content" [class.onboarding__content--changing]="isChanging()">
+  <div class="onboarding__content">
     <div class="onboarding__top-row">
       <div class="onboarding__progress" [attr.aria-label]="'Step ' + (stepIndex() + 1) + ' of ' + steps.length">
         @for (step of steps; track step.title; let index = $index) {
@@ -10,15 +10,18 @@
       <button class="onboarding__skip" type="button" (click)="skip()">Skip intro</button>
     </div>
 
-    <div class="onboarding__video-shell">
-      <video [attr.aria-label]="currentStep().videoLabel" [autoplay]="!prefersReducedMotion" [poster]="currentStep().posterSrc" [src]="currentStep().videoSrc" loop muted playsinline preload="auto"></video>
+    @for (step of [currentStep()]; track step.title) {
+    <div class="onboarding__video-shell rr-motion-enter">
+      <video #demo [attr.aria-label]="step.videoLabel" [autoplay]="!motion.reduced()" [poster]="step.posterSrc" [src]="step.videoSrc" controls muted playsinline preload="metadata"></video>
     </div>
 
-    <div class="onboarding__copy">
+    <div class="onboarding__copy rr-motion-enter">
       <p>RAVE ROUTE</p>
-      <h1 id="onboarding-title">{{ currentStep().title }}</h1>
-      <span>{{ currentStep().description }}</span>
+      <h1 #stepHeading id="onboarding-title" tabindex="-1">{{ step.title }}</h1>
+      <span>{{ step.description }}</span>
     </div>
+
+    }
 
     <div class="onboarding__actions">
       <button class="onboarding__back" [class.onboarding__back--hidden]="!canGoBack()" type="button" (click)="previous()">Back</button>

@@ -6,8 +6,10 @@
       <h1>Add festival</h1>
     </header>
 
-    @if (selectedPreset(); as preset) {
-      <section class="festival-add__selection" aria-labelledby="selected-festival-title">
+    @if (isLoading()) {
+      <p role="status">Loading festival…</p>
+    } @else if (selectedPreset(); as preset) {
+      <section class="festival-add__selection rr-motion-enter" aria-labelledby="selected-festival-title">
         <p>READY TO ADD</p>
         <h2 id="selected-festival-title">{{ preset.label }}</h2>
         <div>
@@ -33,7 +35,8 @@
         </small>
         <ion-button class="rr-button" expand="block" [disabled]="isAdding()" type="button" (click)="addFestival()">
           @if (isAdding()) {
-            <ion-spinner aria-label="Adding festival"></ion-spinner>
+            <ion-spinner aria-hidden="true" [paused]="motion.reduced()"></ion-spinner>
+            Adding festival…
           } @else if (isAlreadyAdded(preset)) {
             Open festival
           } @else {

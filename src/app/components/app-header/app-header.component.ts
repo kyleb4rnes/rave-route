@@ -69,9 +69,9 @@ export class AppHeaderComponent {
   private readonly currentUrl = toSignal(
     this.router.events.pipe(
       filter((event): event is NavigationEnd => event instanceof NavigationEnd),
-      map(() => this.router.url)
+      map(() => this.router.url.split(/[?#]/, 1)[0])
     ),
-    { initialValue: this.router.url }
+    { initialValue: this.router.url.split(/[?#]/, 1)[0] }
   );
 
   readonly title = input.required<string>();
@@ -100,7 +100,7 @@ export class AppHeaderComponent {
   }
 
   openSettings(): void {
-    this.menuOpen.set(false);
+    this.closeMenu();
     if (this.isSettings()) {
       this.settingsRequested.emit();
 
@@ -111,7 +111,7 @@ export class AppHeaderComponent {
   }
 
   openHelp(): void {
-    this.menuOpen.set(false);
+    this.closeMenu();
     if (this.isHelp()) {
       this.goBack();
 
@@ -136,13 +136,14 @@ export class AppHeaderComponent {
   handleMenuKeydown(event: KeyboardEvent): void {
     if (event.key === 'Tab') {
       this.closeMenu();
+      this.focusMenuTrigger();
       return;
     }
 
     if (event.key === 'Escape') {
       event.preventDefault();
       this.closeMenu();
-      this.menuTrigger().nativeElement.shadowRoot?.querySelector<HTMLElement>('[part="native"]')?.focus();
+      this.focusMenuTrigger();
       return;
     }
 
@@ -174,7 +175,14 @@ export class AppHeaderComponent {
     }
   }
 
+  private focusMenuTrigger(): void {
+    this.menuTrigger().nativeElement.shadowRoot?.querySelector<HTMLElement>('[part="native"]')?.focus();
+  }
+
   closeMenu(): void {
+    if (!this.menuOpen()) return;
     this.menuOpen.set(false);
+    const menu = this.menu()?.nativeElement;
+    if (menu) menu.inert = true;
   }
 }

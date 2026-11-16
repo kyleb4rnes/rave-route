@@ -154,7 +154,7 @@
             <p class="festival-details__packing-empty">Add items here to build your packing list.</p>
           }
           @for (item of packingItems(); track item.id) {
-            <label class="festival-details__packing-item">
+            <label class="festival-details__packing-item rr-motion-enter">
               <input
                 type="checkbox"
                 [checked]="item.packed"

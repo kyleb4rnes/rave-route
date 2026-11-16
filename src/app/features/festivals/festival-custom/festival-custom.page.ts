@@ -1,4 +1,4 @@
-import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { Router } from '@angular/router';
 import { IonContent } from '@ionic/angular/standalone';
 
@@ -19,11 +19,23 @@ export class FestivalCustomPage {
   private readonly router = inject(Router);
   private readonly festivalStore = inject(FestivalStore);
 
-  async createFestival(draft: FestivalDraft): Promise<void> {
-    const festival = await this.festivalStore.addFestival(draft);
+  readonly saving = signal(false);
+  readonly error = signal<string | null>(null);
 
-    if (festival) {
-      await this.router.navigate(['/festivals', festival.id]);
+  async createFestival(draft: FestivalDraft): Promise<void> {
+    if (this.saving()) return;
+    const origin = this.router.lastSuccessfulNavigation();
+    this.error.set(null);
+    this.saving.set(true);
+    try {
+      const festival = await this.festivalStore.addFestival(draft);
+      if (!festival) {
+        this.error.set('We could not add that festival. Please try again.');
+      } else if (this.router.lastSuccessfulNavigation() === origin && !this.router.currentNavigation()) {
+        await this.router.navigate(['/festivals', festival.id]);
+      }
+    } finally {
+      this.saving.set(false);
     }
   }
 

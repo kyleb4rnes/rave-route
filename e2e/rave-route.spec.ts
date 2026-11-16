@@ -165,7 +165,7 @@ test.describe('Rave Route journeys', () => {
     await expect(page).toHaveURL(/\/settings$/);
     await expect(page.getByRole('heading', { name: 'App settings' })).toBeVisible();
 
-    await page.getByRole('button', { name: 'Open app menu' }).click();
+    await page.locator('app-settings').getByRole('button', { name: 'Open app menu' }).click();
     await page.getByRole('menuitem', { name: 'Close settings' }).click();
     await expect(page).toHaveURL(/\/home$/);
   });

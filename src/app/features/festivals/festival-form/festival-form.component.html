@@ -54,8 +54,11 @@
 
   <div class="festival-form__actions">
     <ion-button class="festival-form__cancel" fill="clear" type="button" (click)="cancel()">Cancel</ion-button>
-    <ion-button class="rr-button" type="submit">{{ submitLabel() }}</ion-button>
+    <ion-button class="rr-button" type="submit" [disabled]="saving()">{{ saving() ? 'Saving…' : submitLabel() }}</ion-button>
   </div>
+  @if (saving()) {
+    <p class="ion-sr-only" role="status">Saving festival…</p>
+  }
 </form>
 
 <ion-modal class="festival-date-range-modal" aria-label="Festival dates" [isOpen]="isDateRangePickerOpen()" (didDismiss)="cancelDateRangePicker()">

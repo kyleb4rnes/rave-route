@@ -1,3 +1,4 @@
+import { MotionPreference } from '../../../core/motion/motion-preference';
 import {
   Component,
   computed,
@@ -74,6 +75,7 @@ addIcons({ calendarOutline, chevronForward, filterOutline, locationOutline });
   ],
 })
 export class FestivalBrowsePage {
+  readonly motion = inject(MotionPreference);
   private readonly router = inject(Router);
   private readonly timetableService = inject(TimetableLolLineupService);
 
