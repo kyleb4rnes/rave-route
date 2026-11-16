@@ -1,24 +1,22 @@
-import {
-  Component,
-  inject,
-  signal,
-  ChangeDetectionStrategy,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { IonButton, IonContent, IonNote } from '@ionic/angular/standalone';
+import {
+  IonButton,
+  IonContent,
+  IonItem,
+  IonLabel,
+  IonNote,
+  IonSelect,
+  IonSelectOption,
+} from '@ionic/angular/standalone';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { AppHeaderComponent } from '../../components/app-header/app-header.component';
-import { AppSettingsStore } from '../../core/settings/app-settings.store';
+import { AppSettingsStore, BackgroundImagePosition } from '../../core/settings/app-settings.store';
 import { ImageStorageService } from '../../core/images/image-storage.service';
-import {
-  AppearanceMode,
-  appearanceModeOptions,
-} from '../../core/settings/appearance-modes';
-import {
-  ThemeColour,
-  themeColourOptions,
-} from '../../core/settings/theme-colours';
+import { AppearanceMode, appearanceModeOptions } from '../../core/settings/appearance-modes';
+import { ThemeColour, themeColourOptions } from '../../core/settings/theme-colours';
+import { AppLanguage, appLanguageOptions } from '../../core/i18n/app-language';
+import { TranslationKey, TranslationService } from '../../core/i18n/translation.service';
 
 @Component({
   selector: 'app-settings',
@@ -30,88 +28,77 @@ import {
     AppHeaderComponent,
     IonButton,
     IonContent,
+    IonItem,
+    IonLabel,
     IonNote,
-    ReactiveFormsModule,
+    IonSelect,
+    IonSelectOption,
   ],
 })
 export class AppSettingsPage {
   private readonly router = inject(Router);
   private readonly appSettingsStore = inject(AppSettingsStore);
   private readonly imageStorage = inject(ImageStorageService);
+  private readonly translationService = inject(TranslationService);
 
-  readonly saveError = signal<string | null>(null);
   readonly imageSelectionError = signal<string | null>(null);
   readonly imagePreviewUrl = signal('');
   readonly isClosing = signal(false);
   readonly themeColourOptions = themeColourOptions;
   readonly appearanceModeOptions = appearanceModeOptions;
-  readonly form = new FormGroup({
-    homeBackgroundImageUrl: new FormControl(
-      this.appSettingsStore.homeBackgroundImageUrl(),
-      { nonNullable: true }
-    ),
-    themeColour: new FormControl<ThemeColour>(
-      this.appSettingsStore.themeColour(),
-      {
-        nonNullable: true,
-      }
-    ),
-    appearanceMode: new FormControl<AppearanceMode>(
-      this.appSettingsStore.appearanceMode(),
-      {
-        nonNullable: true,
-      }
-    ),
-  });
+  readonly appLanguageOptions = appLanguageOptions;
+  readonly themeColour = this.appSettingsStore.themeColour;
+  readonly appearanceMode = this.appSettingsStore.appearanceMode;
+  readonly language = this.appSettingsStore.language;
+  readonly backgroundImagePosition = this.appSettingsStore.homeBackgroundImagePosition;
+  readonly hasBackgroundImage = () => Boolean(this.appSettingsStore.homeBackgroundImageUrl());
+  private backgroundDrag: {
+    pointerId: number;
+    startX: number;
+    startY: number;
+    position: BackgroundImagePosition;
+  } | null = null;
+  readonly t = (key: TranslationKey): string => this.translationService.translate(key);
 
   constructor() {
-    this.form.controls.homeBackgroundImageUrl.valueChanges.subscribe(
-      (imageUrl) => this.resolveImagePreview(imageUrl)
-    );
-    this.resolveImagePreview(this.form.controls.homeBackgroundImageUrl.value);
-  }
-
-  async saveSettings(): Promise<void> {
-    this.form.markAllAsTouched();
-    this.saveError.set(null);
-
-    if (this.form.invalid) {
-      return;
-    }
-
-    const saved = await this.appSettingsStore.saveSettings(
-      this.form.controls.homeBackgroundImageUrl.value,
-      this.form.controls.themeColour.value,
-      this.form.controls.appearanceMode.value
-    );
-
-    if (!saved) {
-      this.saveError.set('We could not save your settings. Please try again.');
-
-      return;
-    }
-
-    this.closeSettings();
+    this.resolveImagePreview(this.appSettingsStore.homeBackgroundImageUrl());
   }
 
   selectThemeColour(themeColour: ThemeColour): void {
-    this.form.controls.themeColour.setValue(themeColour);
+    this.appSettingsStore.updateAppearance(themeColour, this.appearanceMode());
   }
 
   selectAppearanceMode(appearanceMode: AppearanceMode): void {
-    this.form.controls.appearanceMode.setValue(appearanceMode);
+    this.appSettingsStore.updateAppearance(this.themeColour(), appearanceMode);
+  }
+
+  selectLanguage(language: AppLanguage): void {
+    this.appSettingsStore.updateLanguage(language);
+  }
+
+  themeColourLabel(themeColour: ThemeColour): string {
+    const keyByTheme: Record<ThemeColour, TranslationKey> = {
+      red: 'settings.themeRed',
+      blue: 'settings.themeBlue',
+      green: 'settings.themeGreen',
+      purple: 'settings.themePurple',
+      pink: 'settings.themePink',
+    };
+
+    return this.t(keyByTheme[themeColour]);
+  }
+
+  appearanceModeLabel(appearanceMode: AppearanceMode): string {
+    return this.t(appearanceMode === 'light' ? 'settings.light' : 'settings.dark');
+  }
+
+  resetAppearance(): void {
+    this.appSettingsStore.resetAppearance();
   }
 
   handleThemeColourKeydown(event: KeyboardEvent, index: number): void {
-    const nextIndex = this.getRadioOptionIndex(
-      event.key,
-      index,
-      this.themeColourOptions.length
-    );
-
-    if (nextIndex === null) {
-      return;
-    }
+    const nextIndex = this.getRadioOptionIndex(event.key, index, this.themeColourOptions.length);
+    if (nextIndex === null) return;
 
     event.preventDefault();
     this.selectThemeColour(this.themeColourOptions[nextIndex].id);
@@ -119,15 +106,8 @@ export class AppSettingsPage {
   }
 
   handleAppearanceModeKeydown(event: KeyboardEvent, index: number): void {
-    const nextIndex = this.getRadioOptionIndex(
-      event.key,
-      index,
-      this.appearanceModeOptions.length
-    );
-
-    if (nextIndex === null) {
-      return;
-    }
+    const nextIndex = this.getRadioOptionIndex(event.key, index, this.appearanceModeOptions.length);
+    if (nextIndex === null) return;
 
     event.preventDefault();
     this.selectAppearanceMode(this.appearanceModeOptions[nextIndex].id);
@@ -145,79 +125,83 @@ export class AppSettingsPage {
         resultType: CameraResultType.DataUrl,
         source: CameraSource.Photos,
       });
+      if (!photo.dataUrl) return;
 
-      if (photo.dataUrl) {
-        this.form.controls.homeBackgroundImageUrl.setValue(photo.dataUrl);
+      const saved = await this.appSettingsStore.updateBackgroundImage(photo.dataUrl);
+      if (!saved) {
+        this.imageSelectionError.set(this.t('settings.imageSaveError'));
+        return;
       }
+
+      this.resolveImagePreview(this.appSettingsStore.homeBackgroundImageUrl());
     } catch {
-      this.imageSelectionError.set(
-        'We could not select that image. Please try again.'
-      );
+      this.imageSelectionError.set(this.t('settings.imageSelectError'));
     }
   }
 
-  clearBackgroundImage(): void {
-    this.form.controls.homeBackgroundImageUrl.setValue('');
+  startBackgroundDrag(event: PointerEvent): void {
+    const preview = event.currentTarget as HTMLElement;
+    preview.setPointerCapture(event.pointerId);
+    this.backgroundDrag = {
+      pointerId: event.pointerId,
+      startX: event.clientX,
+      startY: event.clientY,
+      position: this.backgroundImagePosition(),
+    };
+    event.preventDefault();
+  }
+
+  moveBackgroundDrag(event: PointerEvent): void {
+    if (!this.backgroundDrag || this.backgroundDrag.pointerId !== event.pointerId) return;
+
+    const preview = event.currentTarget as HTMLElement;
+    const bounds = preview.getBoundingClientRect();
+    const position: BackgroundImagePosition = {
+      x: this.backgroundDrag.position.x - ((event.clientX - this.backgroundDrag.startX) / bounds.width) * 100,
+      y: this.backgroundDrag.position.y - ((event.clientY - this.backgroundDrag.startY) / bounds.height) * 100,
+    };
+
+    this.appSettingsStore.updateBackgroundImagePosition(position);
+    event.preventDefault();
+  }
+
+  endBackgroundDrag(event: PointerEvent): void {
+    if (this.backgroundDrag?.pointerId !== event.pointerId) return;
+
+    this.backgroundDrag = null;
+    const preview = event.currentTarget as HTMLElement;
+    if (preview.hasPointerCapture(event.pointerId)) preview.releasePointerCapture(event.pointerId);
+  }
+
+  async clearBackgroundImage(): Promise<void> {
+    const cleared = await this.appSettingsStore.updateBackgroundImage('');
+    if (cleared) this.imagePreviewUrl.set('');
+    else this.imageSelectionError.set(this.t('settings.imageRemoveError'));
   }
 
   closeSettings(): void {
-    if (this.isClosing()) {
-      return;
-    }
+    if (this.isClosing()) return;
 
     this.isClosing.set(true);
     setTimeout(() => void this.router.navigate(['/home']), 650);
   }
 
   private resolveImagePreview(imageUrl: string): void {
-    void this.imageStorage
-      .resolveImageUrl(imageUrl)
-      .then((resolvedUrl) => {
-        if (this.form.controls.homeBackgroundImageUrl.value === imageUrl) {
-          this.imagePreviewUrl.set(resolvedUrl);
-        }
-      })
-      .catch(() => {
-        if (this.form.controls.homeBackgroundImageUrl.value === imageUrl) {
-          this.imagePreviewUrl.set('');
-        }
-      });
+    void this.imageStorage.resolveImageUrl(imageUrl)
+      .then((resolvedUrl) => this.imagePreviewUrl.set(resolvedUrl))
+      .catch(() => this.imagePreviewUrl.set(''));
   }
 
-  private getRadioOptionIndex(
-    key: string,
-    currentIndex: number,
-    optionCount: number
-  ): number | null {
-    if (key === 'Home') {
-      return 0;
-    }
-
-    if (key === 'End') {
-      return optionCount - 1;
-    }
-
-    if (key === 'ArrowRight' || key === 'ArrowDown') {
-      return (currentIndex + 1) % optionCount;
-    }
-
-    if (key === 'ArrowLeft' || key === 'ArrowUp') {
-      return (currentIndex - 1 + optionCount) % optionCount;
-    }
-
+  private getRadioOptionIndex(key: string, currentIndex: number, optionCount: number): number | null {
+    if (key === 'Home') return 0;
+    if (key === 'End') return optionCount - 1;
+    if (key === 'ArrowRight' || key === 'ArrowDown') return (currentIndex + 1) % optionCount;
+    if (key === 'ArrowLeft' || key === 'ArrowUp') return (currentIndex - 1 + optionCount) % optionCount;
     return null;
   }
 
-  private focusRadioOption(
-    currentTarget: EventTarget | null,
-    nextIndex: number
-  ): void {
-    const radioGroup = (currentTarget as HTMLElement | null)?.closest(
-      '[role="radiogroup"]'
-    );
-    const options =
-      radioGroup?.querySelectorAll<HTMLButtonElement>('[role="radio"]');
-
-    options?.item(nextIndex)?.focus();
+  private focusRadioOption(currentTarget: EventTarget | null, nextIndex: number): void {
+    const radioGroup = (currentTarget as HTMLElement | null)?.closest('[role="radiogroup"]');
+    radioGroup?.querySelectorAll<HTMLButtonElement>('[role="radio"]').item(nextIndex)?.focus();
   }
 }

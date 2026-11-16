@@ -1,5 +1,5 @@
 <app-header
-  title="App settings"
+  [title]="t('settings.title')"
   [interceptBack]="true"
   (backRequested)="closeSettings()"
   (settingsRequested)="closeSettings()"
@@ -9,87 +9,86 @@
   <main class="settings-page" [class.settings-page--closing]="isClosing()">
     <div class="settings-page__backdrop" aria-hidden="true"></div>
     <header class="settings-page__hero">
-      <p>MAKE IT YOURS</p>
-      <h1>App settings</h1>
+      <p>{{ t('settings.eyebrow') }}</p>
+      <h1>{{ t('settings.title') }}</h1>
+      <p class="settings-page__status">{{ t('settings.status') }}</p>
     </header>
 
-    <form class="settings-form" [formGroup]="form" (ngSubmit)="saveSettings()" novalidate>
-      <section aria-labelledby="theme-colour-title">
-        <h2 id="theme-colour-title">Theme colour</h2>
-        <p>Choose the app's primary colour.</p>
+    <div class="settings-form">
+      <section aria-labelledby="language-title">
+        <h2 id="language-title">{{ t('settings.language') }}</h2>
+        <p>{{ t('settings.languageDescription') }}</p>
+        <ion-item class="settings-language">
+          <ion-label>{{ t('settings.languageSelectLabel') }}</ion-label>
+          <ion-select [attr.aria-label]="t('settings.languageSelectLabel')" [value]="language()" interface="popover" (ionChange)="selectLanguage($event.detail.value)">
+            @for (languageOption of appLanguageOptions; track languageOption.id) {
+              <ion-select-option [value]="languageOption.id">{{ languageOption.label }}</ion-select-option>
+            }
+          </ion-select>
+        </ion-item>
+      </section>
 
+      <section aria-labelledby="theme-colour-title">
+        <h2 id="theme-colour-title">{{ t('settings.themeColour') }}</h2>
+        <p>{{ t('settings.themeColourDescription') }}</p>
         <div class="theme-colour-picker" aria-labelledby="theme-colour-title" role="radiogroup">
           @for (theme of themeColourOptions; track theme.id; let index = $index) {
-            <button
-              [attr.aria-checked]="form.controls.themeColour.value === theme.id"
-              [attr.tabindex]="form.controls.themeColour.value === theme.id ? 0 : -1"
-              [class.theme-colour-picker__option--selected]="form.controls.themeColour.value === theme.id"
-              [style.--theme-colour]="theme.primary"
-              [style.--theme-colour-soft]="theme.primarySoft"
-              class="theme-colour-picker__option"
-              role="radio"
-              type="button"
-              (click)="selectThemeColour(theme.id)"
-              (keydown)="handleThemeColourKeydown($event, index)"
-            >
-              <span aria-hidden="true"></span>
-              {{ theme.label }}
+            <button [attr.aria-checked]="themeColour() === theme.id" [attr.tabindex]="themeColour() === theme.id ? 0 : -1" [class.theme-colour-picker__option--selected]="themeColour() === theme.id" [style.--theme-colour]="theme.primary" [style.--theme-colour-soft]="theme.primarySoft" class="theme-colour-picker__option" role="radio" type="button" (click)="selectThemeColour(theme.id)" (keydown)="handleThemeColourKeydown($event, index)">
+              <span aria-hidden="true"></span>{{ themeColourLabel(theme.id) }}
             </button>
           }
         </div>
       </section>
 
       <section aria-labelledby="appearance-title">
-        <h2 id="appearance-title">Appearance</h2>
-        <p>Choose a light or dark app surface.</p>
-
+        <h2 id="appearance-title">{{ t('settings.appearance') }}</h2>
+        <p>{{ t('settings.appearanceDescription') }}</p>
         <div class="appearance-mode-picker" aria-labelledby="appearance-title" role="radiogroup">
           @for (appearance of appearanceModeOptions; track appearance.id; let index = $index) {
-            <button
-              [attr.aria-checked]="form.controls.appearanceMode.value === appearance.id"
-              [attr.tabindex]="form.controls.appearanceMode.value === appearance.id ? 0 : -1"
-              [class.appearance-mode-picker__option--selected]="form.controls.appearanceMode.value === appearance.id"
-              class="appearance-mode-picker__option"
-              role="radio"
-              type="button"
-              (click)="selectAppearanceMode(appearance.id)"
-              (keydown)="handleAppearanceModeKeydown($event, index)"
-            >
-              {{ appearance.label }}
+            <button [attr.aria-checked]="appearanceMode() === appearance.id" [attr.tabindex]="appearanceMode() === appearance.id ? 0 : -1" [class.appearance-mode-picker__option--selected]="appearanceMode() === appearance.id" class="appearance-mode-picker__option" role="radio" type="button" (click)="selectAppearanceMode(appearance.id)" (keydown)="handleAppearanceModeKeydown($event, index)">
+              {{ appearanceModeLabel(appearance.id) }}
             </button>
           }
         </div>
+        <ion-button class="settings-secondary-action" fill="clear" type="button" (click)="resetAppearance()">
+          {{ t('settings.resetAppearance') }}
+        </ion-button>
       </section>
 
       <section aria-labelledby="background-image-title">
-        <h2 id="background-image-title">Background image</h2>
-        <p>Choose an optional image from your photo library for the app background.</p>
-
+        <h2 id="background-image-title">{{ t('settings.backgroundImage') }}</h2>
+        <p>{{ t('settings.backgroundImageDescription') }}</p>
         <div class="settings-background-image">
           @if (imagePreviewUrl()) {
-          <img [src]="imagePreviewUrl()" alt="Selected app background preview" />
+            <div
+              class="settings-background-image__preview"
+              [style.background-image]="'url(' + imagePreviewUrl() + ')'"
+              [style.background-position]="backgroundImagePosition().x + '% ' + backgroundImagePosition().y + '%'"
+              [attr.aria-label]="t('settings.selectedBackgroundPreview')"
+              role="img"
+              (pointerdown)="startBackgroundDrag($event)"
+              (pointermove)="moveBackgroundDrag($event)"
+              (pointerup)="endBackgroundDrag($event)"
+              (pointercancel)="endBackgroundDrag($event)"
+            ></div>
           }
           <div class="settings-background-image__actions">
-            <ion-button fill="outline" type="button" (click)="selectBackgroundImage()">Choose photo</ion-button>
-            @if (form.controls.homeBackgroundImageUrl.value) {
-              <ion-button fill="clear" type="button" (click)="clearBackgroundImage()">Remove</ion-button>
+            <ion-button fill="outline" type="button" (click)="selectBackgroundImage()">{{ t('settings.choosePhoto') }}</ion-button>
+            @if (hasBackgroundImage()) {
+              <ion-button fill="clear" type="button" (click)="clearBackgroundImage()">{{ t('settings.remove') }}</ion-button>
             }
           </div>
         </div>
 
+        @if (hasBackgroundImage()) {
+          <p class="settings-form__hint">{{ t('settings.backgroundImageDescription') }}</p>
+        }
+
         @if (imageSelectionError()) {
           <ion-note color="danger" role="alert">{{ imageSelectionError() }}</ion-note>
         }
-        @if (saveError()) {
-          <ion-note color="danger" role="alert">{{ saveError() }}</ion-note>
-        }
-
-        <p class="settings-form__hint">Remove the image and save to restore the standard background.</p>
+        <p class="settings-form__hint">{{ t('settings.savedHint') }}</p>
       </section>
-
-      <div class="settings-form__actions">
-        <ion-button class="rr-button" type="submit">Save settings</ion-button>
-      </div>
-    </form>
+    </div>
   </main>
 </ion-content>

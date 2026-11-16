@@ -1,16 +1,21 @@
 :root {
+  color-scheme: light;
+
   // Rave Route design tokens.
   --rr-primary: #d92332;
+  --rr-primary-rgb: 217, 35, 50;
   --rr-primary-dark: #ad1825;
   --rr-primary-contrast: #ffffff;
   --rr-accent: #ff6b6b;
+  --rr-accent-foreground: var(--rr-primary-dark);
   --rr-primary-soft: #fff0ee;
   --rr-background: #f4f6f8;
   --rr-surface: #ffffff;
   --rr-text: #2a2d32;
   --rr-text-muted: #626a73;
   --rr-border: #dfe4e8;
-  --rr-background-overlay: rgb(244 246 248 / 82%);
+  --rr-background-overlay: rgb(244 246 248 / 90%);
+  --rr-control-border: var(--rr-border);
 
   --rr-radius-card: 1.25rem;
   --rr-radius-control: 0.75rem;
@@ -19,17 +24,62 @@
 
   // Ionic theme mappings.
   --ion-color-primary: var(--rr-primary);
-  --ion-color-primary-rgb: 217, 35, 50;
+  --ion-color-primary-rgb: var(--rr-primary-rgb);
   --ion-color-primary-contrast: var(--rr-primary-contrast);
   --ion-color-primary-contrast-rgb: 255, 255, 255;
   --ion-color-primary-shade: var(--rr-primary-dark);
-  --ion-color-primary-tint: #e54754;
+  --ion-color-primary-tint: var(--rr-accent);
+  --ion-background-color: var(--rr-background);
+  --ion-background-color-rgb: 244, 246, 248;
+  --ion-text-color: var(--rr-text);
+  --ion-text-color-rgb: 42, 45, 50;
+  --ion-card-background: var(--rr-surface);
+  --ion-item-background: var(--rr-surface);
+}
+
+:root.ion-palette-dark {
+  color-scheme: dark;
+
+  --rr-background: #11171c;
+  --rr-surface: #1a2229;
+  --rr-surface-rgb: 26, 34, 41;
+  --rr-text: #f2f5f7;
+  --rr-text-muted: #b8c2cb;
+  --rr-border: #35414a;
+  --rr-control-border: #657580;
+  --rr-shadow-card: 0 0.75rem 2rem rgb(0 0 0 / 34%);
+  --rr-background-overlay: rgb(17 23 28 / 88%);
+  --rr-accent-foreground: var(--rr-dark-accent, #ff9ca2);
+
+  // Ionic's class palette supplies the mode-specific steps and control states.
+  --ion-background-color: var(--rr-background);
+  --ion-background-color-rgb: 17, 23, 28;
+  --ion-text-color: var(--rr-text);
+  --ion-text-color-rgb: 242, 245, 247;
+  --ion-card-background: var(--rr-surface);
+  --ion-item-background: var(--rr-surface);
+  --ion-border-color: var(--rr-border);
+  --ion-overlay-background-color: var(--rr-surface);
+  --ion-placeholder-color: var(--rr-text-muted);
+  --ion-placeholder-opacity: 1;
+  --ion-color-primary: var(--rr-accent-foreground);
+  --ion-color-primary-rgb: var(--rr-dark-accent-rgb, 255, 156, 162);
+  --ion-color-primary-contrast: var(--rr-background);
+  --ion-color-primary-contrast-rgb: var(--ion-background-color-rgb);
+  --ion-color-primary-shade: color-mix(in srgb, var(--ion-color-primary) 92%, var(--rr-background));
+  --ion-color-primary-tint: color-mix(in srgb, var(--ion-color-primary) 90%, var(--rr-text));
+  --ion-color-danger: #ff929b;
+  --ion-color-danger-rgb: 255, 146, 155;
+  --ion-color-danger-shade: #ed838e;
+  --ion-color-danger-tint: #ffa4ab;
 }
 
 ion-button.rr-button,
 button.rr-button {
   --background: var(--rr-primary);
   --background-hover: var(--rr-primary-dark);
+  --background-activated: var(--rr-primary-dark);
+  --background-focused: var(--rr-primary-dark);
   --border-radius: var(--rr-radius-control);
   --box-shadow: none;
   --color: var(--rr-primary-contrast);

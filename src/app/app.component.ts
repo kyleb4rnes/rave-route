@@ -1,6 +1,7 @@
 import {
   Component,
   computed,
+  DOCUMENT,
   effect,
   inject,
   signal,
@@ -10,11 +11,11 @@ import { IonApp, IonRouterOutlet, IonSpinner } from '@ionic/angular/standalone';
 import { FestivalStore } from './core/festivals/festival.store';
 import { AppSettingsStore } from './core/settings/app-settings.store';
 import { ImageStorageService } from './core/images/image-storage.service';
-import { appearancePalettes } from './core/settings/appearance-modes';
 import { themeColourPresets } from './core/settings/theme-colours';
 import { RaveRouteLogoComponent } from './components/rave-route-logo/rave-route-logo.component';
 import { OnboardingStore } from './core/onboarding/onboarding.store';
 import { OnboardingComponent } from './features/onboarding/onboarding.component';
+import { WebIconService } from './core/branding/web-icon.service';
 
 @Component({
   selector: 'app-root',
@@ -35,6 +36,8 @@ export class AppComponent {
   private readonly appSettingsStore = inject(AppSettingsStore);
   private readonly imageStorage = inject(ImageStorageService);
   private readonly onboardingStore = inject(OnboardingStore);
+  private readonly webIconService = inject(WebIconService);
+  private readonly document = inject(DOCUMENT);
   private readonly appBackgroundImageUrl = signal('');
   private readonly launchStateSignal = signal<
     'loading' | 'leaving' | 'complete'
@@ -58,31 +61,37 @@ export class AppComponent {
   readonly hideRoutedContent = computed(
     () => this.onboardingOpen() && !this.onboardingReady()
   );
-  readonly appearance = computed(
-    () => appearancePalettes[this.appSettingsStore.appearanceMode()]
-  );
-  readonly theme = computed(() => {
-    const colourTheme = themeColourPresets[this.appSettingsStore.themeColour()];
-
-    return {
-      ...colourTheme,
-      primarySoft:
-        this.appSettingsStore.appearanceMode() === 'dark'
-          ? colourTheme.primarySoftDark
-          : colourTheme.primarySoft,
-    };
-  });
   readonly appBackground = computed(() => {
     const imageUrl = this.appBackgroundImageUrl();
+    const imagePosition = this.appSettingsStore.homeBackgroundImagePosition();
 
     return imageUrl
       ? `linear-gradient(var(--rr-background-overlay), var(--rr-background-overlay)), url("${encodeURI(
           imageUrl
-        )}") center / cover no-repeat`
+        )}") ${imagePosition.x}% ${imagePosition.y}% / cover no-repeat`
       : 'var(--rr-background)';
   });
 
   constructor() {
+    effect(() => {
+      const { documentElement } = this.document;
+      const dark = this.appSettingsStore.appearanceMode() === 'dark';
+      const theme = themeColourPresets[this.appSettingsStore.themeColour()];
+
+      documentElement.classList.toggle('ion-palette-dark', dark);
+      documentElement.style.setProperty('--rr-primary', theme.primary);
+      documentElement.style.setProperty('--rr-primary-rgb', theme.primaryRgb);
+      documentElement.style.setProperty('--rr-primary-dark', theme.primaryDark);
+      documentElement.style.setProperty('--rr-accent', theme.tint);
+      documentElement.style.setProperty('--rr-primary-soft', dark ? theme.primarySoftDark : theme.primarySoft);
+      documentElement.style.setProperty('--rr-dark-accent', theme.darkAccent);
+      documentElement.style.setProperty('--rr-dark-accent-rgb', theme.darkAccentRgb);
+    });
+
+    effect(() => {
+      this.webIconService.update(this.appSettingsStore.themeColour());
+    });
+
     effect(() => {
       const imageUrl = this.appSettingsStore.homeBackgroundImageUrl();
 

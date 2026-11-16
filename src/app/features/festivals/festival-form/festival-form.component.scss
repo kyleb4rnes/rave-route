@@ -13,7 +13,7 @@
   --color: var(--rr-text);
   --padding-start: 0.875rem;
   --padding-end: 0.875rem;
-  border: 1px solid var(--rr-border);
+  border: 1px solid var(--rr-control-border);
   border-radius: var(--rr-radius-control);
   margin-bottom: 0.5rem;
 }
@@ -22,6 +22,21 @@
   display: block;
   font-size: 0.8125rem;
   margin: -0.125rem 0 0.625rem;
+}
+
+.festival-form__date {
+  display: grid;
+  gap: 0.25rem;
+  padding-block: 0.5rem;
+}
+
+.festival-form__date-label {
+  font-size: 0.75rem;
+}
+
+.festival-form ion-item[button]::part(native):focus-visible {
+  outline: 2px solid var(--rr-accent-foreground);
+  outline-offset: -2px;
 }
 
 .festival-form__actions {
@@ -85,7 +100,8 @@
 .festival-date-range-picker {
   background: var(--rr-background);
   color: var(--rr-text);
-  min-height: 100%;
+  height: 100%;
+  overflow: auto;
   padding: 1.25rem;
 }
 
@@ -96,7 +112,7 @@
 }
 
 .festival-date-range-picker__heading p {
-  color: var(--rr-primary-dark);
+  color: var(--rr-accent-foreground);
   font-size: 0.6875rem;
   font-weight: 800;
   letter-spacing: 0.1em;
@@ -109,7 +125,7 @@
 }
 
 .festival-date-range-picker__heading ion-button {
-  --color: var(--rr-primary-dark);
+  --color: var(--rr-accent-foreground);
   margin: -0.5rem -0.5rem 0 0;
 }
 

@@ -2,9 +2,14 @@ import { Location } from '@angular/common';
 import {
   Component,
   computed,
+  afterNextRender,
+  ElementRef,
   inject,
+  Injector,
   input,
   output,
+  signal,
+  viewChild,
   ChangeDetectionStrategy,
 } from '@angular/core';
 import { NavigationEnd, Router, RouterLink } from '@angular/router';
@@ -22,6 +27,7 @@ import {
   close,
   helpCircleOutline,
   homeOutline,
+  menuOutline,
   settingsOutline,
 } from 'ionicons/icons';
 import { filter, map } from 'rxjs';
@@ -33,6 +39,7 @@ addIcons({
   close,
   helpCircleOutline,
   homeOutline,
+  menuOutline,
   settingsOutline,
 });
 
@@ -56,6 +63,9 @@ addIcons({
 export class AppHeaderComponent {
   private readonly location = inject(Location);
   private readonly router = inject(Router);
+  private readonly injector = inject(Injector);
+  private readonly menu = viewChild<ElementRef<HTMLDivElement>>('menu');
+  private readonly menuTrigger = viewChild.required<unknown, ElementRef<HTMLElement>>('menuTrigger', { read: ElementRef });
   private readonly currentUrl = toSignal(
     this.router.events.pipe(
       filter((event): event is NavigationEnd => event instanceof NavigationEnd),
@@ -69,6 +79,7 @@ export class AppHeaderComponent {
   readonly interceptBack = input(false);
   readonly backRequested = output<void>();
   readonly settingsRequested = output<void>();
+  readonly menuOpen = signal(false);
   readonly isHome = computed(() => this.currentUrl() === '/home');
   readonly isSettings = computed(() => this.currentUrl() === '/settings');
   readonly isHelp = computed(() => this.currentUrl() === '/help');
@@ -89,6 +100,7 @@ export class AppHeaderComponent {
   }
 
   openSettings(): void {
+    this.menuOpen.set(false);
     if (this.isSettings()) {
       this.settingsRequested.emit();
 
@@ -99,6 +111,7 @@ export class AppHeaderComponent {
   }
 
   openHelp(): void {
+    this.menuOpen.set(false);
     if (this.isHelp()) {
       this.goBack();
 
@@ -106,5 +119,62 @@ export class AppHeaderComponent {
     }
 
     void this.router.navigate(['/help']);
+  }
+
+  toggleMenu(): void {
+    if (this.menuOpen()) {
+      this.closeMenu();
+      return;
+    }
+
+    this.menuOpen.set(true);
+    afterNextRender(() => {
+      this.menu()?.nativeElement.querySelector('button')?.focus();
+    }, { injector: this.injector });
+  }
+
+  handleMenuKeydown(event: KeyboardEvent): void {
+    if (event.key === 'Tab') {
+      this.closeMenu();
+      return;
+    }
+
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      this.closeMenu();
+      this.menuTrigger().nativeElement.shadowRoot?.querySelector<HTMLElement>('[part="native"]')?.focus();
+      return;
+    }
+
+    const menu = this.menu()?.nativeElement;
+    if (!menu || !['ArrowDown', 'ArrowUp', 'Home', 'End'].includes(event.key)) {
+      return;
+    }
+
+    event.preventDefault();
+    const items = Array.from(menu.querySelectorAll('button'));
+    const index = items.findIndex((item) => item === event.target);
+    const offset = event.key === 'ArrowDown' ? 1 : -1;
+    const nextIndex = (index + offset + items.length) % items.length;
+
+    if (event.key === 'Home') {
+      items[0]?.focus();
+    } else if (event.key === 'End') {
+      items.at(-1)?.focus();
+    } else {
+      items[nextIndex]?.focus();
+    }
+  }
+
+  handleMenuFocusout(event: FocusEvent): void {
+    const target = event.relatedTarget;
+    if (target !== this.menuTrigger().nativeElement &&
+      !(target instanceof Node && this.menu()?.nativeElement.contains(target))) {
+      this.closeMenu();
+    }
+  }
+
+  closeMenu(): void {
+    this.menuOpen.set(false);
   }
 }

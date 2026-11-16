@@ -14,7 +14,7 @@ ion-content {
 }
 
 .festival-browse header p {
-  color: var(--rr-primary-dark);
+  color: var(--rr-accent-foreground);
   font-size: 0.75rem;
   font-weight: 800;
   letter-spacing: 0.1em;
@@ -35,7 +35,7 @@ ion-content {
 
 .festival-browse__controls {
   align-self: start;
-  background: var(--rr-background);
+  background: transparent;
   display: grid;
   gap: 0.75rem;
   padding: 0.25rem 0 0.5rem;
@@ -45,10 +45,11 @@ ion-content {
 }
 
 .festival-browse__search-row {
-  align-items: center;
-  display: grid;
-  gap: 0.5rem;
-  grid-template-columns: minmax(0, 1fr) auto;
+  display: block;
+}
+
+.festival-browse__search-control {
+  position: relative;
 }
 
 .festival-browse__search-row ion-searchbar {
@@ -56,26 +57,51 @@ ion-content {
   --border-radius: var(--rr-radius-control);
   --box-shadow: none;
   --color: var(--rr-text);
-  height: 2.75rem;
+  height: 2rem;
+  min-height: 2rem;
+  width: 100%;
   padding: 0;
 }
 
 .festival-browse__search-row ion-searchbar::part(container) {
+  border: 1px solid var(--rr-border);
+  box-sizing: border-box;
   height: 100%;
+  min-height: 0;
+  padding: 0;
+}
+
+.festival-browse__search-row ion-searchbar::part(input) {
+  height: 100%;
+  min-height: 0;
+  padding-right: 2.5rem;
 }
 
 .festival-browse__filter-toggle {
-  --background: var(--rr-surface);
-  --color: var(--rr-primary-dark);
-  height: 2.75rem;
+  --background: transparent;
+  --color: var(--rr-accent-foreground);
+  height: 2rem;
+  --min-height: 2rem;
+  --padding-bottom: 0;
+  --padding-top: 0;
   margin: 0;
-  position: relative;
-  width: 2.75rem;
+  min-height: 2rem;
+  position: absolute;
+  right: 0.25rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 2rem;
+  z-index: 2;
 }
 
 .festival-browse__filter-toggle::part(native) {
-  border: 1px solid var(--rr-border);
-  border-radius: var(--rr-radius-control);
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-sizing: border-box;
+  box-shadow: none;
+  height: 100%;
+  min-height: 0;
   padding: 0;
 }
 
@@ -129,7 +155,7 @@ ion-content {
 }
 
 .festival-browse__past-toggle {
-  --color: var(--rr-primary-dark);
+  --color: var(--rr-accent-foreground);
   font-size: 0.8rem;
   margin: 0;
   justify-self: start;
@@ -205,7 +231,7 @@ ion-content {
 }
 
 .festival-browse__attribution a {
-  color: var(--rr-primary-dark);
+  color: var(--rr-accent-foreground);
   font-weight: 800;
 }
 
@@ -233,7 +259,7 @@ ion-content {
 }
 
 .festival-browse__custom ion-button {
-  --color: var(--rr-primary-dark);
+  --color: var(--rr-accent-foreground);
   font-weight: 800;
   margin-bottom: -0.5rem;
 }

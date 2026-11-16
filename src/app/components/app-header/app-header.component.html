@@ -22,12 +22,42 @@
           <ion-icon aria-hidden="true" name="home-outline"></ion-icon>
         </ion-button>
       }
-      <ion-button [attr.aria-label]="isHelp() ? 'Close help' : 'Open help'" (click)="openHelp()">
-        <ion-icon aria-hidden="true" [name]="isHelp() ? 'close' : 'help-circle-outline'"></ion-icon>
-      </ion-button>
-      <ion-button [attr.aria-label]="isSettings() ? 'Close app settings' : 'Open app settings'" (click)="openSettings()">
-        <ion-icon aria-hidden="true" [name]="isSettings() ? 'close' : 'settings-outline'"></ion-icon>
+      <ion-button
+        #menuTrigger
+        aria-label="Open app menu"
+        [attr.aria-expanded]="menuOpen()"
+        aria-haspopup="menu"
+        (click)="toggleMenu()"
+      >
+        <ion-icon aria-hidden="true" name="menu-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
+
+@if (menuOpen()) {
+  <div #menu class="app-header-menu" role="menu" aria-label="App menu" (keydown)="handleMenuKeydown($event)" (focusout)="handleMenuFocusout($event)">
+    @if (isHelp()) {
+      <button role="menuitem" tabindex="-1" type="button" (click)="openHelp()">
+        <ion-icon aria-hidden="true" name="close"></ion-icon>
+        Close help
+      </button>
+    } @else {
+      <button role="menuitem" tabindex="-1" type="button" routerLink="/help" (click)="closeMenu()">
+        <ion-icon aria-hidden="true" name="help-circle-outline"></ion-icon>
+        Help
+      </button>
+    }
+    @if (isSettings()) {
+      <button role="menuitem" tabindex="-1" type="button" (click)="openSettings()">
+        <ion-icon aria-hidden="true" name="close"></ion-icon>
+        Close settings
+      </button>
+    } @else {
+      <button role="menuitem" tabindex="-1" type="button" routerLink="/settings" (click)="closeMenu()">
+        <ion-icon aria-hidden="true" name="settings-outline"></ion-icon>
+        Settings
+      </button>
+    }
+  </div>
+}

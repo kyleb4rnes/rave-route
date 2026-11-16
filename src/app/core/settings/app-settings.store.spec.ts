@@ -27,14 +27,46 @@ describe('AppSettingsStore', () => {
     expect(store.themeColour()).toBe('red');
   });
 
-  it('persists an appearance mode with the colour theme and background image', async () => {
+  it('persists appearance changes immediately', () => {
     const store = createStore();
 
-    await expectAsync(store.saveSettings('data:image/jpeg;base64,background-image', 'purple', 'dark')).toBeResolvedTo(true);
+    store.updateAppearance('purple', 'dark');
 
     const restoredStore = createStore();
     expect(restoredStore.appearanceMode()).toBe('dark');
     expect(restoredStore.themeColour()).toBe('purple');
+  });
+
+  it('defaults to English and persists language changes immediately', () => {
+    const store = createStore();
+
+    expect(store.language()).toBe('en');
+
+    store.updateLanguage('fr');
+
+    const restoredStore = createStore();
+    expect(restoredStore.language()).toBe('fr');
+  });
+
+  it('resets appearance to the default red light theme', () => {
+    const store = createStore();
+
+    store.updateAppearance('purple', 'dark');
+    store.resetAppearance();
+
+    expect(store.appearanceMode()).toBe('light');
+    expect(store.themeColour()).toBe('red');
+  });
+
+  it('persists a background focal point with the image', async () => {
+    const store = createStore();
+
+    await expectAsync(
+      store.updateBackgroundImage('data:image/jpeg;base64,background-image', { x: 20, y: 80 })
+    ).toBeResolvedTo(true);
+
+    const restoredStore = createStore();
     expect(restoredStore.homeBackgroundImageUrl()).toBe('data:image/jpeg;base64,background-image');
+    expect(restoredStore.homeBackgroundImagePosition()).toEqual({ x: 20, y: 80 });
   });
 });

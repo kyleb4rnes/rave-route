@@ -12,7 +12,7 @@
 }
 
 .festival-card__eyebrow {
-  color: var(--rr-primary-dark);
+  color: var(--rr-accent-foreground);
   font-size: 0.75rem;
   font-weight: 800;
   letter-spacing: 0.1em;
@@ -48,7 +48,7 @@
 }
 
 .festival-card__countdown {
-  color: var(--rr-primary-dark);
+  color: var(--rr-accent-foreground);
   font-size: 1.125rem;
   font-weight: 800;
   margin: 1rem 0 0.75rem;
@@ -72,9 +72,9 @@
 }
 
 .festival-card__actions ion-button {
-  --border-color: var(--rr-primary);
+  --border-color: var(--ion-color-primary);
   --border-radius: var(--rr-radius-control);
-  --color: var(--rr-primary-dark);
+  --color: var(--rr-accent-foreground);
   font-size: 0.8125rem;
   font-weight: 800;
   margin: 0;

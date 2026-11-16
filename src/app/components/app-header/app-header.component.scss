@@ -1,5 +1,6 @@
 :host {
   display: block;
+  position: relative;
 }
 
 ion-toolbar {
@@ -14,4 +15,50 @@ ion-toolbar ion-button {
 
 ion-title {
   font-weight: 800;
+}
+
+.app-header-menu {
+  background: var(--rr-surface);
+  border: 1px solid var(--rr-border);
+  border-radius: 0 0 var(--rr-radius-control) var(--rr-radius-control);
+  box-shadow: var(--rr-shadow-card);
+  display: grid;
+  gap: 0.25rem;
+  padding: 0.5rem;
+  position: absolute;
+  right: max(0.5rem, env(safe-area-inset-right));
+  top: calc(100% - 0.25rem);
+  z-index: 10;
+}
+
+.app-header-menu button {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  border-radius: calc(var(--rr-radius-control) - 0.25rem);
+  color: var(--rr-text);
+  cursor: pointer;
+  display: flex;
+  font: inherit;
+  font-weight: 700;
+  gap: 0.625rem;
+  min-height: 2.75rem;
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+}
+
+.app-header-menu button:hover,
+.app-header-menu button:active,
+.app-header-menu button:focus-visible {
+  background: var(--rr-primary-soft);
+}
+
+.app-header-menu button:focus-visible {
+  outline: 2px solid var(--rr-accent-foreground);
+  outline-offset: -2px;
+}
+
+.app-header-menu ion-icon {
+  color: var(--ion-color-primary);
+  font-size: 1.25rem;
 }

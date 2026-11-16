@@ -49,6 +49,12 @@ ion-content {
   margin: 0;
 }
 
+.settings-page__status {
+  font-size: 0.875rem;
+  margin: 0.75rem 0 0;
+  opacity: 0.9;
+}
+
 .settings-form {
   animation: settings-content-enter 400ms 250ms ease-out both;
   background: var(--rr-background);
@@ -108,8 +114,9 @@ ion-content {
 }
 
 .theme-colour-picker__option--selected {
-  border-color: var(--theme-colour);
-  box-shadow: 0 0 0 1px var(--theme-colour);
+  background: var(--rr-primary-soft);
+  border-color: var(--ion-color-primary);
+  box-shadow: 0 0 0 1px var(--ion-color-primary);
 }
 
 .settings-form ion-list {
@@ -123,8 +130,17 @@ ion-content {
   --color: var(--rr-text);
   --padding-end: 0.875rem;
   --padding-start: 0.875rem;
-  border: 1px solid var(--rr-border);
+  border: 1px solid var(--rr-control-border);
   border-radius: var(--rr-radius-control);
+}
+
+.settings-language {
+  --inner-padding-end: 0.25rem;
+}
+
+.settings-language ion-label {
+  color: var(--rr-text);
+  font-weight: 700;
 }
 
 .settings-form ion-note {
@@ -142,13 +158,22 @@ ion-content {
   gap: 0.75rem;
 }
 
-.settings-background-image img {
+.settings-background-image__preview {
+  aspect-ratio: 9 / 16;
   border: 1px solid var(--rr-border);
   border-radius: var(--rr-radius-control);
   display: block;
-  height: 9rem;
-  object-fit: cover;
-  width: 100%;
+  background-repeat: no-repeat;
+  background-size: cover;
+  cursor: grab;
+  height: auto;
+  touch-action: none;
+  margin-inline: auto;
+  width: min(100%, 14rem);
+}
+
+.settings-background-image__preview:active {
+  cursor: grabbing;
 }
 
 .settings-background-image__actions {
@@ -162,10 +187,8 @@ ion-content {
   margin: 0;
 }
 
-.settings-form__actions {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 1.5rem;
+.settings-secondary-action {
+  margin: 0.5rem 0 0 -0.75rem;
 }
 
 .settings-page--closing .settings-page__backdrop {

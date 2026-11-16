@@ -33,7 +33,7 @@
 }
 
 .collapsed-card__summary ion-icon {
-  color: var(--rr-primary-dark);
+  color: var(--rr-accent-foreground);
   font-size: 1.25rem;
 }
 
@@ -60,9 +60,9 @@
 }
 
 .collapsed-card__actions ion-button {
-  --border-color: var(--rr-primary);
+  --border-color: var(--ion-color-primary);
   --border-radius: var(--rr-radius-control);
-  --color: var(--rr-primary-dark);
+  --color: var(--rr-accent-foreground);
   font-size: 0.8125rem;
   font-weight: 800;
   margin: 0;

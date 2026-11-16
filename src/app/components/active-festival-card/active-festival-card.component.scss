@@ -43,7 +43,6 @@
 .active-festival-card__heading p {
   font-size: 0.75rem;
   margin: 0;
-  opacity: 0.85;
 }
 
 .active-festival-card__festival h2 {
@@ -56,7 +55,6 @@
 .active-festival-card__location {
   margin-bottom: 1rem;
   margin-top: 0;
-  opacity: 0.85;
 }
 
 .active-festival-card__title {
@@ -99,12 +97,12 @@
 }
 
 .active-festival-card__set:focus-visible {
-  outline: 2px solid var(--rr-primary-dark);
+  outline: 2px solid var(--rr-accent-foreground);
   outline-offset: -2px;
 }
 
 .active-festival-card__set > p {
-  color: var(--rr-primary-dark);
+  color: var(--rr-accent-foreground);
   margin: 0 0 0.5rem;
 }
 
@@ -116,7 +114,7 @@
 }
 
 .active-festival-card__set strong ion-icon {
-  color: var(--rr-primary-dark);
+  color: var(--rr-accent-foreground);
   margin-left: 0.25rem;
   vertical-align: -0.1em;
 }
@@ -133,7 +131,7 @@
 
 .active-festival-card__set small {
   align-items: center;
-  color: var(--rr-primary-dark);
+  color: var(--rr-accent-foreground);
   display: inline-flex;
   font-weight: 800;
   gap: 0.25rem;
