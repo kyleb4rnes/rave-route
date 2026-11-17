@@ -4,7 +4,7 @@ import {
   output,
   ChangeDetectionStrategy,
 } from '@angular/core';
-import { IonIcon } from '@ionic/angular/standalone';
+import { IonIcon } from '@ionic/angular/ion-icon';
 import { addIcons } from 'ionicons';
 import { heart } from 'ionicons/icons';
 

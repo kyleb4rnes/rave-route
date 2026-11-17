@@ -10,8 +10,12 @@
       <button class="onboarding__skip" type="button" (click)="skip()">Skip intro</button>
     </div>
 
-    <div class="onboarding__video-shell">
-      <video [attr.aria-label]="currentStep().videoLabel" [autoplay]="!prefersReducedMotion" [poster]="currentStep().posterSrc" [src]="currentStep().videoSrc" loop muted playsinline preload="auto"></video>
+    <div class="onboarding__video-shell" (pointerdown)="enableMedia()">
+      @if (mediaEnabled()) {
+        <video [attr.aria-label]="currentStep().videoLabel" autoplay [poster]="currentStep().posterSrc" [src]="currentStep().videoSrc" loop muted playsinline preload="none"></video>
+      } @else {
+        <img [src]="currentStep().posterSrc" alt="" fetchpriority="high" />
+      }
     </div>
 
     <div class="onboarding__copy">

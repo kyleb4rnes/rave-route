@@ -4,7 +4,8 @@ import {
   output,
   ChangeDetectionStrategy,
 } from '@angular/core';
-import { IonButton, IonIcon } from '@ionic/angular/standalone';
+import { IonButton } from '@ionic/angular/ion-button';
+import { IonIcon } from '@ionic/angular/ion-icon';
 import { addIcons } from 'ionicons';
 import { chevronDown, chevronForward } from 'ionicons/icons';
 

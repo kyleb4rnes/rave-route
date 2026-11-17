@@ -1,10 +1,11 @@
-import { provideZoneChangeDetection, isDevMode } from '@angular/core';
+import { provideZonelessChangeDetection, isDevMode } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
-import { RouteReuseStrategy, provideRouter } from '@angular/router';
 import {
-  IonicRouteStrategy,
-  provideIonicAngular,
-} from '@ionic/angular/standalone';
+  RouteReuseStrategy,
+  provideRouter,
+  withDisabledInitialNavigation,
+} from '@angular/router';
+import { IonicRouteStrategy } from '@ionic/angular/ionic-route-strategy';
 
 import { AppComponent } from './app/app.component';
 import { routes } from './app/app.routes';
@@ -14,11 +15,10 @@ import { provideServiceWorker } from '@angular/service-worker';
 
 bootstrapApplication(AppComponent, {
   providers: [
-    provideZoneChangeDetection(),
+    provideZonelessChangeDetection(),
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     { provide: FESTIVAL_REPOSITORY, useClass: LocalStorageFestivalRepository },
-    provideIonicAngular({ animated: false }),
-    provideRouter(routes),
+    provideRouter(routes, withDisabledInitialNavigation()),
     provideServiceWorker('ngsw-worker.js', {
       enabled: !isDevMode(),
       registrationStrategy: 'registerWhenStable:30000',

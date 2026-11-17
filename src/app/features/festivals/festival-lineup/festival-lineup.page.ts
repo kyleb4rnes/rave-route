@@ -7,16 +7,14 @@ import {
   ChangeDetectionStrategy,
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ActionSheetController } from '@ionic/angular';
-import {
-  IonButton,
-  IonContent,
-  IonIcon,
-  IonLabel,
-  IonNote,
-  IonSegment,
-  IonSegmentButton,
-} from '@ionic/angular/standalone';
+import { ActionSheetController } from '@ionic/angular/action-sheet-controller';
+import { IonButton } from '@ionic/angular/ion-button';
+import { IonContent } from '@ionic/angular/ion-content';
+import { IonIcon } from '@ionic/angular/ion-icon';
+import { IonLabel } from '@ionic/angular/ion-label';
+import { IonNote } from '@ionic/angular/ion-note';
+import { IonSegment } from '@ionic/angular/ion-segment';
+import { IonSegmentButton } from '@ionic/angular/ion-segment-button';
 import { addIcons } from 'ionicons';
 import {
   heart,

@@ -32,9 +32,9 @@ See [product specification](docs/product-specification.md) for the current scope
 
 Run `npm run timetable-lol:sync` to fetch Timetable.lol's public events and planner-data API endpoints and generate the compact bundled catalogue used by the community import flow. Only live events with importable timed sets are included; the script reports skipped events and malformed rows for review before committing. The app visibly attributes imported catalogue data as “Data provided by Timetable.lol”.
 
-`src/assets/timetables/timetable-lol-catalogue.json` is the single source of truth. When it changes, commit and push it to `main`: Cloudflare Pages automatically publishes it at `https://rave-route-catalogue.pages.dev/timetable-lol-catalogue.json`, while the same file remains bundled in the next Android/web build.
+`src/assets/timetables/timetable-lol-catalogue.json` is the single source of truth. When it changes, commit and push it to `main`: the production loader reads the file from `raw.githubusercontent.com/kyleb4rnes/rave-route/main`, while the same file remains bundled in the next Android/web build.
 
-Production builds request the Pages copy first and automatically fall back to the bundled copy for offline use, network/HTTP failures, or an invalid hosted catalogue. This keeps catalogue updates independent of app-store releases without making the app dependent on the network. After pushing a catalogue change, confirm the Pages deployment succeeds and that the public URL serves the expected JSON. Use `[skip pages]` in an unrelated commit message when a Pages deployment should be skipped.
+Production builds request the raw repository copy first and automatically fall back to the service-worker-cached bundled copy for offline use, timeouts, network/HTTP failures, or an invalid hosted catalogue. This keeps catalogue updates independent of app-store releases without making the app dependent on the network. After pushing a catalogue change, confirm the public raw URL serves the expected JSON.
 
 ## Technical direction
 

@@ -6,14 +6,12 @@ import {
   ChangeDetectionStrategy,
 } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import {
-  IonButton,
-  IonContent,
-  IonInput,
-  IonItem,
-  IonSelect,
-  IonSelectOption,
-} from '@ionic/angular/standalone';
+import { IonButton } from '@ionic/angular/ion-button';
+import { IonContent } from '@ionic/angular/ion-content';
+import { IonInput } from '@ionic/angular/ion-input';
+import { IonItem } from '@ionic/angular/ion-item';
+import { IonSelect } from '@ionic/angular/ion-select';
+import { IonSelectOption } from '@ionic/angular/ion-select-option';
 
 import { AppHeaderComponent } from '../../../components/app-header/app-header.component';
 import { FestivalBudgetService } from '../../../core/festivals/festival-budget.service';

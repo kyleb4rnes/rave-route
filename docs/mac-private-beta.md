@@ -235,7 +235,7 @@ Use the smallest session that matches the change:
 | Change | Mac required? | Mac work |
 | --- | --- | --- |
 | Angular/Ionic UI or business logic | No, unless releasing iOS | Windows verification; later Mac sync/archive |
-| Catalogue JSON or hosted catalogue | No | Windows/CI and Cloudflare Pages |
+| Catalogue JSON or hosted catalogue | No | Windows/CI and raw GitHub hosting |
 | Dependency update with no native plugin change | Only to release iOS | Pull, `npm ci`, sync, smoke-test, archive |
 | Capacitor/plugin update | Yes | Sync, inspect native changes, test on iPhone, archive |
 | iOS permission/capability | Yes | Xcode project settings, privacy text, real-device test |
@@ -247,4 +247,4 @@ If the MacBook is too slow or its Xcode is too old to upload, use it for the rea
 
 ## What does not need the Mac
 
-Angular/Ionic development, browser testing, unit tests, linting, production builds, Playwright checks, catalogue refreshes, Cloudflare Pages publishing, and Android development can continue on Windows.
+Angular/Ionic development, browser testing, unit tests, linting, production builds, Playwright checks, catalogue refreshes, hosted-catalogue verification, and Android development can continue on Windows.

@@ -4,15 +4,13 @@ import {
   output,
   ChangeDetectionStrategy,
 } from '@angular/core';
-import {
-  IonCard,
-  IonCardContent,
-  IonCardHeader,
-  IonCardTitle,
-  IonButton,
-  IonChip,
-  IonLabel,
-} from '@ionic/angular/standalone';
+import { IonCard } from '@ionic/angular/ion-card';
+import { IonCardContent } from '@ionic/angular/ion-card-content';
+import { IonCardHeader } from '@ionic/angular/ion-card-header';
+import { IonCardTitle } from '@ionic/angular/ion-card-title';
+import { IonButton } from '@ionic/angular/ion-button';
+import { IonChip } from '@ionic/angular/ion-chip';
+import { IonLabel } from '@ionic/angular/ion-label';
 import { FestivalImageComponent } from '../festival-image/festival-image.component';
 
 @Component({

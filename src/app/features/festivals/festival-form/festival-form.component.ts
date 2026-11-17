@@ -16,16 +16,14 @@ import {
   ValidatorFn,
   Validators,
 } from '@angular/forms';
-import {
-  IonButton,
-  IonDatetime,
-  IonInput,
-  IonItem,
-  IonList,
-  IonModal,
-  IonNote,
-  IonToggle,
-} from '@ionic/angular/standalone';
+import { IonButton } from '@ionic/angular/ion-button';
+import { IonDatetime } from '@ionic/angular/ion-datetime';
+import { IonInput } from '@ionic/angular/ion-input';
+import { IonItem } from '@ionic/angular/ion-item';
+import { IonList } from '@ionic/angular/ion-list';
+import { IonModal } from '@ionic/angular/ion-modal';
+import { IonNote } from '@ionic/angular/ion-note';
+import { IonToggle } from '@ionic/angular/ion-toggle';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 
 import { FestivalDraft } from '../../../core/festivals/models/festival-draft';

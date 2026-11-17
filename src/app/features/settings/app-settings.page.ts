@@ -6,7 +6,9 @@ import {
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { IonButton, IonContent, IonNote } from '@ionic/angular/standalone';
+import { IonButton } from '@ionic/angular/ion-button';
+import { IonContent } from '@ionic/angular/ion-content';
+import { IonNote } from '@ionic/angular/ion-note';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { AppHeaderComponent } from '../../components/app-header/app-header.component';
 import { AppSettingsStore } from '../../core/settings/app-settings.store';

@@ -31,7 +31,7 @@ The staged execution path for these checks is documented in [Public-release exec
 - [x] Store selected images as private Capacitor Filesystem files rather than base64 data in browser local storage.
 - [ ] Test image retention through app upgrades, reinstalls, and storage-pressure scenarios.
 - [x] Establish Android versioning: version name `0.1.0`, version code `1`, and environment-based release signing configuration.
-- [x] Choose Cloudflare Pages for the hosted catalogue URL: `https://rave-route-catalogue.pages.dev/timetable-lol-catalogue.json`.
+- [x] Configure the hosted catalogue URL: `https://raw.githubusercontent.com/kyleb4rnes/rave-route/main/src/assets/timetables/timetable-lol-catalogue.json`.
 - [x] Configure `environment.timetableLolCatalogue.remoteUrl` for production builds.
 - [ ] Verify online hosted-catalogue loading and bundled fallback behaviour in a native build.
 - [ ] Create the protected upload keystore and generate the signed Android App Bundle.

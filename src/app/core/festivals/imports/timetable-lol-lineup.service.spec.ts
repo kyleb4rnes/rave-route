@@ -138,7 +138,10 @@ describe('TimetableLolLineupService', () => {
 
     await new TimetableLolLineupService().loadPresets();
 
-    expect(window.fetch).toHaveBeenCalledOnceWith(environment.timetableLolCatalogue.remoteUrl);
+    expect(window.fetch).toHaveBeenCalledOnceWith(
+      environment.timetableLolCatalogue.remoteUrl,
+      jasmine.objectContaining({ signal: jasmine.any(AbortSignal) }),
+    );
   });
 
   it('falls back to the bundled catalogue when the configured remote catalogue cannot be loaded', async () => {
@@ -150,8 +153,49 @@ describe('TimetableLolLineupService', () => {
 
     const presets = await new TimetableLolLineupService().loadPresets();
 
-    expect(window.fetch).toHaveBeenCalledWith(environment.timetableLolCatalogue.remoteUrl);
+    expect(window.fetch).toHaveBeenCalledWith(
+      environment.timetableLolCatalogue.remoteUrl,
+      jasmine.objectContaining({ signal: jasmine.any(AbortSignal) }),
+    );
     expect(window.fetch).toHaveBeenCalledWith(environment.timetableLolCatalogue.bundledUrl);
     expect(presets[0].eventSlug).toBe('api-festival-2026');
+  });
+
+  it('falls back when the remote catalogue contains invalid data', async () => {
+    environment.timetableLolCatalogue.remoteUrl = 'https://catalogue.raveroute.app/timetables/timetable-lol-catalogue.json';
+    (window.fetch as jasmine.Spy).and.returnValues(
+      Promise.resolve(new Response(JSON.stringify({ events: [{ title: 'Invalid' }] }), { status: 200 })),
+      Promise.resolve(new Response(JSON.stringify(catalogueFixture), { status: 200 })),
+    );
+
+    const presets = await new TimetableLolLineupService().loadPresets();
+
+    expect(window.fetch).toHaveBeenCalledWith(environment.timetableLolCatalogue.bundledUrl);
+    expect(presets[0].eventSlug).toBe('api-festival-2026');
+  });
+
+  it('bounds the remote wait before loading the bundled catalogue', async () => {
+    jasmine.clock().install();
+    environment.timetableLolCatalogue.remoteUrl = 'https://catalogue.raveroute.app/timetables/timetable-lol-catalogue.json';
+    (window.fetch as jasmine.Spy).and.callFake((input: RequestInfo | URL, init?: RequestInit) => {
+      if (input === environment.timetableLolCatalogue.remoteUrl) {
+        return new Promise<Response>((_resolve, reject) => {
+          init?.signal?.addEventListener('abort', () => reject(new DOMException('Aborted', 'AbortError')));
+        });
+      }
+
+      return Promise.resolve(new Response(JSON.stringify(catalogueFixture), { status: 200 }));
+    });
+
+    try {
+      const presetsPromise = new TimetableLolLineupService().loadPresets();
+
+      jasmine.clock().tick(1_500);
+
+      await expectAsync(presetsPromise).toBeResolved();
+      expect(window.fetch).toHaveBeenCalledWith(environment.timetableLolCatalogue.bundledUrl);
+    } finally {
+      jasmine.clock().uninstall();
+    }
   });
 });

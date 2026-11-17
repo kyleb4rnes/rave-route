@@ -8,14 +8,12 @@ import {
   ChangeDetectionStrategy,
 } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import {
-  IonAlert,
-  IonButton,
-  IonContent,
-  IonIcon,
-  IonNote,
-  IonToggle,
-} from '@ionic/angular/standalone';
+import { IonAlert } from '@ionic/angular/ion-alert';
+import { IonButton } from '@ionic/angular/ion-button';
+import { IonContent } from '@ionic/angular/ion-content';
+import { IonIcon } from '@ionic/angular/ion-icon';
+import { IonNote } from '@ionic/angular/ion-note';
+import { IonToggle } from '@ionic/angular/ion-toggle';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { addIcons } from 'ionicons';
 import { cameraOutline } from 'ionicons/icons';

@@ -111,7 +111,7 @@ The dated [roadmap to public release](docs/roadmap-to-public-release.md) is the 
 
 ### Recommended next work, in priority order
 
-1. **Catalogue refresh operations** - use `src/assets/timetables/timetable-lol-catalogue.json` as the single source of truth; review scheduled Timetable.lol refreshes, validate location and ticket metadata, push approved JSON to `main`, and verify Cloudflare Pages publishes it at the configured URL. Keep the bundled copy current for offline use.
+1. **Catalogue refresh operations** - use `src/assets/timetables/timetable-lol-catalogue.json` as the single source of truth; review scheduled Timetable.lol refreshes, validate location and ticket metadata, push approved JSON to `main`, and verify the configured raw GitHub URL serves it. Keep the bundled copy current for offline use.
 2. **Manual device and UX regression pass** - verify the latest Help/Settings overlay behaviour, catalogue-first Add Festival flow, festival ordering, sticky browse controls, packing removal, budget summaries, external ticket links, and hosted-catalogue fallback on a physical device or browser-sized viewport.
 3. **iPhone web-app refinement** - use Safari/PWA testing to capture small UI improvements, including the white fade at the top of the app, and address web-compatible issues as they are found.
 4. **Public-release hardening** - work through the release checklist: dependency/security findings, Android signing and store packaging, iOS readiness, image-storage resilience, privacy/support materials, and physical-device coverage.

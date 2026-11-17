@@ -17,6 +17,16 @@
       }
     },
     {
+      "name": "catalogue",
+      "installMode": "prefetch",
+      "updateMode": "prefetch",
+      "resources": {
+        "files": [
+          "/assets/timetables/timetable-lol-catalogue.json"
+        ]
+      }
+    },
+    {
       "name": "assets",
       "installMode": "lazy",
       "updateMode": "prefetch",
