@@ -10,30 +10,32 @@
 
     <div class="festival-browse__controls">
       <div class="festival-browse__search-row">
-        <ion-searchbar
-          aria-label="Search festival catalogue"
-          debounce="150"
-          placeholder="Search festivals or a year"
-          (ionInput)="updateSearchTerm($event.detail.value)"
-        ></ion-searchbar>
-        <ion-button
-          class="festival-browse__filter-toggle"
-          fill="clear"
-          type="button"
-          aria-label="Show festival filters"
-          aria-controls="festival-filters"
-          [attr.aria-expanded]="showFilters()"
-          (click)="toggleFilters()"
-        >
-          <ion-icon aria-hidden="true" name="filter-outline"></ion-icon>
-          @if (activeFilterCount() > 0) {
-            <span class="festival-browse__filter-count" aria-label="Active filters">{{ activeFilterCount() }}</span>
-          }
-        </ion-button>
+        <div class="festival-browse__search-control">
+          <ion-searchbar
+            aria-label="Search festival catalogue"
+            debounce="150"
+            placeholder="Search festivals or a year"
+            (ionInput)="updateSearchTerm($event.detail.value)"
+          ></ion-searchbar>
+          <ion-button
+            class="festival-browse__filter-toggle"
+            fill="clear"
+            type="button"
+            aria-label="Show festival filters"
+            aria-controls="festival-filters"
+            [attr.aria-expanded]="showFilters()"
+            (click)="toggleFilters()"
+          >
+            <ion-icon aria-hidden="true" name="filter-outline"></ion-icon>
+            @if (activeFilterCount() > 0) {
+              <span class="festival-browse__filter-count rr-motion-enter" aria-label="Active filters">{{ activeFilterCount() }}</span>
+            }
+          </ion-button>
+        </div>
       </div>
 
       @if (showFilters()) {
-        <section class="festival-browse__filters" id="festival-filters" aria-label="Festival filters">
+        <section class="festival-browse__filters rr-motion-enter" id="festival-filters" aria-label="Festival filters">
         <ion-item>
           <ion-label>Country</ion-label>
           <ion-select
@@ -135,7 +137,7 @@
 
     @if (isLoading()) {
       <div class="festival-browse__status" role="status">
-        <ion-spinner aria-label="Loading festivals"></ion-spinner>
+        <ion-spinner aria-hidden="true" [paused]="motion.reduced()"></ion-spinner>
         <span>Loading festivals…</span>
       </div>
     } @else if (error()) {

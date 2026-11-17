@@ -2,12 +2,16 @@ import {
   Component,
   computed,
   DestroyRef,
+  afterRenderEffect,
+  ElementRef,
   inject,
   input,
   signal,
+  viewChild,
   ChangeDetectionStrategy,
 } from '@angular/core';
 import { OnboardingStore } from '../../core/onboarding/onboarding.store';
+import { MotionPreference } from '../../core/motion/motion-preference';
 
 type OnboardingStep = {
   title: string;
@@ -31,8 +35,10 @@ export class OnboardingComponent {
   private readonly isChangingSignal = signal(false);
   private readonly isLeavingSignal = signal(false);
   private readonly mediaEnabledSignal = signal(false);
+  private readonly heading = viewChild<ElementRef<HTMLElement>>('stepHeading');
 
   readonly ready = input(false);
+  readonly motion = inject(MotionPreference);
 
   readonly steps: readonly OnboardingStep[] = [
     {
@@ -85,12 +91,17 @@ export class OnboardingComponent {
   constructor() {
     const mediaTimer = setTimeout(() => this.enableMedia(), 8000);
     this.destroyRef.onDestroy(() => clearTimeout(mediaTimer));
+    afterRenderEffect(() => {
+      this.stepIndex();
+      this.heading()?.nativeElement.focus({ preventScroll: true });
+    });
+    afterRenderEffect(() => {
+      if (this.ready()) this.enableMedia();
+    });
   }
 
   enableMedia(): void {
-    if (!this.prefersReducedMotion) {
-      this.mediaEnabledSignal.set(true);
-    }
+    this.mediaEnabledSignal.set(true);
   }
 
   next(): void {

@@ -140,8 +140,9 @@ test.describe('Rave Route journeys', () => {
 
     await expect(page.getByRole('heading', { name: 'App settings' })).toBeVisible();
     await page.getByRole('radio', { name: 'Dark' }).click();
-    await page.getByRole('button', { name: 'Save settings' }).click();
-    await expect(page).toHaveURL(/\/home$/);
+    await expect
+      .poll(() => page.evaluate(() => localStorage.getItem('rave-route.settings.v1')))
+      .toContain('"appearanceMode":"dark"');
   });
 
   test('reopens the welcome tour from Help and can skip it', async ({ page }) => {
@@ -156,13 +157,16 @@ test.describe('Rave Route journeys', () => {
   test('opens Help and Settings from the shared page controls', async ({ page }) => {
     await page.goto('/home');
 
-    await page.getByRole('button', { name: 'Open help' }).click();
+    await page.getByRole('button', { name: 'Open app menu' }).click();
+    await page.getByRole('menuitem', { name: 'Help' }).click();
     await expect(page).toHaveURL(/\/help$/);
-    await page.locator('app-header').last().getByRole('button', { name: 'Open app settings' }).click();
+    await page.locator('app-header').last().getByRole('button', { name: 'Open app menu' }).click();
+    await page.getByRole('menuitem', { name: 'Settings' }).click();
     await expect(page).toHaveURL(/\/settings$/);
     await expect(page.getByRole('heading', { name: 'App settings' })).toBeVisible();
 
-    await page.getByRole('button', { name: 'Close app settings' }).click();
+    await page.locator('app-settings').getByRole('button', { name: 'Open app menu' }).click();
+    await page.getByRole('menuitem', { name: 'Close settings' }).click();
     await expect(page).toHaveURL(/\/home$/);
   });
 

@@ -21,7 +21,6 @@ export class HelpPage {
   private readonly router = inject(Router);
   private readonly onboardingStore = inject(OnboardingStore);
 
-  readonly isClosing = signal(false);
   readonly expandedSection = signal<string | null>(null);
 
   toggleSection(section: string): void {
@@ -31,15 +30,10 @@ export class HelpPage {
   }
 
   closeHelp(): void {
-    if (this.isClosing()) {
-      return;
-    }
-
-    this.isClosing.set(true);
-    setTimeout(() => void this.router.navigate(['/home']), 650);
+    void this.router.navigate(['/home']);
   }
 
-  replayWelcome(): void {
-    this.onboardingStore.openReplay();
+  replayWelcome(event?: Event): void {
+    this.onboardingStore.openReplay(event?.currentTarget as HTMLElement | undefined);
   }
 }

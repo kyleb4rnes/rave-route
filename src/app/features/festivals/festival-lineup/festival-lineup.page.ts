@@ -1,3 +1,4 @@
+import { MotionPreference } from '../../../core/motion/motion-preference';
 import {
   Component,
   computed,
@@ -77,6 +78,7 @@ export class FestivalLineupPage {
   private readonly route = inject(ActivatedRoute);
   private readonly festivalStore = inject(FestivalStore);
   private readonly timetableService = inject(TimetableLolLineupService);
+  private readonly motion = inject(MotionPreference);
   private readonly actionSheetController = inject(ActionSheetController);
   private readonly shareService = inject(MustSeeShareService);
   private readonly festivalId =
@@ -249,7 +251,10 @@ export class FestivalLineupPage {
     }
   }
 
-  async toggleMustSee(set: FestivalSet): Promise<void> {
+  async toggleMustSee(set: FestivalSet, event: Event): Promise<void> {
+    const row = (event.currentTarget as HTMLElement).closest<HTMLElement>(
+      '.time-schedule__set, .stage-schedule__set'
+    );
     this.actionError.set(null);
 
     if (
@@ -260,6 +265,13 @@ export class FestivalLineupPage {
       ))
     ) {
       this.actionError.set('We could not update that set. Please try again.');
+      return;
+    }
+    if (row?.isConnected && !this.motion.reduced() && !set.isMustSee) {
+      row.animate([{ outlineColor: 'var(--rr-accent-foreground)' }, { outlineColor: 'transparent' }], {
+        duration: 240,
+        easing: 'ease-out',
+      });
     }
   }
 

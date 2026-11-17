@@ -14,8 +14,11 @@
       <ion-note color="danger" role="alert">Enter a location.</ion-note>
     }
 
-    <ion-item button detail="true" (click)="openDateRangePicker()">
-      <ion-input [value]="dateRangeLabel" label="Festival dates" labelPlacement="stacked" readonly></ion-input>
+    <ion-item button detail="true" aria-haspopup="dialog" [attr.aria-expanded]="isDateRangePickerOpen()" (click)="openDateRangePicker()">
+      <span class="festival-form__date">
+        <span class="festival-form__date-label">Festival dates</span>
+        {{ dateRangeLabel }}
+      </span>
     </ion-item>
     @if (isInvalid('startDate') || isInvalid('endDate')) {
       <ion-note color="danger" role="alert">Choose a festival start and end date.</ion-note>
@@ -51,11 +54,14 @@
 
   <div class="festival-form__actions">
     <ion-button class="festival-form__cancel" fill="clear" type="button" (click)="cancel()">Cancel</ion-button>
-    <ion-button class="rr-button" type="submit">{{ submitLabel() }}</ion-button>
+    <ion-button class="rr-button" type="submit" [disabled]="saving()">{{ saving() ? 'Saving…' : submitLabel() }}</ion-button>
   </div>
+  @if (saving()) {
+    <p class="ion-sr-only" role="status">Saving festival…</p>
+  }
 </form>
 
-<ion-modal class="festival-date-range-modal" [isOpen]="isDateRangePickerOpen()" (didDismiss)="cancelDateRangePicker()">
+<ion-modal class="festival-date-range-modal" aria-label="Festival dates" [isOpen]="isDateRangePickerOpen()" (didDismiss)="cancelDateRangePicker()">
   <ng-template>
     <div class="festival-date-range-picker">
       <div class="festival-date-range-picker__heading">

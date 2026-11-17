@@ -91,8 +91,14 @@ export class FestivalBudgetPage {
     this.amount.set(null);
   }
 
-  removeExpense(id: string): void {
+  removeExpense(id: string, event: Event): void {
+    const trigger = event.currentTarget as HTMLButtonElement;
+    const page = trigger.closest('main');
     this.budget.set(this.budgetService.removeItem(this.festivalId, id));
+    if (trigger.matches(':focus')) {
+      const fallback = page?.querySelector<HTMLElement>('#add-expense-button');
+      fallback?.shadowRoot?.querySelector<HTMLElement>('[part="native"]')?.focus({ preventScroll: true });
+    }
   }
 
   formatAmount(amount: number): string {

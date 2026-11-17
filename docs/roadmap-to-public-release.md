@@ -41,7 +41,7 @@ The release should provide:
 - A tested native iPhone build if the January MacBook access is sufficient.
 - Honest store/privacy/support material.
 
-Apple Watch support, iPad-specific work, accounts, cloud sync, social features, music, payments, and advanced travel features are not required for this first public release. Apple Watch and iPad work cannot begin until the Mac/native phase and should not threaten the March deadline.
+Apple Watch support, notification delivery, iPad-specific work, accounts, cloud sync, social features, music, payments, and advanced travel features are not required for the current PWA release. Notification work should be picked up during the Mac/native phase, once iOS permissions and background delivery can be tested properly, and should not threaten the March deadline.
 
 ## Phase 1 — Web/PWA development and iPhone Safari testing
 
@@ -135,7 +135,7 @@ This is the complete inventory of work currently deferred anywhere in the projec
 | 2 | **Music playback / Spotify research** | Licensing, authentication, platform rules, and offline expectations make it poor deadline work. | Research only; do not build for March. |
 | 3 | **Advanced travel planning** | Traveller origin, richer transport/accommodation provider links, optional flight suggestions, geocoding, maps, and navigation are useful later but not needed to plan a festival today. | Capture ideas; defer implementation. |
 | 4 | **Accounts, cloud sync, cloud image storage, and shared calendars** | The existing Supabase and shared-calendar proposals require data migration, recovery, permissions, deletion, offline reconciliation, invites, realtime behaviour, group comparison, meeting sets, custom-event publishing, and external calendar export. | Design/reference only; do not build before March. |
-| 5 | **Catalogue enhancements beyond reliability** | Automatic location enrichment, festival-style filters, extra import providers, bulk set-time paste/import, Must-see artist preferences, and set-time-change notifications all add value, but the current catalogue already supports the core journey. | Only take a small item if it directly fixes an observed user problem. |
+| 5 | **Catalogue enhancements beyond reliability** | Automatic location enrichment, festival-style filters, extra import providers, bulk set-time paste/import, Must-see artist preferences, and event-driven notifications all add value, but the current catalogue already supports the core journey. | Keep notification design in future work; implement after Mac/iOS access and a reliable event source are available. |
 | 6 | **Brand, theme, and first-run polish** | A fuller welcome flow, Light/Dark refinement, theme-aware icons, and a lighter/white logo treatment can improve perceived quality. | Do only the changes proven by Safari testing or needed for launch assets. |
 | 7 | **Onboarding review** | Copy, flow, and the current demonstration videos need real-iPhone feedback. Video recreation waits for the native runtime. | Review and specify now; recreate later in Phase 2. |
 | 8 | **Ongoing catalogue operations** | Timetable.lol refresh cadence, source/location/ticket/genre review, hosted JSON publication, and bundled fallback freshness protect the product’s usefulness. | Required operating work. |
@@ -151,13 +151,14 @@ This is the complete inventory of work currently deferred anywhere in the projec
 | 1 | **Apple Watch companion** | Requires a stable iOS foundation and a deliberate decision about the smallest useful watch job: next set, reminder, or another focused task. | Post-release; do not start before launch. |
 | 2 | **Expanded iPad experience** | iPad portrait/landscape support should be assessed on native hardware, but a full tablet redesign can consume the release window. | Test and fix shared release-critical layouts only. |
 | 3 | **Native theme-aware icon variants and branding exploration** | Platform-specific icon variants and a refined logo can improve polish once the native app exists. | Nice to have; finish only after core acceptance. |
-| 4 | **Native onboarding-video recreation** | The videos should be rebuilt once their actual native dimensions, playback behaviour, and launch handoff can be tested. | Complete if onboarding is retained for launch; otherwise preserve the current working media. |
-| 5 | **iPad acceptance pass** | Check safe areas, orientation, touch behaviour, standalone presentation, and responsive shared pages. | Required assessment; fixes are prioritised by user impact. |
-| 6 | **Android signed release path** | Complete signing, internal/closed testing, upgrade tests, Play listing, Data Safety, and required tester period where applicable. | Required if Android is included in the March public release. |
-| 7 | **Native iOS foundation** | Generate/sync the Capacitor iOS project, configure Xcode, signing, privacy text/manifest, app assets, photo/filesystem behaviour, and direct iPhone runs. | Required before any App Store release. |
-| 8 | **TestFlight and native resilience** | Validate fresh install, upgrade, relaunch, offline fallback, image persistence, links, permissions, accessibility, and crash-free core journeys. | Required before App Store submission. |
-| 9 | **Store and launch package** | Final screenshots, descriptions, categories, age ratings, privacy disclosures, support route, reviewer notes, signing backups, release notes, and go/no-go evidence. | Required for store publication. |
-| 10 | **Release hardening and publication** | Freeze scope, fix only blockers, repeat acceptance on PWA and signed candidates, submit stores, then monitor for 72 hours. | Highest Phase 2 priority; complete by 31 March. |
+| 4 | **Notification support** | Requires a reliable event source, user preferences, permission education, native delivery, background behaviour, deep links, and opt-out handling. | Pick up after Mac/iOS access is practical; target native public release if it can be validated without destabilising launch. |
+| 5 | **Native onboarding-video recreation** | The videos should be rebuilt once their actual native dimensions, playback behaviour, and launch handoff can be tested. | Complete if onboarding is retained for launch; otherwise preserve the current working media. |
+| 6 | **iPad acceptance pass** | Check safe areas, orientation, touch behaviour, standalone presentation, and responsive shared pages. | Required assessment; fixes are prioritised by user impact. |
+| 7 | **Android signed release path** | Complete signing, internal/closed testing, upgrade tests, Play listing, Data Safety, and required tester period where applicable. | Required if Android is included in the March public release. |
+| 8 | **Native iOS foundation** | Generate/sync the Capacitor iOS project, configure Xcode, signing, privacy text/manifest, app assets, photo/filesystem behaviour, and direct iPhone runs. | Required before any App Store release. |
+| 9 | **TestFlight and native resilience** | Validate fresh install, upgrade, relaunch, offline fallback, image persistence, links, permissions, accessibility, and crash-free core journeys. | Required before App Store submission. |
+| 10 | **Store and launch package** | Final screenshots, descriptions, categories, age ratings, privacy disclosures, support route, reviewer notes, signing backups, release notes, and go/no-go evidence. | Required for store publication. |
+| 11 | **Release hardening and publication** | Freeze scope, fix only blockers, repeat acceptance on PWA and signed candidates, submit stores, then monitor for 72 hours. | Highest Phase 2 priority; complete by 31 March. |
 
 ### Phase 3 — After the first public release
 

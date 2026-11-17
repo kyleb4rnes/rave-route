@@ -116,10 +116,11 @@ The dated [roadmap to public release](docs/roadmap-to-public-release.md) is the 
 3. **iPhone web-app refinement** - use Safari/PWA testing to capture small UI improvements, including the white fade at the top of the app, and address web-compatible issues as they are found.
 4. **Public-release hardening** - work through the release checklist: dependency/security findings, Android signing and store packaging, iOS readiness, image-storage resilience, privacy/support materials, and physical-device coverage.
 5. **Native Apple platform work** - when a personal MacBook is available, create and maintain the Capacitor iOS project, complete Xcode/device/TestFlight work, and assess iPad-specific layouts.
-6. **Apple Watch support** - investigate a companion experience after the iOS foundation is working; define the useful watch scope before committing to implementation.
-7. **Native onboarding media refresh** - recreate the onboarding videos when the native app experience is being built and the final device constraints are known.
-8. **First-run setup and onboarding** - design an initial welcome flow for new installs, including a short introduction and useful preferences without making setup feel mandatory or heavy.
-9. **Appearance refinement** - review whether accent colours and surfaces need clearer, mode-specific treatment in Light and Dark appearance settings, and generate an app icon variant that follows the selected colour theme where the platform permits it.
+6. **Notification support** - when Mac/iOS access is practical, design and implement permission-aware notifications for ticket releases, low ticket availability, set-time releases, lineup changes, and festival reminders. Connect this to a reviewed catalogue/backend event source before promising background updates.
+7. **Apple Watch support** - investigate a companion experience after the iOS foundation is working; define the useful watch scope before committing to implementation.
+8. **Native onboarding media refresh** - recreate the onboarding videos when the native app experience is being built and the final device constraints are known.
+9. **First-run setup and onboarding** - design an initial welcome flow for new installs, including a short introduction and useful preferences without making setup feel mandatory or heavy.
+10. **Appearance refinement** - review whether accent colours and surfaces need clearer, mode-specific treatment in Light and Dark appearance settings, and generate an app icon variant that follows the selected colour theme where the platform permits it.
 10. **Music playback** - investigate a royalty-free in-app option or a safe Spotify connection, including licensing, authentication, offline behaviour, and platform rules before choosing an implementation.
 11. **Travel planning refinement** - build on the current destination-aware Google Maps and Booking.com search shortcuts. Explore traveller-origin capture, relevant local services, and flight-search links to suitable providers without embedding bookings or payments.
 12. **Optional flight suggestions** - add a clear “Suggest flights” action that asks for the traveller's departure location only when they choose it, combines that with the festival location and dates, and opens a provider search with those details. Treat suggestions as search shortcuts, not personalised booking advice, and handle missing venue/airport data gracefully.
@@ -136,7 +137,7 @@ The dated [roadmap to public release](docs/roadmap-to-public-release.md) is the 
 
 - Bulk paste/import of set times.
 - Additional automatic import providers beyond the current Timetable.lol community catalogue.
-- Automatic background notifications when a saved catalogue festival publishes or changes its set times; the current device-only version provides an explicit check/update action instead.
+- Automatic background notifications when a saved catalogue festival releases tickets, approaches low availability, publishes or changes its set times, announces lineup changes, or approaches its festival date. Defer implementation until Mac/iOS access is practical and a reliable catalogue/backend event source is available; the current device-only version provides an explicit check/update action instead.
 - Timetable.lol refresh strategy: establish a refresh cadence and review process for the API-backed catalogue, including skipped-event review, hosted JSON publishing, bundled fallback updates, release timing, and failure handling.
 
 ## 11. Work to Complete Before First Public Release

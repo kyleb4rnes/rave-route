@@ -2,6 +2,7 @@ import {
   Component,
   computed,
   inject,
+  signal,
   ChangeDetectionStrategy,
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -29,6 +30,8 @@ export class FestivalEditPage {
   private readonly festivalId =
     this.route.snapshot.paramMap.get('festivalId') ?? '';
 
+  readonly saving = signal(false);
+  readonly error = signal<string | null>(null);
   readonly loading = this.festivalStore.loading;
   readonly festival = computed(() =>
     this.festivalStore.getFestivalById(this.festivalId)
@@ -40,13 +43,19 @@ export class FestivalEditPage {
   });
 
   async saveFestival(draft: FestivalDraft): Promise<void> {
-    const festival = await this.festivalStore.updateFestival(
-      this.festivalId,
-      draft
-    );
-
-    if (festival) {
-      await this.router.navigate(['/festivals', festival.id]);
+    if (this.saving()) return;
+    const origin = this.router.lastSuccessfulNavigation();
+    this.error.set(null);
+    this.saving.set(true);
+    try {
+      const festival = await this.festivalStore.updateFestival(this.festivalId, draft);
+      if (!festival) {
+        this.error.set('We could not save your festival changes. Please try again.');
+      } else if (this.router.lastSuccessfulNavigation() === origin && !this.router.currentNavigation()) {
+        await this.router.navigate(['/festivals', festival.id]);
+      }
+    } finally {
+      this.saving.set(false);
     }
   }
 

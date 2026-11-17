@@ -1,4 +1,4 @@
-<section class="onboarding" [class.onboarding--leaving]="isLeaving()" [class.onboarding--ready]="ready()" aria-labelledby="onboarding-title">
+<section class="onboarding" role="dialog" aria-modal="true" [attr.aria-label]="currentStep().title" aria-labelledby="onboarding-title">
   <div class="onboarding__glow" aria-hidden="true"></div>
   <div class="onboarding__content" [class.onboarding__content--changing]="isChanging()">
     <div class="onboarding__top-row">
@@ -12,7 +12,7 @@
 
     <div class="onboarding__video-shell" (pointerdown)="enableMedia()">
       @if (mediaEnabled()) {
-        <video [attr.aria-label]="currentStep().videoLabel" autoplay [poster]="currentStep().posterSrc" [src]="currentStep().videoSrc" loop muted playsinline preload="none"></video>
+        <video #demo [attr.aria-label]="currentStep().videoLabel" [autoplay]="!motion.reduced()" [poster]="currentStep().posterSrc" [src]="currentStep().videoSrc" controls muted playsinline preload="metadata"></video>
       } @else {
         <img [src]="currentStep().posterSrc" alt="" fetchpriority="high" />
       }
@@ -20,7 +20,7 @@
 
     <div class="onboarding__copy">
       <p>RAVE ROUTE</p>
-      <h1 id="onboarding-title">{{ currentStep().title }}</h1>
+      <h1 #stepHeading id="onboarding-title" tabindex="-1">{{ currentStep().title }}</h1>
       <span>{{ currentStep().description }}</span>
     </div>
 

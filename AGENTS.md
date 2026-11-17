@@ -1,0 +1,3 @@
+# Implementation plans
+
+Include a **Model choice** section in every implementation plan. Give a specific model name or ID, reasoning effort, and a one-line rationale. For focused changes, start with `gpt-5.6-luna` at low or medium effort when available. For broader engineering work, recommend `gpt-6.1-sol` at medium effort when available. Prefer another named model when the task warrants it. If you cannot verify access, still name the recommended model and qualify it with “if available.” Use one recommendation unless phases genuinely need different capabilities. This recommendation does not switch the active model.

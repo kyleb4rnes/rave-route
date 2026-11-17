@@ -14,7 +14,11 @@ Do not rent or configure a cloud Mac for routine development at this stage. Cont
 - Repository pushed to the commit that should be tested.
 - Secure storage for Apple credentials and recovery details; never put them in the repository.
 
-The first private test remains device-only: there are no accounts, cloud sync, backup, analytics, or push notifications. Tell testers that deleting the app can delete local festival plans and private images.
+The first private test remains device-only: there are no accounts, cloud sync, backup, analytics, or push notifications. Notification support is deliberately deferred until Mac/iOS access is practical and a reliable event source has been designed. Tell testers that deleting the app can delete local festival plans and private images.
+
+## Deferred notification work
+
+When the Mac/native phase begins, evaluate notification support as a separate feature stage. Cover ticket-release alerts, low-availability alerts, set-time and lineup updates, festival reminders, Settings preferences, permission education, notification deep links, background delivery, and opt-out behaviour. Do not request notification permission or add notification plugins to the current device-only beta before the event source and privacy copy are agreed.
 
 ## Minimum-Mac-use strategy
 

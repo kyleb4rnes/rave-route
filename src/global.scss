@@ -32,9 +32,8 @@
  * https://ionicframework.com/docs/theming/dark-mode
  */
 
-/* @import "@ionic/angular/css/palettes/dark.always.css"; */
-/* @import "@ionic/angular/css/palettes/dark.class.css"; */
-/* Appearance is controlled explicitly from App Settings, not by the device setting. */
+/* App Settings controls this class independently of the device setting. */
+@import "@ionic/angular/css/palettes/dark.class.css";
 
 :root {
   --ion-font-family: "Avenir Next", Avenir, "Segoe UI", sans-serif;
@@ -48,6 +47,8 @@ body {
 }
 
 body {
+  background: var(--rr-background);
+  color: var(--rr-text);
   font-family: var(--ion-font-family);
 }
 
@@ -72,6 +73,47 @@ ion-modal ion-content {
   --background: var(--rr-surface);
 }
 
+.ion-palette-dark :is(ion-modal, ion-popover) {
+  --background: var(--rr-surface);
+}
+
+.ion-palette-dark .festival-date-range-modal ion-datetime {
+  --background: var(--rr-surface);
+  --background-rgb: var(--rr-surface-rgb);
+  --wheel-fade-background-rgb: var(--rr-surface-rgb);
+  --ion-text-color-step-500: var(--rr-text-muted);
+  --ion-text-color-step-700: var(--rr-text-muted);
+}
+
+.ion-palette-dark ion-alert {
+  --ion-text-color-step-400: var(--rr-text-muted);
+  --ion-text-color-step-450: var(--rr-text-muted);
+  --ion-text-color-step-600: var(--rr-text-muted);
+}
+
+ion-action-sheet:is(.ios, .md) .action-sheet-title {
+  color: var(--rr-text-muted);
+}
+
+.ion-palette-dark :is(ion-input, ion-searchbar, ion-select) {
+  --placeholder-color: var(--rr-text-muted);
+}
+
+.ion-palette-dark :is(ion-input, ion-searchbar, ion-select):focus-within {
+  outline: 2px solid var(--rr-accent-foreground);
+  outline-offset: -2px;
+}
+
+.ion-palette-dark .rr-button::part(native):focus-visible {
+  outline: 2px solid var(--rr-primary-contrast);
+  outline-offset: -4px;
+}
+
+.ion-palette-dark :is(.alert-button, .alert-tappable, .action-sheet-button):focus-visible {
+  outline: 2px solid var(--rr-accent-foreground);
+  outline-offset: -3px;
+}
+
 .appearance-mode-picker {
   display: grid;
   gap: 0.625rem;
@@ -93,9 +135,9 @@ ion-modal ion-content {
 
 .appearance-mode-picker__option--selected {
   background: var(--rr-primary-soft);
-  border-color: var(--rr-primary);
-  box-shadow: 0 0 0 1px var(--rr-primary);
-  color: var(--rr-primary-dark);
+  border-color: var(--ion-color-primary);
+  box-shadow: 0 0 0 1px var(--ion-color-primary);
+  color: var(--rr-accent-foreground);
 }
 
 .past-festivals,
@@ -122,19 +164,75 @@ ion-modal ion-content {
 }
 
 .past-festivals__toggle span:last-child {
-  color: var(--rr-primary-dark);
+  color: var(--rr-accent-foreground);
   font-size: 1.5rem;
   font-weight: 400;
   line-height: 1;
+}
+
+:root {
+  --rr-motion-fast: 100ms;
+  --rr-motion-component: 160ms;
+  --rr-motion-launch: 300ms;
+  --rr-ease-enter: cubic-bezier(0.16, 1, 0.3, 1);
+  --rr-ease-exit: cubic-bezier(0.4, 0, 1, 1);
+}
+
+.rr-motion-enter {
+  animation: rr-enter var(--rr-motion-component) var(--rr-ease-enter) backwards;
+}
+
+.rr-tour-leave {
+  position: fixed;
+  inset: 0;
+  z-index: 10001;
+  pointer-events: none;
+  animation: rr-fade-out var(--rr-motion-fast) var(--rr-ease-exit) both;
+}
+
+.rr-menu-leave {
+  pointer-events: none;
+  animation: rr-fade-out var(--rr-motion-fast) var(--rr-ease-exit) both;
+}
+
+@keyframes rr-enter {
+  from { opacity: 0.65; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes rr-fade-out {
+  to { opacity: 0; }
+}
+
+@media (hover: hover) {
+  :is(.past-festivals__toggle, .collapsed-card__summary, .help-page__section-toggle, .app-header-menu button):hover {
+    background-color: var(--rr-primary-soft);
+  }
+}
+
+:is(.past-festivals__toggle, .appearance-mode-picker__option, .theme-colour-picker__option, .collapsed-card__summary, .help-page__section-toggle, .app-header-menu button) {
+  transition: background-color var(--rr-motion-fast) var(--rr-ease-enter),
+    border-color var(--rr-motion-fast) var(--rr-ease-enter);
+}
+
+:is(.past-festivals__toggle, .appearance-mode-picker__option, .theme-colour-picker__option, .collapsed-card__summary):focus-visible {
+  outline: 2px solid var(--rr-accent-foreground);
+  outline-offset: 2px;
+}
+
+:is(.past-festivals__toggle, .appearance-mode-picker__option, .theme-colour-picker__option, .collapsed-card__summary, .help-page__section-toggle):active {
+  background-color: var(--rr-primary-soft);
 }
 
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
   *::after {
+    animation-delay: 0ms !important;
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     scroll-behavior: auto !important;
+    transition-delay: 0ms !important;
     transition-duration: 0.01ms !important;
   }
 }

@@ -1,7 +1,7 @@
 <app-header title="Help" [interceptBack]="true" (backRequested)="closeHelp()"></app-header>
 
 <ion-content>
-  <main class="help-page" [class.help-page--closing]="isClosing()">
+  <main class="help-page">
     <div class="help-page__backdrop" aria-hidden="true"></div>
     <header class="help-page__hero">
       <p class="help-page__eyebrow">YOUR FESTIVAL COMPANION</p>
@@ -11,7 +11,7 @@
 
     <div class="help-page__sections">
       <section class="help-page__card" aria-labelledby="welcome-tour-title">
-        <button class="help-page__section-toggle" type="button" (click)="replayWelcome()">
+        <button class="help-page__section-toggle" type="button" (click)="replayWelcome($event)">
           <span id="welcome-tour-title">Watch the welcome tour again</span>
           <span aria-hidden="true">›</span>
         </button>
@@ -24,7 +24,7 @@
         </button>
 
         @if (expandedSection() === 'getting-started') {
-        <div class="help-page__section-content" id="getting-started-content">
+        <div class="help-page__section-content rr-motion-enter" id="getting-started-content">
           <ol class="help-steps">
         <li>
           <span class="help-steps__number" aria-hidden="true">1</span>
@@ -58,7 +58,7 @@
           <span aria-hidden="true">{{ expandedSection() === 'festival-details' ? '−' : '+' }}</span>
         </button>
         @if (expandedSection() === 'festival-details') {
-        <div class="help-page__section-content" id="festival-details-content">
+        <div class="help-page__section-content rr-motion-enter" id="festival-details-content">
           <ul class="help-tips">
             <li>Use Plan ahead to compare tickets, transport, and accommodation for the festival location and dates.</li>
             <li>Prices are estimates or live provider searches. Confirm each item once it is arranged so the festival summary stays up to date.</li>
@@ -73,7 +73,7 @@
           <span aria-hidden="true">{{ expandedSection() === 'packing' ? '−' : '+' }}</span>
         </button>
         @if (expandedSection() === 'packing') {
-        <div class="help-page__section-content" id="packing-content">
+        <div class="help-page__section-content rr-motion-enter" id="packing-content">
           <p class="help-page__card-copy">Add the things you want to remember, tick them off as you pack, and remove anything you no longer need.</p>
         </div>
         }
@@ -85,7 +85,7 @@
           <span aria-hidden="true">{{ expandedSection() === 'budget' ? '−' : '+' }}</span>
         </button>
         @if (expandedSection() === 'budget') {
-        <div class="help-page__section-content" id="budget-content">
+        <div class="help-page__section-content rr-motion-enter" id="budget-content">
           <p class="help-page__card-copy">Set a total budget, choose a currency, and record expenses such as tickets, travel, stay, food, and drinks. The remaining budget updates as you go.</p>
         </div>
         }
@@ -97,7 +97,7 @@
           <span aria-hidden="true">{{ expandedSection() === 'data' ? '−' : '+' }}</span>
         </button>
         @if (expandedSection() === 'data') {
-        <div class="help-page__section-content" id="data-content">
+        <div class="help-page__section-content rr-motion-enter" id="data-content">
           <ul class="help-tips">
             <li>Catalogue festivals and timed line-ups come from <a href="https://timetable.lol" target="_blank" rel="noopener noreferrer">Timetable.lol</a>, with attribution shown wherever its data is used.</li>
             <li>The catalogue is refreshed through a scheduled sync and checked regularly so the latest published information can be added to the app.</li>
@@ -113,7 +113,7 @@
           <span aria-hidden="true">{{ expandedSection() === 'custom' ? '−' : '+' }}</span>
         </button>
         @if (expandedSection() === 'custom') {
-        <div class="help-page__section-content" id="custom-content">
+        <div class="help-page__section-content rr-motion-enter" id="custom-content">
           <p class="help-page__card-copy">Planning something that is not in the catalogue? Add a custom festival manually from the festival planner.</p>
         </div>
         }

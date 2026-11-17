@@ -20,5 +20,5 @@
   [style.--rr-primary-dark]="theme().primaryDark"
   [style.--rr-primary-soft]="theme().primarySoft"
 >
-  <ion-router-outlet></ion-router-outlet>
+  <ion-router-outlet [inert]="onboardingOpen()"></ion-router-outlet>
 </ion-app>

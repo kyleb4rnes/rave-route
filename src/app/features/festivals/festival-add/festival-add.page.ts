@@ -1,3 +1,4 @@
+import { MotionPreference } from '../../../core/motion/motion-preference';
 import {
   Component,
   DestroyRef,
@@ -47,6 +48,8 @@ export class FestivalAddPage {
   private readonly timetableService = inject(TimetableLolLineupService);
 
   readonly selectedPreset = signal<TimetableLolPreset | null>(null);
+  readonly motion = inject(MotionPreference);
+  readonly isLoading = signal(true);
   readonly isAdding = signal(false);
   readonly error = signal<string | null>(null);
   private selectedEventSlug: string | null = null;
@@ -81,6 +84,7 @@ export class FestivalAddPage {
       return;
     }
 
+    const origin = this.router.lastSuccessfulNavigation();
     this.isAdding.set(true);
     this.error.set(null);
 
@@ -96,7 +100,9 @@ export class FestivalAddPage {
         return;
       }
 
-      await this.router.navigate(['/festivals', festival.id]);
+      if (this.router.lastSuccessfulNavigation() === origin && !this.router.currentNavigation()) {
+        await this.router.navigate(['/festivals', festival.id]);
+      }
     } catch {
       this.error.set('We could not load that festival. Please try again.');
     } finally {
@@ -135,11 +141,15 @@ export class FestivalAddPage {
       );
       if (selectedPreset) {
         this.selectedPreset.set(selectedPreset);
+      } else {
+        this.error.set('This festival is no longer in the catalogue.');
       }
     } catch {
       this.error.set(
         'We could not load the festival catalogue. Please try again.'
       );
+    } finally {
+      this.isLoading.set(false);
     }
   }
 }

@@ -101,6 +101,16 @@
 
 - At the end of each future development session, append a brief dated bullet list describing that session’s completed work, decisions, and verification.
 
+## 2026-11-16 — Reactive appearance and navigation
+
+- Made theme colour, Light/Dark appearance, and background-image changes apply and persist immediately; the Settings page no longer has a Save button.
+- Added an in-place background focal-point preview with horizontal and vertical controls. The selected position is stored alongside the private local image reference and is applied across the app.
+- Consolidated Help and Settings into an accessible expandable app menu in the shared header, leaving room for future header actions.
+- Added persistence coverage for immediate appearance updates and background focal points; updated the Playwright navigation checks for the menu interaction.
+- Added a Reset appearance action that restores the default red/light theme without removing the selected background photo.
+- Product decisions recorded for the next planning stage: support Dutch, French, Spanish, German, Danish, Norwegian, Swedish, Polish, Russian, and Albanian after English; include notifications before public release; reserve a future Account item in the header menu once account functionality exists.
+- Clarified that notification support belongs in future work for the Mac/native phase: it should be picked up when iOS permissions and background delivery can be tested, with a reliable catalogue/backend event source, rather than added to the current device-only beta.
+
 ## 2026-07-25 — Device refinement and future roadmap
 
 - Replaced separate start/end controls with one two-step festival date-range calendar.
@@ -191,14 +201,5 @@
 - 2026-11-08: Planned a device-local Must-see sharing feature: the Line-up page will share only hearted sets as a plain-text itinerary, with copy fallback and a later one-way `.ics` calendar-file export. The proposal explicitly excludes accounts, links, sync, group calendars, and non-line-up personal data; implementation has not started.
 - 2026-11-08: Implemented Must-see sharing from the Line-up page. Added chronological plain-text export, clipboard fallback, browser `.ics` download, native Capacitor file sharing, safe iCalendar escaping and overnight handling, the `@capacitor/share` dependency, and focused export tests. Lint, all 62 unit tests, and the production build passed; native sync remains to be checked on the Android project.
 - 2026-11-08: Refined the physical-device festival workflow: Browse now limits optional history to the preceding 12 months and reveals its subdued control only while scrolling up; Add Festival is reduced to a clear title and an information-rich ready-to-add card; packing keeps keyboard focus after each custom item; and Expenses now uses the same padded, rounded card treatment as the rest of the Budget page. Removed the global Ionic lift-and-fade route transition after device testing identified its flash/jump between ordinary pages.
-## 2026-11-16 — Motion follow-up
-
-- Recorded a future MacBook and physical-iPhone review for the motion pass, covering Settings and Help transitions, route changes, launch and onboarding handoffs, overlays, reduced motion, and the empty-state border and location-pointer animations.
-
-## 2026-11-17 — Performance and offline audit
-
-- Restored clean Ionic 9 production builds by replacing the removed `@ionic/angular/standalone` barrel with validated component-level imports, adopted zoneless Angular change detection, deferred Ionic initialization, routing, and the themed application shell until onboarding completes, and removed the fixed launch-screen delay.
-- Corrected the hosted Timetable.lol catalogue URL to the repository's public raw JSON, added a 1.5-second remote timeout plus bundled fallback coverage, and explicitly prefetched the bundled catalogue through Angular's service worker. A clean offline profile remained controlled and rendered all 23 Browse rows from cache.
-- Regenerated every declared PWA icon at its actual manifest size, added responsive WebP onboarding posters, prioritized the first poster, and moved demo-video loading off the critical path until engagement or an eight-second fallback.
-- Across three cold Lighthouse 13.6 mobile runs, the median performance score improved from 58 to 82, median LCP from 4.22 seconds to 2.08 seconds, and transferred bytes from 1.94 MB to 137 KB; CLS remained 0. The 100 target was not reached because simulated mobile CPU TBT remained 547–781 ms.
-- Verified lint, all 65 unit tests, all 13 Playwright journeys, the production build, zero production dependency vulnerabilities, first/returning/reduced-motion startup behavior, and offline service-worker catalogue rendering.
+- 2026-11-16: Audited Light and Dark across all routes. Applied the saved appearance to the document and Ionic overlay palette, separated readable accents from brand fills, and corrected calendar, form, photo-overlay, and menu states. Added desktop and mobile Playwright coverage for appearance persistence, overlays, and keyboard interaction. Verified the production PWA retains Dark during an offline reload.
+- 2026-11-17: Resolved PR #84's merge conflicts while retaining the cold-start, offline-catalogue, optimized-icon, and deferred-onboarding work. Reconciled the newer theme, language, background-position, focus, and reduced-motion changes. Production build and lint passed; all 25 Playwright journeys passed and all 71 unit specs executed successfully in Edge (Karma's Chrome launcher itself still reports a local browser-start warning before the configured Edge fallback connects).

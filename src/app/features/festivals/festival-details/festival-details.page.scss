@@ -54,7 +54,7 @@ ion-content {
 }
 
 .festival-details__image-actions button:first-child {
-  color: var(--rr-primary-dark);
+  color: var(--rr-accent-foreground);
   font-size: 1.2rem;
   justify-content: center;
   min-width: 2.25rem;
@@ -73,7 +73,7 @@ ion-content {
 }
 
 .festival-details__eyebrow {
-  color: var(--rr-primary-dark);
+  color: var(--rr-accent-foreground);
   font-size: 0.75rem;
   font-weight: 800;
   letter-spacing: 0.1em;
@@ -81,7 +81,7 @@ ion-content {
 }
 
 .festival-details__countdown {
-  color: var(--rr-primary-dark);
+  color: var(--rr-accent-foreground);
   font-weight: 800;
   margin: 0.75rem 0 0;
 }
@@ -180,7 +180,7 @@ ion-content {
 .festival-details__plan-pill.is-arranged {
   background: var(--rr-primary-soft);
   border-color: color-mix(in srgb, var(--rr-primary) 35%, var(--rr-border));
-  color: var(--rr-primary-dark);
+  color: var(--rr-accent-foreground);
 }
 
 .festival-details__plan-estimate,
@@ -221,7 +221,7 @@ ion-content {
 
 .festival-details__plan-link--secondary {
   background: transparent;
-  color: var(--rr-primary-dark);
+  color: var(--rr-accent-foreground);
 }
 
 .festival-details__plan-item ion-toggle {
@@ -373,7 +373,7 @@ ion-content {
 }
 
 .festival-details__photo-option ion-icon {
-  color: var(--rr-primary);
+  color: var(--ion-color-primary);
   flex: 0 0 auto;
   font-size: 1.4rem;
 }

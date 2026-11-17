@@ -6,9 +6,12 @@ const storageKey = 'rave-route.onboarding.v1';
 export class OnboardingStore {
   private readonly openSignal = signal(!this.hasCompletedOnboarding());
 
+  replayTrigger?: HTMLElement;
+
   readonly isOpen = this.openSignal.asReadonly();
 
-  openReplay(): void {
+  openReplay(trigger?: HTMLElement): void {
+    this.replayTrigger = trigger;
     this.openSignal.set(true);
   }
 

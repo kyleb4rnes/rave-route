@@ -34,7 +34,7 @@ export const appearancePalettes: Record<AppearanceMode, AppearancePalette> = {
   },
 };
 
-export const appearanceModeOptions = Object.entries(appearancePalettes).map(([id, palette]) => ({
-  id: id as AppearanceMode,
-  ...palette,
-}));
+export const appearanceModeOptions: readonly { id: AppearanceMode }[] = [
+  { id: 'light' },
+  { id: 'dark' },
+];
