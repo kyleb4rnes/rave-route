@@ -5,14 +5,23 @@
   @if (onboardingOpen()) {
     <app-onboarding [ready]="true"></app-onboarding>
   }
-} @else if (onboardingOpen()) {
-  <app-onboarding [ready]="false"></app-onboarding>
-} @else {
-  <section class="launch-screen" aria-label="Loading Rave Route" aria-live="polite" role="status">
+}
+
+@if (!onboardingOpen() && (!applicationStarted() || launchState() !== 'complete')) {
+  <section
+    class="launch-screen"
+    [class.launch-screen--leaving]="launchState() === 'leaving'"
+    [style.--launch-colour]="theme().primary"
+    aria-label="Loading Rave Route"
+    aria-live="polite"
+    role="status"
+  >
     <div class="launch-screen__backdrop" aria-hidden="true"></div>
     <div class="launch-screen__content">
-      <img class="launch-screen__logo" src="assets/brand/rave-route-logo-red-light.svg" alt="Rave Route" />
-      <span class="launch-screen__spinner" aria-hidden="true"></span>
+      <app-rave-route-logo variant="launch"></app-rave-route-logo>
+      <span class="launch-screen__spinner" aria-label="Loading your festival route" role="img"></span>
     </div>
   </section>
+} @else if (!applicationStarted() && onboardingOpen()) {
+  <app-onboarding [ready]="false"></app-onboarding>
 }
