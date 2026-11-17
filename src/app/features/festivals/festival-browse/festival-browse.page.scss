@@ -45,6 +45,15 @@ ion-content {
   display: block;
 }
 
+.festival-browse__controls--stuck {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.festival-browse__controls.festival-browse__controls--stuck ion-searchbar {
+  --border-radius: 0 0 var(--rr-radius-control) var(--rr-radius-control);
+}
+
 .festival-browse__search-control {
   position: relative;
 }
@@ -156,6 +165,28 @@ ion-content {
   --color: var(--rr-accent-foreground);
   font-weight: 800;
   min-height: 3.5rem;
+  height: 3.5rem;
+  transform: translateY(calc(-3.5rem * (1 - var(--past-reveal))));
+  transition: transform var(--rr-motion-component) var(--rr-ease-enter);
+}
+
+.festival-browse__past-reveal {
+  height: calc(4.25rem * var(--past-reveal));
+  margin-bottom: -0.75rem;
+  overflow: hidden;
+  transition: height var(--rr-motion-component) var(--rr-ease-enter);
+}
+
+.festival-browse__past-reveal--pulling,
+.festival-browse__past-reveal--pulling .festival-browse__past-toggle {
+  transition: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .festival-browse__past-reveal,
+  .festival-browse__past-reveal .festival-browse__past-toggle {
+    transition: none;
+  }
 }
 
 .festival-browse__list {

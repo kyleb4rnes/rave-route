@@ -4,6 +4,8 @@ import {
   computed,
   inject,
   signal,
+  ElementRef,
+  viewChild,
   ChangeDetectionStrategy,
 } from '@angular/core';
 import { Router } from '@angular/router';
@@ -85,6 +87,11 @@ export class FestivalBrowsePage {
   readonly showFilters = signal(false);
   readonly showPastFestivals = signal(false);
   readonly showPastFestivalToggle = signal(false);
+  readonly searchStuck = signal(false);
+  readonly pulling = signal(false);
+  private readonly pullProgress = signal(0);
+  readonly pastReveal = computed(() => this.showPastFestivalToggle() ? 1 : this.pullProgress());
+  private readonly controls = viewChild<ElementRef<HTMLElement>>('controls');
   readonly isLoading = signal(true);
   readonly error = signal<string | null>(null);
   readonly catalogueUpdatedAt = signal<string | null>(null);
@@ -138,8 +145,13 @@ export class FestivalBrowsePage {
 
   onContentScroll(event: CustomEvent<{ scrollTop: number }>): void {
     const scrollTop = event.detail.scrollTop;
+    const controls = this.controls()?.nativeElement;
+    const content = event.target as HTMLIonContentElement;
+    if (controls) {
+      this.searchStuck.set(controls.getBoundingClientRect().top <= content.getBoundingClientRect().top + 1);
+    }
 
-    if (scrollTop < this.lastScrollTop) {
+    if (!this.pullStartedAtTop && scrollTop >= 0 && scrollTop < this.lastScrollTop) {
       this.showPastFestivalToggle.set(true);
     }
 
@@ -156,12 +168,16 @@ export class FestivalBrowsePage {
 
   onPullMove(event: TouchEvent): void {
     const y = event.touches[0]?.clientY;
-    if (this.pullStartedAtTop && this.pullStartY !== null && y !== undefined && y - this.pullStartY >= 40) {
-      this.showPastFestivalToggle.set(true);
+    if (this.pullStartedAtTop && this.pullStartY !== null && y !== undefined && !this.showPastFestivalToggle()) {
+      this.pulling.set(true);
+      this.pullProgress.set(Math.min(1, Math.max(0, (y - this.pullStartY) / 80)));
     }
   }
 
   onPullEnd(): void {
+    this.pulling.set(false);
+    if (this.pullProgress() >= 0.35) this.showPastFestivalToggle.set(true);
+    this.pullProgress.set(0);
     this.pullStartY = null;
     this.pullStartedAtTop = false;
   }

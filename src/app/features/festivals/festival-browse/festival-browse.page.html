@@ -14,7 +14,7 @@
       <h1>Find your next route</h1>
     </header>
 
-    <div class="festival-browse__controls">
+    <div #controls class="festival-browse__controls" [class.festival-browse__controls--stuck]="searchStuck()">
       <div class="festival-browse__search-row">
         <div class="festival-browse__search-control">
           <ion-searchbar
@@ -138,7 +138,14 @@
       <ion-note color="danger" role="alert">{{ error() }}</ion-note>
     } @else {
       <section class="festival-browse__list" id="festival-results" aria-label="Available festivals">
-        @if (pastPresets().length > 0 && showPastFestivalToggle()) {
+        @if (pastPresets().length > 0) {
+          <div
+            class="festival-browse__past-reveal"
+            [class.festival-browse__past-reveal--pulling]="pulling()"
+            [style.--past-reveal]="pastReveal()"
+            [inert]="!showPastFestivalToggle()"
+            [attr.aria-hidden]="pastReveal() === 0 ? 'true' : null"
+          >
           <ion-button
             class="festival-browse__festival festival-browse__past-toggle"
             expand="block"
@@ -150,6 +157,7 @@
           >
             <span>{{ showPastFestivals() ? 'Hide past festivals' : 'Show past festivals' }}</span>
           </ion-button>
+          </div>
         }
         @for (preset of visiblePresets(); track preset.id) {
           <ion-button

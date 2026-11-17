@@ -46,17 +46,21 @@ test.describe('Rave Route journeys', () => {
     await page.goto('/festivals/browse');
 
     await expect(page.getByRole('heading', { name: 'Find your next route' })).toBeVisible();
-    await expect(page.locator('.festival-browse__festival').first()).toBeVisible();
+    await expect(page.locator('.festival-browse__list > .festival-browse__festival').first()).toBeVisible();
     const pastFestivalsButton = page.getByRole('button', { name: 'Show past festivals', exact: true });
     await expect(pastFestivalsButton).toHaveCount(0);
+    const controls = page.locator('.festival-browse__controls');
+    await expect(controls).not.toHaveCSS('border-top-left-radius', '0px');
     await page.locator('ion-content').hover();
     await page.mouse.wheel(0, 1000);
     await expect.poll(() => page.locator('ion-content').evaluate(async element =>
       (await (element as HTMLIonContentElement).getScrollElement()).scrollTop,
     )).toBeGreaterThan(0);
+    await expect(controls).toHaveCSS('border-top-left-radius', '0px');
     await page.mouse.wheel(0, -1000);
     await expect(pastFestivalsButton).toBeVisible();
-    await expect(page.locator('.festival-browse__list > ion-button').first()).toHaveText('Show past festivals');
+    await expect(controls).not.toHaveCSS('border-top-left-radius', '0px');
+    await expect(page.locator('.festival-browse__list > :first-child')).toHaveText('Show past festivals');
     await pastFestivalsButton.click();
     await page.locator('ion-searchbar input').fill('Vroeger Was Alles Beter');
     const festival = page.getByRole('button', { name: /Vroeger Was Alles Beter 2026/ });
@@ -71,7 +75,7 @@ test.describe('Rave Route journeys', () => {
     await page.goto('/festivals/browse');
     const card = page.getByRole('button', { name: 'Show past festivals', exact: true });
     const content = page.locator('ion-content');
-    await expect(page.locator('.festival-browse__festival').first()).toBeVisible();
+    await expect(page.locator('.festival-browse__list > .festival-browse__festival').first()).toBeVisible();
     await expect(card).toHaveCount(0);
     await expect(page.getByText('Browse festivals now and add set times when they are published.')).toHaveCount(0);
     // Exercise a top-edge pull without relying on Safari's negative scrollTop.
@@ -83,14 +87,17 @@ test.describe('Rave Route journeys', () => {
     await content.evaluate(async element => {
       await (element as HTMLIonContentElement).getScrollElement();
       const move = new Event('touchmove');
-      Object.defineProperty(move, 'touches', { value: [{ clientY: 260 }] });
+      Object.defineProperty(move, 'touches', { value: [{ clientY: 240 }] });
       element.dispatchEvent(move);
+    });
+    await expect(page.locator('.festival-browse__past-reveal')).toHaveCSS('height', '34px');
+    await content.evaluate(element => {
       element.dispatchEvent(new Event('touchend'));
       element.dispatchEvent(new CustomEvent('ionScroll', { detail: { scrollTop: 0 } }));
       element.dispatchEvent(new CustomEvent('ionScroll', { detail: { scrollTop: 10 } }));
     });
     await expect(card).toBeVisible();
-    await expect(page.locator('.festival-browse__list > ion-button').first()).toHaveText('Show past festivals');
+    await expect(page.locator('.festival-browse__list > :first-child')).toHaveText('Show past festivals');
     await card.click();
     await expect(page.getByRole('button', { name: 'Hide past festivals', exact: true })).toHaveAttribute('aria-expanded', 'true');
   });
