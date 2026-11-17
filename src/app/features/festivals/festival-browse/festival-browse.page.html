@@ -1,11 +1,17 @@
 <app-header title="Browse festivals"></app-header>
 
-<ion-content [scrollEvents]="true" (ionScroll)="onContentScroll($event)">
+<ion-content
+  [scrollEvents]="true"
+  (ionScroll)="onContentScroll($event)"
+  (touchstart)="onPullStart($event)"
+  (touchmove)="onPullMove($event)"
+  (touchend)="onPullEnd()"
+  (touchcancel)="onPullEnd()"
+>
   <main class="festival-browse">
     <header>
       <p>FESTIVAL CATALOGUE</p>
       <h1>Find your next route</h1>
-      <span>Browse festivals now and add set times when they are published.</span>
     </header>
 
     <div class="festival-browse__controls">
@@ -121,18 +127,6 @@
         </section>
       }
 
-      @if (!isLoading() && !error() && pastPresets().length > 0 && showPastFestivalToggle()) {
-        <ion-button
-          class="festival-browse__past-toggle"
-          fill="clear"
-          type="button"
-          [attr.aria-expanded]="showPastFestivals()"
-          aria-controls="festival-results"
-          (click)="togglePastFestivals()"
-        >
-          {{ showPastFestivals() ? 'Hide' : 'Show' }} festivals from the past year ({{ pastPresets().length }})
-        </ion-button>
-      }
     </div>
 
     @if (isLoading()) {
@@ -144,6 +138,19 @@
       <ion-note color="danger" role="alert">{{ error() }}</ion-note>
     } @else {
       <section class="festival-browse__list" id="festival-results" aria-label="Available festivals">
+        @if (pastPresets().length > 0 && showPastFestivalToggle()) {
+          <ion-button
+            class="festival-browse__festival festival-browse__past-toggle"
+            expand="block"
+            fill="clear"
+            type="button"
+            [attr.aria-expanded]="showPastFestivals()"
+            aria-controls="festival-results"
+            (click)="togglePastFestivals()"
+          >
+            <span>{{ showPastFestivals() ? 'Hide past festivals' : 'Show past festivals' }}</span>
+          </ion-button>
+        }
         @for (preset of visiblePresets(); track preset.id) {
           <ion-button
             class="festival-browse__festival"

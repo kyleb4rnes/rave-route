@@ -109,6 +109,8 @@ export class FestivalBrowsePage {
       : this.currentAndFuturePresets()
   );
   private lastScrollTop = 0;
+  private pullStartY: number | null = null;
+  private pullStartedAtTop = false;
 
   constructor() {
     void this.loadCatalogue();
@@ -139,11 +141,29 @@ export class FestivalBrowsePage {
 
     if (scrollTop < this.lastScrollTop) {
       this.showPastFestivalToggle.set(true);
-    } else if (scrollTop > this.lastScrollTop) {
-      this.showPastFestivalToggle.set(false);
     }
 
     this.lastScrollTop = scrollTop;
+  }
+
+  async onPullStart(event: TouchEvent): Promise<void> {
+    this.pullStartY = event.touches[0]?.clientY ?? null;
+    this.pullStartedAtTop = false;
+    const content = event.currentTarget as HTMLIonContentElement;
+    const scrollElement = await content.getScrollElement();
+    this.pullStartedAtTop = scrollElement.scrollTop <= 0;
+  }
+
+  onPullMove(event: TouchEvent): void {
+    const y = event.touches[0]?.clientY;
+    if (this.pullStartedAtTop && this.pullStartY !== null && y !== undefined && y - this.pullStartY >= 40) {
+      this.showPastFestivalToggle.set(true);
+    }
+  }
+
+  onPullEnd(): void {
+    this.pullStartY = null;
+    this.pullStartedAtTop = false;
   }
 
   updateCountry(value: unknown): void {

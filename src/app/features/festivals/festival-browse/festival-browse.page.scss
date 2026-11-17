@@ -27,18 +27,15 @@ ion-content {
   margin: 0;
 }
 
-.festival-browse header span {
-  color: var(--rr-text-muted);
-  display: block;
-  margin-top: 0.5rem;
-}
-
 .festival-browse__controls {
   align-self: start;
-  background: transparent;
+  background: var(--rr-primary-soft);
+  border: 1px solid var(--rr-border);
+  border-radius: var(--rr-radius-card);
+  box-shadow: var(--rr-shadow-card);
   display: grid;
   gap: 0.75rem;
-  padding: 0.25rem 0 0.5rem;
+  padding: 0.5rem;
   position: sticky;
   top: 0;
   z-index: 10;
@@ -154,17 +151,17 @@ ion-content {
   padding-top: 0.75rem;
 }
 
-.festival-browse__past-toggle {
+.festival-browse__festival.festival-browse__past-toggle {
+  --background: var(--rr-primary-soft);
   --color: var(--rr-accent-foreground);
-  font-size: 0.8rem;
-  margin: 0;
-  justify-self: start;
-  min-height: 2rem;
+  font-weight: 800;
+  min-height: 3.5rem;
 }
 
 .festival-browse__list {
   display: grid;
   gap: 0.75rem;
+  overflow-anchor: none;
 }
 
 .festival-browse__festival {
