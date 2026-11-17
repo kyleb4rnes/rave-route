@@ -6,6 +6,7 @@ import {
   DOCUMENT,
   inject,
   input,
+  output,
   signal,
 } from '@angular/core';
 import { IonApp } from '@ionic/angular/ion-app';
@@ -25,6 +26,9 @@ import { WebIconService } from './core/branding/web-icon.service';
 })
 export class AppShellComponent {
   readonly onboardingOpen = input(false);
+  readonly ready = output<void>();
+  private readonly routeActivated = signal(false);
+  private readonly backgroundResolved = signal(false);
   private readonly appSettingsStore = inject(AppSettingsStore);
   private readonly imageStorage = inject(ImageStorageService);
   private readonly webIconService = inject(WebIconService);
@@ -57,6 +61,9 @@ export class AppShellComponent {
 
   constructor() {
     effect(() => {
+      if (this.routeActivated() && this.backgroundResolved()) this.ready.emit();
+    });
+    effect(() => {
       const dark = this.appSettingsStore.appearanceMode() === 'dark';
       const theme = themeColourPresets[this.appSettingsStore.themeColour()];
       this.document.documentElement.classList.toggle('ion-palette-dark', dark);
@@ -79,13 +86,19 @@ export class AppShellComponent {
         .then((resolvedUrl) => {
           if (this.appSettingsStore.homeBackgroundImageUrl() === imageUrl) {
             this.appBackgroundImageUrl.set(resolvedUrl);
+            this.backgroundResolved.set(true);
           }
         })
         .catch(() => {
           if (this.appSettingsStore.homeBackgroundImageUrl() === imageUrl) {
             this.appBackgroundImageUrl.set('');
+            this.backgroundResolved.set(true);
           }
         });
     });
+  }
+
+  onRouteReady(): void {
+    this.routeActivated.set(true);
   }
 }

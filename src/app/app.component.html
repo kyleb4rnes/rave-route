@@ -1,6 +1,6 @@
 @if (applicationStarted()) {
   @defer (when applicationStarted()) {
-    <app-shell [onboardingOpen]="onboardingOpen()"></app-shell>
+    <app-shell [onboardingOpen]="onboardingOpen()" (ready)="shellReady.set(true)"></app-shell>
   }
   @if (onboardingOpen()) {
     <app-onboarding [ready]="true"></app-onboarding>
@@ -11,6 +11,7 @@
   <section
     class="launch-screen"
     [class.launch-screen--leaving]="launchState() === 'leaving'"
+    (animationend)="completeLaunch($event)"
     [style.--launch-colour]="theme().primary"
     aria-label="Loading Rave Route"
     aria-live="polite"

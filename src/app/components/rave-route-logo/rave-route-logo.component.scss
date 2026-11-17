@@ -7,11 +7,13 @@
 .logo__mark {
   display: block;
   height: 2.35rem;
-  object-fit: contain;
+  // Crop the SVG's square transparent margins to fit the wide toolbar slot.
+  object-fit: cover;
   width: 3.6rem;
 }
 
 .logo__mark--launch {
+  object-fit: contain;
   height: clamp(7rem, 38vw, 10rem);
   width: clamp(10rem, 54vw, 14rem);
 }

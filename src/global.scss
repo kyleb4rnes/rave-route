@@ -49,8 +49,16 @@ body {
 }
 
 body {
+  // A transformed body becomes the containing block for fixed overlays and can
+  // rasterize the toolbar in WebKit. Keep fixed UI anchored to the viewport.
+  transform: none;
   color: var(--rr-text);
   font-family: var(--ion-font-family);
+}
+
+html.plt-pwa {
+  // Ionic adds plt-pwa at runtime. Do not switch from 100% to 100vh mid-launch.
+  height: 100%;
 }
 
 ion-app {

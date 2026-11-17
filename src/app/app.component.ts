@@ -3,6 +3,7 @@ import {
   Component,
   computed,
   DOCUMENT,
+  DestroyRef,
   effect,
   inject,
   signal,
@@ -16,6 +17,7 @@ import { themeColourPresets } from './core/settings/theme-colours';
 import { RaveRouteLogoComponent } from './components/rave-route-logo/rave-route-logo.component';
 import { OnboardingComponent } from './features/onboarding/onboarding.component';
 import { AppShellComponent } from './app-shell.component';
+import { MotionPreference } from './core/motion/motion-preference';
 
 @Component({
   selector: 'app-root',
@@ -31,17 +33,18 @@ export class AppComponent {
   private readonly appSettingsStore = inject(AppSettingsStore);
   private readonly router = inject(Router);
   private readonly document = inject(DOCUMENT);
+  private readonly motion = inject(MotionPreference);
   private initialNavigationStarted = false;
   private tourWasOpen = false;
   private readonly applicationStartedSignal = signal(false);
   private readonly launchStateSignal = signal<'loading' | 'leaving' | 'complete'>('loading');
   private readonly launchStartedAt = Date.now();
   private exitTimer: ReturnType<typeof setTimeout> | undefined;
+  readonly shellReady = signal(false);
 
   private readonly minimumLaunchDurationMs = new URLSearchParams(window.location.search).has('capture')
     ? 0
-    : 1400;
-  private readonly exitAnimationDurationMs = 900;
+    : 400;
 
   readonly onboardingOpen = this.onboardingStore.isOpen;
   readonly applicationStarted = this.applicationStartedSignal.asReadonly();
@@ -49,6 +52,7 @@ export class AppComponent {
   readonly theme = computed(() => themeColourPresets[this.appSettingsStore.themeColour()]);
 
   constructor() {
+    inject(DestroyRef).onDestroy(() => clearTimeout(this.exitTimer));
     afterRenderEffect(() => {
       const open = this.onboardingOpen();
       if (!open && this.tourWasOpen) {
@@ -72,8 +76,8 @@ export class AppComponent {
       }
     });
 
-    effect(() => {
-      if (!this.festivalStore.loading() && this.launchState() === 'loading' && !this.exitTimer) {
+    afterRenderEffect(() => {
+      if (this.shellReady() && !this.festivalStore.loading() && this.launchState() === 'loading' && !this.exitTimer) {
         const remainingDelay = Math.max(
           0,
           this.minimumLaunchDurationMs - (Date.now() - this.launchStartedAt),
@@ -85,8 +89,13 @@ export class AppComponent {
   }
 
   private beginLaunchExit(): void {
-    this.launchStateSignal.set('leaving');
-    setTimeout(() => this.launchStateSignal.set('complete'), this.exitAnimationDurationMs);
+    this.launchStateSignal.set(this.motion.reduced() ? 'complete' : 'leaving');
+  }
+
+  completeLaunch(event: AnimationEvent): void {
+    if (event.target === event.currentTarget && this.launchState() === 'leaving') {
+      this.launchStateSignal.set('complete');
+    }
   }
 
   private async startApplication(): Promise<void> {
