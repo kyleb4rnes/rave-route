@@ -44,7 +44,7 @@ function manifest(theme, primary) {
     short_name: 'Rave Route',
     description: 'Plan your festival route, lineup and budget with Rave Route.',
     theme_color: primary,
-    background_color: '#f4f6f8',
+    background_color: primary,
     display: 'standalone',
     orientation: 'portrait',
     scope: '/',

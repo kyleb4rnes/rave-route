@@ -8,6 +8,24 @@
 
     <meta name="color-scheme" content="light" />
     <meta name="theme-color" content="#d92332" />
+    <!-- Paint before stylesheets or Angular load, including iOS safe areas. -->
+    <style>
+      html, body { background: var(--rr-primary, #d92332); margin: 0; }
+    </style>
+    <script>
+      (() => {
+        const colours = { red: '#d92332', blue: '#2563eb', green: '#167a3f', purple: '#7c3aed', pink: '#db2777' };
+        let theme = 'red';
+        try {
+          const settings = JSON.parse(localStorage.getItem('rave-route.settings.v1') || '{}');
+          if (settings && Object.prototype.hasOwnProperty.call(colours, settings.themeColour)) {
+            theme = settings.themeColour;
+          }
+        } catch { /* Use the default when storage is unavailable or invalid. */ }
+        document.documentElement.style.setProperty('--rr-primary', colours[theme]);
+        document.querySelector('meta[name="theme-color"]').setAttribute('content', colours[theme]);
+      })();
+    </script>
     <meta
       name="viewport"
       content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
@@ -20,6 +38,7 @@
     <link rel="preload" as="image" href="assets/onboarding/find-your-festival.webp" fetchpriority="high" />
 
     <!-- add to homescreen for ios -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <link rel="manifest" href="manifest-red.webmanifest" />

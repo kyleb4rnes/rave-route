@@ -3,7 +3,7 @@
   "short_name": "Rave Route",
   "description": "Plan your festival route, lineup and budget with Rave Route.",
   "theme_color": "#7c3aed",
-  "background_color": "#f4f6f8",
+  "background_color": "#7c3aed",
   "display": "standalone",
   "orientation": "portrait",
   "scope": "/",
