@@ -1,4 +1,4 @@
-import { createAnimation } from '@ionic/angular/standalone';
+import { createAnimation } from '@ionic/core/components';
 
 const enterEase = 'cubic-bezier(0.16, 1, 0.3, 1)';
 const exitEase = 'cubic-bezier(0.4, 0, 1, 1)';

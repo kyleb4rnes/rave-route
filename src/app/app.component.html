@@ -1,23 +1,18 @@
-<ion-app [style.--rr-app-background]="appBackground()">
-  <ion-router-outlet (stackWillChange)="setActivePage($event.enteringView.element)" [inert]="onboardingOpen() || launchState() === 'loading'" [class.app-router-outlet--hidden]="hideRoutedContent()"></ion-router-outlet>
-
-  @if (launchScreenVisible()) {
-    <section
-      class="launch-screen"
-      [class.launch-screen--leaving]="launchState() === 'leaving'"
-      aria-label="Loading Rave Route"
-      aria-live="polite"
-      role="status"
-    >
-      <div class="launch-screen__backdrop" aria-hidden="true" (animationend)="finishLaunch()" (animationcancel)="finishLaunch()"></div>
-      <div class="launch-screen__content">
-        <app-rave-route-logo variant="launch"></app-rave-route-logo>
-        <ion-spinner aria-label="Loading your festival route" name="crescent" [paused]="motion.reduced()"></ion-spinner>
-      </div>
-    </section>
+@if (applicationStarted()) {
+  @defer (when applicationStarted()) {
+    <app-shell [onboardingOpen]="onboardingOpen()"></app-shell>
   }
-
-  @if (onboardingOpen() && onboardingReady()) {
-    <app-onboarding animate.leave="rr-tour-leave"></app-onboarding>
+  @if (onboardingOpen()) {
+    <app-onboarding [ready]="true"></app-onboarding>
   }
-</ion-app>
+} @else if (onboardingOpen()) {
+  <app-onboarding [ready]="false"></app-onboarding>
+} @else {
+  <section class="launch-screen" aria-label="Loading Rave Route" aria-live="polite" role="status">
+    <div class="launch-screen__backdrop" aria-hidden="true"></div>
+    <div class="launch-screen__content">
+      <img class="launch-screen__logo" src="assets/brand/rave-route-logo-red-light.svg" alt="Rave Route" />
+      <span class="launch-screen__spinner" aria-hidden="true"></span>
+    </div>
+  </section>
+}

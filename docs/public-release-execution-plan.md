@@ -66,7 +66,7 @@ Exit criteria:
 Tasks:
 
 - Run the reviewed Timetable.lol catalogue sync and inspect all JSON changes.
-- Push the approved catalogue and verify the Cloudflare Pages URL serves the expected file.
+- Push the approved catalogue and verify the configured raw GitHub URL serves the expected file.
 - Test a native build online: catalogue browse, search, filters, import, artwork, ticket metadata, and attribution.
 - Test the failure path by blocking or disabling the hosted URL and confirming the bundled catalogue is used.
 - Confirm a saved catalogue festival can check for updated set times without losing manual sets or Must-see choices.

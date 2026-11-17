@@ -7,18 +7,16 @@ import {
   ChangeDetectionStrategy,
 } from '@angular/core';
 import { Router } from '@angular/router';
-import {
-  IonButton,
-  IonContent,
-  IonIcon,
-  IonItem,
-  IonLabel,
-  IonNote,
-  IonSearchbar,
-  IonSelect,
-  IonSelectOption,
-  IonSpinner,
-} from '@ionic/angular/standalone';
+import { IonButton } from '@ionic/angular/ion-button';
+import { IonContent } from '@ionic/angular/ion-content';
+import { IonIcon } from '@ionic/angular/ion-icon';
+import { IonItem } from '@ionic/angular/ion-item';
+import { IonLabel } from '@ionic/angular/ion-label';
+import { IonNote } from '@ionic/angular/ion-note';
+import { IonSearchbar } from '@ionic/angular/ion-searchbar';
+import { IonSelect } from '@ionic/angular/ion-select';
+import { IonSelectOption } from '@ionic/angular/ion-select-option';
+import { IonSpinner } from '@ionic/angular/ion-spinner';
 import { addIcons } from 'ionicons';
 import {
   calendarOutline,

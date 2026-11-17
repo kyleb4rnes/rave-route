@@ -1,6 +1,6 @@
 import { Component, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { Router } from '@angular/router';
-import { IonContent } from '@ionic/angular/standalone';
+import { IonContent } from '@ionic/angular/ion-content';
 
 import { AppHeaderComponent } from '../../../components/app-header/app-header.component';
 import { FestivalStore } from '../../../core/festivals/festival.store';

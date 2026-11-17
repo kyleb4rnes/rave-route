@@ -95,6 +95,7 @@ Make the web app polished, reliable, installable, and useful enough that it can 
 - Configure bundle ID, signing, deployment target, privacy descriptions, privacy manifest, icon, and splash assets.
 - Run the app directly on the iPhone from Xcode.
 - Check native photo selection, Filesystem image persistence, relaunch, safe areas, links, and offline fallback.
+- Revisit the motion pass on macOS and a physical iPhone. Check Settings and Help page reveals, route transitions, launch and onboarding handoffs, overlay transitions, reduced-motion behaviour, and whether the border and location-pointer animations remain smooth in Safari WebView.
 - Capture and fix iOS-only defects that can be corrected in the shared Angular/Ionic code.
 
 ### February: platform acceptance and release package

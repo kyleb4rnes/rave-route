@@ -5,7 +5,7 @@ import {
   ChangeDetectionStrategy,
 } from '@angular/core';
 import { Router } from '@angular/router';
-import { IonContent } from '@ionic/angular/standalone';
+import { IonContent } from '@ionic/angular/ion-content';
 import { AppHeaderComponent } from '../../components/app-header/app-header.component';
 import { OnboardingStore } from '../../core/onboarding/onboarding.store';
 

@@ -1,14 +1,12 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
-import {
-  IonButton,
-  IonContent,
-  IonItem,
-  IonLabel,
-  IonNote,
-  IonSelect,
-  IonSelectOption,
-} from '@ionic/angular/standalone';
+import { IonButton } from '@ionic/angular/ion-button';
+import { IonContent } from '@ionic/angular/ion-content';
+import { IonItem } from '@ionic/angular/ion-item';
+import { IonLabel } from '@ionic/angular/ion-label';
+import { IonNote } from '@ionic/angular/ion-note';
+import { IonSelect } from '@ionic/angular/ion-select';
+import { IonSelectOption } from '@ionic/angular/ion-select-option';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { AppHeaderComponent } from '../../components/app-header/app-header.component';
 import { AppSettingsStore, BackgroundImagePosition } from '../../core/settings/app-settings.store';

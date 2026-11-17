@@ -31,6 +31,13 @@ interface RecognisedTimetableLolCatalogue extends TimetableLolCatalogue {
   events: readonly TimetableLolCatalogueEvent[];
 }
 
+interface TimetableLolCatalogueSource {
+  url: string;
+  timeoutMs?: number;
+}
+
+const remoteCatalogueTimeoutMs = 1_500;
+
 interface TimetableLolCatalogueEvent {
   eventSlug: string;
   title: string;
@@ -144,10 +151,19 @@ export class TimetableLolLineupService {
   }
 }
 
-async function fetchFirstRecognisedCatalogue(sourceUrls: readonly string[]): Promise<RecognisedTimetableLolCatalogue> {
-  for (const sourceUrl of sourceUrls) {
+async function fetchFirstRecognisedCatalogue(
+  sources: readonly TimetableLolCatalogueSource[],
+): Promise<RecognisedTimetableLolCatalogue> {
+  for (const source of sources) {
+    const abortController = source.timeoutMs ? new AbortController() : null;
+    const timeout = abortController
+      ? setTimeout(() => abortController.abort(), source.timeoutMs)
+      : null;
+
     try {
-      const response = await fetch(sourceUrl);
+      const response = abortController
+        ? await fetch(source.url, { signal: abortController.signal })
+        : await fetch(source.url);
 
       if (!response.ok) {
         continue;
@@ -162,19 +178,30 @@ async function fetchFirstRecognisedCatalogue(sourceUrls: readonly string[]): Pro
       }
     } catch {
       continue;
+    } finally {
+      if (timeout) {
+        clearTimeout(timeout);
+      }
     }
   }
 
   throw new Error('The community timetable could not be reached.');
 }
 
-function getCatalogueSourceUrls(): string[] {
-  const configuredUrls = [
-    environment.timetableLolCatalogue.remoteUrl,
-    environment.timetableLolCatalogue.bundledUrl,
-  ].filter((sourceUrl): sourceUrl is string => typeof sourceUrl === 'string' && sourceUrl.length > 0);
+function getCatalogueSourceUrls(): TimetableLolCatalogueSource[] {
+  const remoteUrl = environment.timetableLolCatalogue.remoteUrl;
+  const bundledUrl = environment.timetableLolCatalogue.bundledUrl;
+  const sources: TimetableLolCatalogueSource[] = [];
 
-  return [...new Set(configuredUrls)];
+  if (remoteUrl) {
+    sources.push({ url: remoteUrl, timeoutMs: remoteCatalogueTimeoutMs });
+  }
+
+  if (bundledUrl && bundledUrl !== remoteUrl) {
+    sources.push({ url: bundledUrl });
+  }
+
+  return sources;
 }
 
 export function getLineupAvailabilityLabel(

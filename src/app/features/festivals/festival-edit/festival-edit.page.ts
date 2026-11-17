@@ -6,7 +6,8 @@ import {
   ChangeDetectionStrategy,
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { IonButton, IonContent } from '@ionic/angular/standalone';
+import { IonButton } from '@ionic/angular/ion-button';
+import { IonContent } from '@ionic/angular/ion-content';
 
 import { AppHeaderComponent } from '../../../components/app-header/app-header.component';
 import { FestivalDraft } from '../../../core/festivals/models/festival-draft';

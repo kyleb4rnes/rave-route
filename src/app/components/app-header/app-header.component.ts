@@ -13,14 +13,12 @@ import {
   ChangeDetectionStrategy,
 } from '@angular/core';
 import { NavigationEnd, Router, RouterLink } from '@angular/router';
-import {
-  IonButton,
-  IonButtons,
-  IonHeader,
-  IonIcon,
-  IonTitle,
-  IonToolbar,
-} from '@ionic/angular/standalone';
+import { IonButton } from '@ionic/angular/ion-button';
+import { IonButtons } from '@ionic/angular/ion-buttons';
+import { IonHeader } from '@ionic/angular/ion-header';
+import { IonIcon } from '@ionic/angular/ion-icon';
+import { IonTitle } from '@ionic/angular/ion-title';
+import { IonToolbar } from '@ionic/angular/ion-toolbar';
 import { addIcons } from 'ionicons';
 import {
   chevronBack,

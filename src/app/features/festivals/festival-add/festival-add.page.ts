@@ -8,13 +8,11 @@ import {
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import {
-  IonButton,
-  IonContent,
-  IonIcon,
-  IonNote,
-  IonSpinner,
-} from '@ionic/angular/standalone';
+import { IonButton } from '@ionic/angular/ion-button';
+import { IonContent } from '@ionic/angular/ion-content';
+import { IonIcon } from '@ionic/angular/ion-icon';
+import { IonNote } from '@ionic/angular/ion-note';
+import { IonSpinner } from '@ionic/angular/ion-spinner';
 import { addIcons } from 'ionicons';
 import { calendarOutline } from 'ionicons/icons';
 

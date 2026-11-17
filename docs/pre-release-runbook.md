@@ -18,15 +18,14 @@ Run and review `npm audit --omit=dev` before each release candidate. The full au
 
 ## Remote catalogue release path
 
-The production loader requests `https://rave-route-catalogue.pages.dev/timetable-lol-catalogue.json` before the bundled fallback. `src/assets/timetables/timetable-lol-catalogue.json` is the single source of truth: committing and pushing it to `main` updates the Pages copy automatically and includes it in the next app build.
+The production loader requests `https://raw.githubusercontent.com/kyleb4rnes/rave-route/main/src/assets/timetables/timetable-lol-catalogue.json` before the bundled fallback. `src/assets/timetables/timetable-lol-catalogue.json` is the single source of truth: committing and pushing it to `main` updates the hosted copy and includes it in the next app build.
 
 For each catalogue update:
 
 1. Run `npm run timetable-lol:sync`, review its output and the JSON changes, then commit the approved `src/assets/timetables/timetable-lol-catalogue.json` update.
-2. Push to `main` and confirm the Pages deployment succeeds and the public URL serves the expected catalogue.
-3. Use `[skip pages]` for unrelated commits when a Pages deployment should be skipped.
-4. Keep the bundled catalogue refreshed for every store release so offline installs and hosting failures still have a current-enough fallback.
-5. Before release, confirm a native build loads the hosted catalogue when online; then temporarily block the URL and confirm it uses the bundled catalogue.
+2. Push to `main` and confirm the public raw URL serves the expected catalogue.
+3. Keep the bundled catalogue refreshed for every store release so offline installs and hosting failures still have a current-enough fallback.
+4. Before release, confirm a native build loads the hosted catalogue when online; then temporarily block the URL and confirm it uses the bundled catalogue.
 
 ## Android device acceptance
 
