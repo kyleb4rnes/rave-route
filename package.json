@@ -41,7 +41,7 @@
     "@capacitor/filesystem": "^8.1.5",
     "@capacitor/ios": "8.6.2",
     "@capacitor/share": "^8.0.3",
-    "@ionic/angular": "^9.0.11",
+    "@ionic/angular": "^9.0.12",
     "ionicons": "^8.1.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.9.1",
@@ -62,12 +62,12 @@
     "@ionic/angular-toolkit": "^13.0.0",
     "@playwright/test": "^1.65.1",
     "@types/jasmine": "~7.0.0",
-    "@typescript-eslint/eslint-plugin": "^8.72.2",
-    "@typescript-eslint/parser": "^8.72.2",
-    "angular-eslint": "^22.6.0",
+    "@typescript-eslint/eslint-plugin": "^8.73.0",
+    "@typescript-eslint/parser": "^8.73.0",
+    "angular-eslint": "^22.8.0",
     "eslint": "^9.39.5",
     "eslint-plugin-import": "^2.29.1",
-    "eslint-plugin-jsdoc": "^65.4.7",
+    "eslint-plugin-jsdoc": "^65.4.12",
     "eslint-plugin-prefer-arrow": "1.2.3",
     "istanbul-lib-instrument": "^6.0.3",
     "jasmine-core": "~6.3.0",
@@ -78,7 +78,7 @@
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.3.0",
     "typescript": "~6.0.3",
-    "typescript-eslint": "^8.72.2"
+    "typescript-eslint": "^8.73.0"
   },
   "allowScripts": {
     "sharp@0.32.6": true
